@@ -1,0 +1,9 @@
+{
+  "name": "bulbs-component-clickventure",
+  "version": "0.0.1",
+  "description": "Clickventure component for bulbs-cms.",
+  "main": [],
+  "scripts": {},
+  "author": "Andrew Kos <akos123@gmail.com>",
+  "license": "MIT"
+}

@@ -1,0 +1,66 @@
+<div class="clickventure-node">
+    <div class="form-control form-group clearfix node-text">
+        <onion-editor ng-model="node.title" role="singleline" formatting="bold,italic,strike"  placeholder="Name (used for display in CMS)"></onion-editor>
+    </div>
+    <div class="form-group">
+        <label class="checkbox-inline">
+            <input type="checkbox" ng-model="node.start">
+            <span>Start</span></label>
+        <label class="checkbox-inline">
+            <input type="checkbox" ng-model="node.finish">
+            <span>Finish</span></label>
+        <label class="checkbox-inline">
+            <input type="checkbox" ng-model="node.shareable">
+            <span>Shareable</span></label>
+        <button ng-click="cloneNode({node:node})" class="btn btn-xs btn-default checkbox-inline pull-right">
+            <i class="fa fa-copy"></i> Clone Page
+        </button>
+    </div>
+    <div ng-show="node.shareable" class="form-group">
+        <span>Share Message</span>
+        <div class="form-control">
+            <onion-editor role="singleline" ng-model="node.share_text" placeholder="Message for sharing"/>
+        </div>
+    </div>
+    <div class="well">
+        <onion-editor ng-model="node.body" role="multiline" placeholder="Body (displays on site)"></onion-editor>
+    </div>
+    <div class="navbar navbar-default">
+        <label>
+            Default link Style
+            <select class="form-control" ng-options="style.toLowerCase() as style for style in linkStyles" ng-model="node.link_style"></select>
+        </label>
+    </div>
+    <div class="panel-group">
+    <div ng-repeat="link in node.links" class="clearfix panel panel-default">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                Link
+                <div class="btn-group pull-right">
+                    <button class="btn btn-link btn-xs" ng-click="onMoveListObject(node.links, $index, $index + 1)" ng-disabled="$last">
+                        <span class="glyphicon glyphicon-chevron-down"></span>
+                    </button>
+                    <button class="btn btn-link btn-xs" ng-click="onDeleteObject(node.links, link)">
+                        <span class="glyphicon glyphicon-remove text-danger"></span>
+                    </button>
+                    <button class="btn btn-link btn-xs" ng-click="onMoveListObject(node.links, $index, $index - 1)" ng-disabled="$index == 0">
+                        <span class="glyphicon glyphicon-chevron-up"></span>
+                    </button>
+                </div>
+            </h4>
+        </div>
+        <div class="panel-body">
+            <clickventure-edit-link nodes="nodes" node="node" link="link"></clickventure-edit-link>
+        </div>
+    </div>
+    </div>
+    <button class="btn btn-default" ng-click="onAddLink(node)">
+        <span class="glyphicon glyphicon-plus"></span> Add Link
+    </button>
+    <div class="row">
+        <h3>Inbound links</h3>
+        <div ng-repeat="node in inboundNodes">
+            <a ng-bind="node.title" ng-click="selectNode({node:node})"></a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,2 @@
+recursive-include src/django-bulbs/static *
+recursive-include src/django-bulbs/templates *

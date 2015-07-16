@@ -1,0 +1,201 @@
+@import "clickventure-variables";  // must be provided by implementation
+@import (optional) "styles/clickventure-variable-overrides";
+
+.clickventure-container {
+  .clearfix;
+
+  min-height: 800px; // less hoppy for pages with large size differences
+  position: relative;
+
+  .clickventure-restart {
+    background: #fff;
+    color: #4b4b49;
+    border: 2px solid #4b4b49;
+    margin: 20px 0 0;
+
+    &:hover {
+      background: #40c6f1;
+      color: #fff;
+    }
+
+  }
+
+  .clickventure-node {
+    display: none;
+    position: relative;
+  }
+
+
+  .clickventure-node-body {
+    >:first-child {
+      margin-top: 0;
+    }
+
+    margin-bottom: 20px;
+  }
+
+
+  .clickventure-node-share {
+
+    .share {
+      margin-bottom: 0 !important;
+    }
+
+    .share-title {
+      margin: 20px 0 0;
+      text-transform: uppercase;
+    }
+  }
+
+  .clickventure-node-links {
+    .clearfix;
+  }
+
+  .clickventure-node-link {
+    padding: 0 auto;
+    cursor: pointer;
+    display: none;
+  }
+
+  .clickventure-finish {
+    color: #fff;
+    background: @finish-background;
+    padding: 20px;
+  }
+
+  .clickventure-action {
+    float: left;
+    clear: both;
+    color: @text-color;
+    padding: 15px;
+    margin: 5px;
+    background-color: #f4f4f4;
+    position: relative;
+
+    &:hover {
+      background-color: #ddd;
+    }
+  }
+
+  .clickventure-action-finish {
+    background-color: rgb(255, 96, 1);
+    border: 2px solid #4b4b49;
+    color: white;
+    margin: 5px 0;
+    padding: 7px 10px;
+  }
+
+  .clickventure-music {
+    float: left;
+    clear: both;
+    color: @text-color;
+    padding: 15px;
+    margin: 5px;
+    background-color: #f4f4f4;
+    position: relative;
+
+    &:hover {
+      background-color: #ddd;
+    }
+  }
+
+  .clickventure-quiz {
+    background: #f4f4f4;
+    cursor: pointer;
+    color: #333737;
+    text-decoration: none;
+    vertical-align: middle;
+    margin-bottom: 5px;
+
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+
+  .clickventure-word-bubble {
+    .BorderRadius(10px,10px,10px,10px);
+
+    float: left;
+    clear: both;
+    padding: 7px 15px;
+    margin: 0 0 30px;
+    background-color: #33c5f3;
+    position: relative;
+    &:hover {
+      background-color: #5ad4fa;
+    }
+
+    &:hover:after {
+      border-color: #5ad4fa transparent;
+    }
+
+    /* creates triangle */
+    &:after {
+      content: "";
+      position: absolute;
+      bottom: -15px;
+      /* value = - border-top-width - border-bottom-width */
+      left: 15px;
+      border-width: 15px 15px 0 0;
+      /* vary these values to change the angle of the vertex */
+      border-style: solid;
+      border-color: @accent-color transparent;
+      /* reduce the damage in FF3.0 */
+      display: block;
+      width: 0;
+    }
+  }
+
+  .clickventure-float {
+    float: left;
+  }
+}
+
+.fake-input {
+
+  label {
+    cursor: inherit;
+    display: block;
+    padding: 20px 20px 20px 50px;
+    position: relative;
+
+    &:before {
+      display: block;
+      float: left;
+      content: "";
+      border: 2px solid #000;
+      width: 28px;
+      height: 28px;
+      position: absolute;
+      top: 20px;
+      left: 10px;
+    }
+
+    &:after {
+      color: @accent-color;
+      font-family: "FontAwesome";
+      float: left;
+      font-size: 40px;
+      width: 40px;
+      position: absolute;
+      top: 20px;
+      line-height: 0;
+      left: 0;
+      bottom: 0;
+      margin: 0 0 0 10px;
+      line-height: 30px;
+    }
+
+    &.has-image:before {
+      display: none;
+    }
+  }
+
+  input {
+    display: none;
+
+    &:checked + label:after {
+      content: "\f00c";
+    }
+  }
+}

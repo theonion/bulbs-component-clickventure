@@ -1,6 +1,10 @@
-{% extends base_content_detail_template %}
+{% extends "detail/default.html" %}
 
 {% load betty compressed core %}
+
+{% block extra_css %}
+  {% compressed_css "clickventure" %}
+{% endblock %}
 
 {% block detail_body %}
   {{ block.super }}
@@ -72,6 +76,12 @@
 
 {% block extra_scripts %}
   {{ block.super }}
+
+  {% if tinytracker %}
+    <script>
+      window.CV_TINYTRACKER = { % tinytracker %};
+    </script>
+  {% endif %}
 
   {% compressed_js "clickventure" %}
 {% endblock %}

@@ -23,6 +23,7 @@ setup(
     packages=[
         "bulbs_component_clickventure"
     ],
+    include_package_data=True,
     install_requires=requires,
     extras_require={
         "dev": dev_requires

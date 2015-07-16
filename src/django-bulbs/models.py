@@ -1,43 +1,44 @@
 from jsonfield import JSONField
 
-from bulbs.content.mixins import BodyMixin, DetailImageMixin
 from bulbs.content.models import Content, ElasticsearchImageField
 
 
-class Clickventure(BodyMixin, DetailImageMixin):
-    """Click your own.
+class ClickventureMixin(models.Model):
+    """Mixin to use for clickventure (choose your own adventure) content types."""
 
-    nodes = {
-        {
-            id: integer,
-            title: reference name,
-            body: html content,
-            link_style: default style for links,
-            links: [
-                {
-                    body: the text,
-                    to_node: id of target node,
-                    transition: name of transition
-                },
-                ...
-            ]
-        },
-        ...
-    }
-    """
+    # nodes = {
+    #     {
+    #         id: integer,
+    #         title: reference name,
+    #         body: html content,
+    #         link_style: default style for links,
+    #         links: [
+    #             {
+    #                 body: the text,
+    #                 to_node: id of target node,
+    #                 transition: name of transition
+    #             },
+    #             ...
+    #         ]
+    #     },
+    #     ...
+    # }
     nodes = JSONField(default="[]", blank=True)
+
+    class Meta:
+        abstract = True
 
     class Mapping(Content.Mapping):
         image = ElasticsearchImageField()
         excludes = ("nodes",)
 
     def to_dict(self):
-        doc = super(Clickventure, self).to_dict()
+        doc = super(ClickventureMixin, self).to_dict()
         del doc["nodes"]
         return doc
 
     def extract_document(self):
-        doc = super(Clickventure, self).extract_document()
+        doc = super(ClickventureMixin, self).extract_document()
         node_text = [""]  # leading line break
         for node in self.nodes:
             node_text.append(node["title"])

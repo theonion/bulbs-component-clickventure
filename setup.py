@@ -1,13 +1,9 @@
 # -*- coding: utf-8 -*-
-import os
-import re
-
 from setuptools import setup, find_packages
 
 requires = [
     "django-bulbs==0.6.0",
-    "django-jsonfield==0.9.13",
-    "django-appconf==1.0.1"
+    "django-jsonfield==0.9.13"
 ]
 
 dev_requires = [

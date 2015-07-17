@@ -5,5 +5,9 @@
   "main": [],
   "scripts": {},
   "author": "Andrew Kos <akos123@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "load-grunt-config": "^0.17.2"
+  }
 }

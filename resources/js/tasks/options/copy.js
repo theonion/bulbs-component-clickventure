@@ -12,7 +12,7 @@ module.exports = {
   },
   bulbs_cms_to_django_app_pre_1_html: {
     cwd: 'src/bulbs-cms',
-    dest: '.tmp/django-bulbs-cms-pre-1/templates/clickventure',
+    dest: '.tmp/django-bulbs-cms-pre-1/templates/cms/clickventure',
     src: '**/*.html',
     expand: true
   },

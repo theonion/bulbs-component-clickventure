@@ -1,12 +1,13 @@
 'use strict';
 
 angular.module('bulbs.clickventure.edit.node', [
-  'lodash'
+  'lodash',
+  'bulbs.clickventure.edit.link'
 ])
   .directive('clickventureEditNode', function () {
     return {
       restrict: 'E',
-      templateUrl: 'clickventure/clickventure-edit/clickventure-edit-node/clickventure-edit-node.html',
+      templateUrl: 'cms/clickventure/clickventure-edit/clickventure-edit-node/clickventure-edit-node.html',
       scope: {
         node: '=',
         nodes: '=',

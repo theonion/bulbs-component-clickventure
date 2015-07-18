@@ -7,6 +7,12 @@ CSS = {
     }
 }
 JS = {
+    "clickventure_cms": {
+        "source_filenames": (
+            "cms/clickventure/*.js"
+        ),
+        "output_filename": "js/clickventure-cms.js"
+    },
     "clickventure": {
         "source_filenames": (
             "velocity/jquery.velocity.min.js",

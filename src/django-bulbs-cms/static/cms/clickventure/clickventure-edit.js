@@ -9,7 +9,7 @@ angular.module('bulbs.clickventure.edit', [
     function () {
       return {
         restrict: 'E',
-        templateUrl: 'cms/clickventure/clickventure-edit/clickventure-edit.html',
+        templateUrl: '/cms/partials/clickventure/clickventure-edit.html',
         scope: {
           article: '=',
           saveArticleDeferred: '='
@@ -274,7 +274,7 @@ angular.module('bulbs.clickventure.edit', [
               return !dupes;
             }
             // start out with a page ready to go
-            if ($scope.article.nodes.length === 0) {
+            if ($scope.article.nodes && $scope.article.nodes.length === 0) {
               $scope.onAddNode();
             }
           }

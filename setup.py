@@ -19,11 +19,13 @@ setup(
     author_email="akos123@gmail.com",
     package_dir={
         "bulbs_component_clickventure": "src/django-bulbs",
-        "bulbs_component_clickventure_public": "src/django-bulbs-public"
+        "bulbs_component_clickventure_public": "src/django-bulbs-public",
+        "bulbs_component_clickventure_cms": "src/django-bulbs-cms"
     },
     packages=[
         "bulbs_component_clickventure",
-        "bulbs_component_clickventure_public"
+        "bulbs_component_clickventure_public",
+        "bulbs_component_clickventure_cms"
     ],
     include_package_data=True,
     install_requires=requires,

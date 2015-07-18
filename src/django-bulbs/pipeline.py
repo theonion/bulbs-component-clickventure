@@ -9,7 +9,7 @@ CSS = {
 JS = {
     "clickventure_cms": {
         "source_filenames": (
-            "cms/clickventure/*.js"
+            "cms/clickventure/*.js",
         ),
         "output_filename": "js/clickventure-cms.js"
     },

@@ -1,2 +1,5 @@
 recursive-include src/django-bulbs-public/static *
 recursive-include src/django-bulbs-public/templates *
+
+recursive-include compat-builds/django-bulbs-cms/static *
+recursive-include compat-builds/django-bulbs-cms/templates *

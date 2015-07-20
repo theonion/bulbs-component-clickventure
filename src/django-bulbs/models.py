@@ -1,7 +1,6 @@
 from django.db import models
 from jsonfield import JSONField
 
-from bulbs.content.models import Content, ElasticsearchImageField
 
 class ClickventureMixin(models.Model):
     """Mixin to use for clickventure (choose your own adventure) content types."""
@@ -27,10 +26,6 @@ class ClickventureMixin(models.Model):
 
     class Meta:
         abstract = True
-
-    class Mapping(Content.Mapping):
-        image = ElasticsearchImageField()
-        excludes = ("nodes",)
 
     def to_dict(self):
         doc = super(ClickventureMixin, self).to_dict()

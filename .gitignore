@@ -2,10 +2,13 @@
 # python #
 ##########
 *.pyc
+*.egg-info
 
 ########
 # node #
 ########
+.tmp
+dist
 node_modules
 
 #######

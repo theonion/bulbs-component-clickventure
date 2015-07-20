@@ -19,7 +19,7 @@ module.exports = {
   },
   bulbs_cms_to_django_app_complete: {
     cwd: '.tmp/django-bulbs-cms-pre-1',
-    dest: 'src/django-bulbs-cms',
+    dest: 'compat-builds/django-bulbs-cms',
     src: '**',
     expand: true
   }

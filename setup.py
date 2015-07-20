@@ -13,14 +13,14 @@ dev_requires = [
 setup(
     name="bulbs-component-clickventure",
     version="0.0.1",
-    description="Clickventure component for bulbs-cms.",
+    description="Clickventure component for bulbs.",
     license="MIT",
     author="Andrew Kos",
     author_email="akos123@gmail.com",
     package_dir={
         "bulbs_component_clickventure": "src/django-bulbs",
         "bulbs_component_clickventure_public": "src/django-bulbs-public",
-        "bulbs_component_clickventure_cms": "src/django-bulbs-cms"
+        "bulbs_component_clickventure_cms": "compat-builds/django-bulbs-cms"
     },
     packages=[
         "bulbs_component_clickventure",

@@ -5,6 +5,5 @@
 
 module.exports = {
   tmp: ['.tmp'],
-  dist: ['dist'],
-  builds_django_bulbs_cms: ['builds-django-bulbs-cms'],
+  dist: ['dist']
 };

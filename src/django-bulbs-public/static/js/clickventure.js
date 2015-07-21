@@ -177,9 +177,8 @@
                       }
                   });
                   showNewNode(transition);
-                  if (clickventure.options.onGotoPage) {
-                      clickventure.options.onGotoPage(clickventure);
-                  }
+
+                  clickventure.element.trigger('clickventure-page-change', [clickventure]);
               }
           });
       } else {

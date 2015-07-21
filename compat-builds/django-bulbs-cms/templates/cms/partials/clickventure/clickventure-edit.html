@@ -44,14 +44,20 @@
         </div>
         <span
             ng-show="node.start"
-            class="fa fa-home"></span>
+            class="fa fa-home">
+        </span>
         <span
             ng-show="node.finish"
-            class="fa fa-flag"></span>
+            class="fa fa-flag">
+        </span>
+        <span
+            ng-show="node.shareable"
+            class="fa fa-share-alt">
+        </span>
         <span
             ng-show="!!node.title"
             ng-bind-html="node.title"></span>
-        <span ng-show="!node.title">Page {{ node.id }}</span>
+        <span ng-show="!node.title">Page {% verbatim %}{{ node.id }}{% endverbatim %}</span>
       </li>
     </ul>
   </div>
@@ -70,7 +76,7 @@
               style="text-decoration:none !important"
               class="pull-right navbar-btn btn btn-link btn-sm"
               target="_blank"
-              href="/r/{{ article.id }}#{{ selectedNode.id }}">
+              href="/r/{% verbatim %}{{ article.id }}{% endverbatim %}#{% verbatim %}{{ selectedNode.id }}{% endverbatim %}">
             <span>Preview</span>
             <i class="fa fa-share"></i>
           </a>

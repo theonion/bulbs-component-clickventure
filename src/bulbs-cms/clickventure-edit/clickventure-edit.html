@@ -44,10 +44,16 @@
         </div>
         <span
             ng-show="node.start"
-            class="fa fa-home"></span>
+            class="fa fa-home">
+        </span>
         <span
             ng-show="node.finish"
-            class="fa fa-flag"></span>
+            class="fa fa-flag">
+        </span>
+        <span
+            ng-show="node.shareable"
+            class="fa fa-share-alt">
+        </span>
         <span
             ng-show="!!node.title"
             ng-bind-html="node.title"></span>

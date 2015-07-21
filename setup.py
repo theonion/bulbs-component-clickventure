@@ -12,7 +12,7 @@ dev_requires = [
 
 setup(
     name="bulbs-component-clickventure",
-    version="0.0.4",
+    version="0.0.5",
     description="Clickventure component for bulbs.",
     license="MIT",
     author="Andrew Kos",

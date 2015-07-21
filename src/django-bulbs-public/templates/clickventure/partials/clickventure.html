@@ -1,0 +1,68 @@
+{% comment %}
+This should be included with an include tag, with the following variables:
+  - content <= the clickventure content object.
+  - share_partial_template <= string path to a share partial, where the variable share_title
+      will be passed in.
+{% endcomment %}
+
+<noscript>
+  <marquee>
+    <blink>This feature requires JavaScript to function.</blink>
+  </marquee>
+</noscript>
+<div
+    id="clickventure-container"
+    class="clickventure-container"
+    data-area="Clickventure">
+  {% for node in content.nodes %}
+    <div
+        id="clickventure-node-{{ node.id }}"
+        class="clickventure-node {% if node.start %}clickventure-start{% endif %} {% if node.finish %}clickventure-finish{% endif %}"
+        data-node-name="{{ node.title }}"
+        data-node-id="{{ node.id }}">
+      <div class="clickventure-node-body">
+        {{ node.body|safe }}
+      </div>
+      <div class="clickventure-node-links">
+        {% for link in node.links %}
+          <div
+              class="clickventure-node-link {% if link.float %}clickventure-float{% endif %}"
+              data-target-node="{{ link.to_node }}"
+              data-transition="{{ link.transition }}">
+            {% if node.finish %}
+              {% include "clickventure/partials/link/action_finish.html" %}
+            {% else %}
+              {% with link_style=link.link_style|default:node.link_style %}
+                {% if link_style %}
+                  {% with "clickventure/partials/link/"|add:link_style|add:".html" as template_name %}
+                    {% include template_name %}
+                  {% endwith %}
+                {% else %}
+                  {% include "clickventure/partials/link/action.html" %}
+                {% endif %}
+              {% endwith %}
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+      {% if node.finish %}
+        <button
+            class="btn clickventure-restart"
+            data-action="Restart">
+          <span class="fa fa-refresh"></span>
+          Start Over
+        </button>
+      {% endif %}
+      {% if node.shareable and share_partial_template %}
+        <div class="shareable clickventure-node-share">
+          {% with share_text=node.share_text|default:node.title %}
+            <h5 class="share-title">
+              Share {% if node.finish %}Your Results{% else %}This Page{% endif %}
+            </h5>
+            {% include share_partial_template with share_title=share_text|add:" - "|add:content.title|safe %}
+          {% endwith %}
+        </div>
+      {% endif %}
+    </div>
+  {% endfor %}
+</div>

@@ -2,7 +2,7 @@
 from setuptools import setup, find_packages
 
 requires = [
-    "django-bulbs==0.6.0",
+    "django-bulbs==0.6.1",
     "django-jsonfield==0.9.13"
 ]
 

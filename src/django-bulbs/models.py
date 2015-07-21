@@ -42,6 +42,3 @@ class ClickventureMixin(models.Model):
                 node_text.append(link["body"])
         doc["body"] += "\n".join(node_text)
         return doc
-
-    def get_template(self):
-        return "clickventure/clickventure_detail.html"

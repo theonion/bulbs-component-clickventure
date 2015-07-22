@@ -2,6 +2,8 @@
   "name": "bulbs-component-clickventure",
   "private": true,
   "dependencies": {
-    "bulbs-public-analytics-manager": "https://0469c955e10241b40fffe0225e29a3c238aadf69:x-oauth-basic@github.com/theonion/bulbs-public-analytics-manager.git#~0.0.1"
+    "bulbs-public-analytics-manager": "https://0469c955e10241b40fffe0225e29a3c238aadf69:x-oauth-basic@github.com/theonion/bulbs-public-analytics-manager.git#~0.0.1",
+    "velocity": "0.11.7",
+    "jquery": "~2.1.4"
   }
 }

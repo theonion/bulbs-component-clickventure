@@ -13,7 +13,7 @@ This should be included with an include tag, with the following variables:
 <div
     id="clickventure-container"
     class="clickventure-container"
-    data-area="Clickventure">
+    data-track-category="Article: Clickventure">
   {% for node in content.nodes %}
     <div
         id="clickventure-node-{{ node.id }}"
@@ -48,13 +48,16 @@ This should be included with an include tag, with the following variables:
       {% if node.finish %}
         <button
             class="btn clickventure-restart"
-            data-action="Restart">
+            data-track-action="Start Over"
+            data-track-label="#">
           <span class="fa fa-refresh"></span>
           Start Over
         </button>
       {% endif %}
       {% if node.shareable and share_partial_template %}
-        <div class="shareable clickventure-node-share">
+        <div
+            class="shareable clickventure-node-share"
+            data-track-action="Share Result">
           {% with share_text=node.share_text|default:node.title %}
             <h5 class="share-title">
               Share {% if node.finish %}Your Results{% else %}This Page{% endif %}

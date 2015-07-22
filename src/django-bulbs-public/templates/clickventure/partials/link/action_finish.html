@@ -1,4 +1,7 @@
-<div class="clickventure-action clickventure-action-finish">
-    <span class="fa fa-long-arrow-left"></span>
-    {{ link.body|safe }}
+<div
+    class="clickventure-action clickventure-action-finish"
+    data-track-action="Checkpoint"
+    data-track-label="#">
+  <span class="fa fa-long-arrow-left"></span>
+  {{ link.body|safe }}
 </div>

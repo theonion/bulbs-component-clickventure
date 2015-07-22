@@ -1,0 +1,6 @@
+{
+  "name": "bulbs-component-clickventure",
+  "dependencies": {
+    "bulbs-public-analytics-manager": "https://0469c955e10241b40fffe0225e29a3c238aadf69:x-oauth-basic@github.com/theonion/bulbs-public-analytics-manager.git#~0.0.1"
+  }
+}

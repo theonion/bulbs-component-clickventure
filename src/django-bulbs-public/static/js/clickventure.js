@@ -85,7 +85,17 @@
 
   var Clickventure = function (element, options) {
     this.element = $(element);
-    this.options = options || {};
+
+    this.options = $.extend({}, {
+        // use hash for location
+        hashState: false,
+        // prevent initial alignment with clickventure container when loading
+        preventFirstAlignment: false
+      },
+      options);
+
+    this.doAlign = !this.options.preventFirstAlignment;
+
     var clickventure = this;
     $('.clickventure-node-link', this.element).each(function (i, elLink) {
       $(elLink).on('click', function (event) {
@@ -109,10 +119,13 @@
   };
 
   Clickventure.prototype.alignWithTop = function () {
-    this.element.velocity('scroll', {
-      duration: 300,
-      offset: -60
-    });
+    if (this.doAlign) {
+      this.element.velocity('scroll', {
+        duration: 300,
+        offset: -60
+      });
+    }
+    this.doAlign = true;
   };
 
   Clickventure.prototype.gotoHash = function (hash) {

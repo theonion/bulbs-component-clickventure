@@ -5,4 +5,5 @@
       hashState: true
     });
   });
+
 })(jQuery, Clickventure);

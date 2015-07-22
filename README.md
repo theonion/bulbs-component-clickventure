@@ -1,3 +1,5 @@
+<strong><i>:exclamation: THIS REPO SHOULD NOT BE MADE PUBLIC :exclamation:</i></strong>
+
 # bulbs-component-clickventure
 Clickventure content type component for bulbs projects.
 

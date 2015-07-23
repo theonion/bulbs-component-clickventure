@@ -30,8 +30,9 @@ module.exports = function (grunt) {
       // clean out old files
       'clean:tmp',
       'clean:builds_django_bulbs_cms',
-      // copy scripts into a django compatibile package
+      // copy scripts and styles into a django compatibile package
       'copy:bulbs_cms_to_django_app_pre_1_scripts',
+      'copy:bulbs_cms_to_django_app_pre_1_styles',
       // copy html to package, do verbatim wrapping for django compatibility
       'replace:bulbs_cms_to_django_app_pre_1_html',
       // do the rest of prep needed for django app

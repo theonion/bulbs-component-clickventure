@@ -177,7 +177,7 @@
     var transition = NODE_TRANSITIONS[transitionName || 'default'];
     this.alignWithTop();
 
-    function showNewNode(transition) {
+     var showNewNode = function (transition) {
       var newNode = $('#clickventure-node-' + nodeId, clickventure.element);
       newNode.velocity(transition.show.fx, {
         duration: 200,
@@ -188,10 +188,11 @@
             stagger: 100
           });
           picturefill(newNode);
-          $('.collapsynav').respMenuCollapse(); //need to re-initiate collapsing menu
+
+          clickventure.element.trigger('clickventure-page-change-complete', [clickventure]);
         }
       });
-    }
+    };
     // hide existing page?
     if (activeNode.length > 0) {
       activeNode.velocity(transition.hide.fx, {

@@ -1,4 +1,10 @@
 CSS = {
+    "clickventure_cms": {
+        "source_filenames": {
+            "cms/clickventure/*.less"
+        },
+        "output_filename": "css/clickventure-cms.css"
+    },
     "clickventure": {
         "source_filenames": (
             "styles/clickventure.less",

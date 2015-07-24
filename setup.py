@@ -16,15 +16,6 @@ dev_requires = [
     "virtualenv==13.0.3"
 ]
 
-repo = "https://0469c955e10241b40fffe0225e29a3c238aadf69:x-oauth-basic@github.com/theonion/{}.git#{}".format(name, version)
-
-class InstallBowerComponents(_install):
-    """Run bower commands to install bower deps."""
-
-    def run(self):
-        _install.run(self)
-        subprocess.call("./node_modules/.bin/bower install --save {}", shell=True)
-
 setup(
     name=name,
     version=version,
@@ -46,7 +37,5 @@ setup(
     install_requires=requires,
     extras_require={
         "dev": dev_requires
-    },
-    # post install
-    cmdclass={"install": InstallBowerComponents}
+    }
 )

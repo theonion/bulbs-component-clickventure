@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 from setuptools.command.install import install as _install
 
 name = "bulbs-component-clickventure"
-version = "0.0.9"
+version = "0.0.10"
 
 requires = [
     "django-bulbs==0.6.1",

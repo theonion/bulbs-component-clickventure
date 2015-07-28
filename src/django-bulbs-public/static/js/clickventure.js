@@ -43,51 +43,51 @@
 
 
   var NODE_TRANSITIONS = {
-    'default': {
-      'show': {
+    default: {
+      show: {
         fx: 'transition.slideRightIn'
       },
-      'hide': {
+      hide: {
         fx: 'transition.slideLeftOut'
       }
     },
-    'flipLeft': {
-      'show': {
+    flipLeft: {
+      show: {
         fx: 'transition.turnPageIn'
       },
-      'hide': {
+      hide: {
         fx: 'transition.turnPageOut'
       }
     },
-    'slideLeft': {
-      'show': {
+    slideLeft: {
+      show: {
         fx: 'transition.slideRightIn'
       },
-      'hide': {
+      hide: {
         fx: 'transition.slideLeftOut'
       }
     },
-    'slideRight': {
-      'show': {
+    slideRight: {
+      show: {
         fx: 'transition.slideLeftIn'
       },
-      'hide': {
+      hide: {
         fx: 'transition.slideRightOut'
       }
     },
-    'slideDown': {
-      'show': {
+    slideDown: {
+      show: {
         fx: 'transition.slideDownIn'
       },
-      'hide': {
+      hide: {
         fx: 'transition.slideDownOut'
       }
     },
-    'slideUp': {
-      'show': {
+    slideUp: {
+      show: {
         fx: 'transition.slideUpIn'
       },
-      'hide': {
+      hide: {
         fx: 'transition.slideUpOut'
       }
     }
@@ -110,6 +110,7 @@
         clickventure.gotoNodeId(targetNode, transitionName);
       });
     });
+
     // a restart button
     $('.clickventure-restart').click(function (event) {
       event.preventDefault();

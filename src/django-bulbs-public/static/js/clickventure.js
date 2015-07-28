@@ -1,5 +1,17 @@
 (function (global, $) {
 
+  var defaultOptions = {
+    // time in ms taken to align with top when user interaction occurs
+    alignmentDuration: 300,
+    // offset for alignment when user interaction occurs, should account for any
+    //  nav bars that might block the top of the clickventure content
+    alignmentOffset: -60,
+    // use hash for location
+    hashState: false,
+    // prevent initial alignment with clickventure container when loading
+    preventFirstAlignment: false
+  };
+
   $.Velocity
     .RegisterUI('transition.turnPageIn', {
       defaultDuration: 200,
@@ -86,13 +98,7 @@
   var Clickventure = function (element, options) {
     this.element = $(element);
 
-    this.options = $.extend({}, {
-        // use hash for location
-        hashState: false,
-        // prevent initial alignment with clickventure container when loading
-        preventFirstAlignment: false
-      },
-      options);
+    this.options = $.extend({}, defaultOptions, options);
 
     this.doAlign = !this.options.preventFirstAlignment;
 

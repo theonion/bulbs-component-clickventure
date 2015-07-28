@@ -1,5 +1,5 @@
-@import "clickventure-variables";  // must be provided by implementation
-@import (optional) "styles/clickventure-variable-overrides";
+@import "clickventure-variables";
+@import (optional) "clickventure-variable-overrides";
 
 .clickventure-container {
   .clearfix;
@@ -52,25 +52,19 @@
   }
 
   .clickventure-node-link {
-    padding: 0 auto;
-    cursor: pointer;
     display: none;
+    cursor: pointer;
+    padding: 0 auto;
   }
 
   .clickventure-finish {
-    color: #fff;
     background: @finish-background;
+    color: #fff;
     padding: 20px;
   }
 
   .clickventure-action {
-    float: left;
-    clear: both;
-    color: @text-color;
-    padding: 15px;
-    margin: 5px;
-    background-color: #f4f4f4;
-    position: relative;
+    .standard-input-mixin;
 
     &:hover {
       background-color: #ddd;
@@ -86,13 +80,7 @@
   }
 
   .clickventure-music {
-    float: left;
-    clear: both;
-    color: @text-color;
-    padding: 15px;
-    margin: 5px;
-    background-color: #f4f4f4;
-    position: relative;
+    .standard-input-mixin;
 
     &:hover {
       background-color: #ddd;
@@ -100,12 +88,11 @@
   }
 
   .clickventure-quiz {
-    background: #f4f4f4;
-    cursor: pointer;
-    color: #333737;
+    .standard-input-mixin;
+
     text-decoration: none;
     vertical-align: middle;
-    margin-bottom: 5px;
+    width: 100%;
 
     &:first-child {
       margin-top: 0;
@@ -115,12 +102,13 @@
   .clickventure-word-bubble {
     .BorderRadius(10px,10px,10px,10px);
 
-    float: left;
-    clear: both;
-    padding: 7px 15px;
-    margin: 0 0 30px;
     background-color: #33c5f3;
+    clear: both;
+    float: left;
+    margin: 0 0 30px;
+    padding: 7px 15px;
     position: relative;
+
     &:hover {
       background-color: #5ad4fa;
     }

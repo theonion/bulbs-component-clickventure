@@ -28,42 +28,57 @@ install which should match the ```<version>``` used in ```requirements.txt```:
 
 ### Implementation
 1. Create a clickventure package in the site's app directory.
-2. Add ```"bulbs_component_clickventure"``` to ```INSTALLED_APPS``` in Django's settings file.
-3. If you're using the public templates and scripts that come with this package by
-default, also include ```"bulbs_component_clickventure_public"``` in ```INSTALLED_APPS```. Follow [Implementing Public](#Implementing-public) below to finish this implementation.
-4. If you're using the cms templates and scripts that come with this package by
+1. Add ```"bulbs_component_clickventure"``` to ```INSTALLED_APPS``` in Django's settings file.
+1. If you're using the cms templates and scripts that come with this package by
 default, also include ```"bulbs_component_clickventure_cms"``` in ```INSTALLED_APPS```. Follow [Implementing CMS](#Implementing-cms) below to finish this implementation.
-5. Add a ```models.py``` that implements ```bulbs_component_clickventure.models.ClickventureMixin```.
-6. Create a migration for your app with Django migrations as you would any other app.
+1. Add a ```models.py``` that implements ```bulbs_component_clickventure.models.ClickventureMixin```.
+1. Create a migration for your app with Django migrations as you would any other app.
 
-#### Implementing Public
-To use the public templates, simply create a detail page with the following template
-logic included:
-```html
-{% include "clickventure/partials/clickventure.html" with content=<content-variable> share_partial_template="<share-template-path>" %}
+#### Implementing Public Resources
+To use the public templates, scripts, and styles:
+
+1. Include ```"bulbs_component_clickventure_public"``` in ```INSTALLED_APPS``` in
+Django's settings file.
+
+1. Create a detail page with the following template logic included:
+  ```html
+  {% include "clickventure/partials/clickventure.html" with content=<content-variable> share_partial_template="<share-template-path>" %}
+  ```
+  Where ```<share-template-path>``` is the path to a share template, and
+  ```<content-variable>``` is the name of the variable containing the content's data.
+  Note: you can use the ```{% with %}``` Django template tag to customize variables in
+  the share template.
+
+##### Overriding Public Styles
+If overriding styles with a ```clickventure-variable-overrides.less``` file, the
+following line must be added to the pipeline so ```lessc``` can correctly compile
+styles:
+```python
+PIPELINE_LESS_ARGUMENTS = "--include-path={}".format(STATIC_ROOT)
 ```
 
-Where ```<share-template-path>``` is the path to a share template, and
-```<content-variable>``` is the name of the variable containing the content's data.
-Note: you can use the ```{% with %}``` Django template tag to customize variables in
-the share template.
+Then, add ```clickventure-variable-overrides.less``` to your app's ```static/styles``` folder.
 
-#### Implementing CMS
-To use the CMS templates, create a CMS page with the following html:
-```html
-<clickventure-edit article="content"></clickventure-edit>
-```
+#### Implementing CMS Resources
+To use the CMS templates, scripts, and styles:
 
-Where ```content``` is an angular scope variable containing the content's data.
+1. Include ```"bulbs_component_clickventure_cms"``` in ```INSTALLED_APPS``` in
+Django's settings file.
 
-Finally, add ```bulbs.clickventure``` as a dependency for your CMS's Angular app.
+1. Create a CMS page with the following html:
+  ```html
+  <clickventure-edit article="content"></clickventure-edit>
+  ```
+  Where ```content``` is an angular scope variable containing the content's data.
+
+1. Add ```bulbs.clickventure``` as a dependency for your CMS's Angular app.
 
 
 ## django-bulbs-cms Package
 ```compat-builds/django-bulbs-cms``` should not be edited directly. This app exists only until
 CMS files are completely migrated out of django. To make changes to this package,
 edit files located in ```src/bulbs-cms``` then run ```grunt build_bulbs_cms_for_django```
-to rebuild ``compat-builds/django-bulbs-cms``` with your changes.
+to rebuild ```compat-builds/django-bulbs-cms``` with your changes.
 
 Commit your changes and the rebuilt package, then reinstall the app on whatever
 project(s) require the changes.

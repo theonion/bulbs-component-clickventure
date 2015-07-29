@@ -1,5 +1,8 @@
-@import "clickventure-variables";
-@import (optional) "clickventure-variable-overrides";
+@import (reference) "clickventure-variables";
+// default mixins
+@import (reference) "clickventure-mixins";
+// custom clickventure styling, included with sheet
+@import (optional) "clickventure-custom";
 
 .clickventure-container {
   .clearfix;
@@ -7,134 +10,127 @@
   min-height: 800px; // less hoppy for pages with large size differences
   position: relative;
 
-  .clickventure-restart {
-    background: #fff;
-    color: #4b4b49;
-    border: 2px solid #4b4b49;
-    margin: 20px 0 0;
-
-    &:hover {
-      background: #40c6f1;
-      color: #fff;
-    }
-
-  }
-
   .clickventure-node {
     display: none;
     position: relative;
-  }
 
+    &.clickventure-finish {
+      background: @finish-color-background;
+      color: @finish-color-text;
+      padding: 20px;
 
-  .clickventure-node-body {
-    >:first-child {
-      margin-top: 0;
+      .clickventure-restart {
+        background: @finish-restart-color-background;
+        border: @finish-restart-border;
+        color: @finish-restart-color-text;
+        margin: 20px 0 0;
+
+        &:hover {
+          background: @finish-restart-hover-color-background;
+          color: @finish-restart-hover-color-text;
+        }
+      }
     }
 
-    margin-bottom: 20px;
-  }
+    .clickventure-node-body {
+      margin-bottom: 20px;
 
-
-  .clickventure-node-share {
-
-    .share {
-      margin-bottom: 0 !important;
+      >:first-child {
+        margin-top: 0;
+      }
     }
 
-    .share-title {
-      margin: 20px 0 0;
-      text-transform: uppercase;
+    .clickventure-node-links {
+      .clearfix;
+
+      .clickventure-node-link {
+        cursor: pointer;
+        display: none;
+        padding: 0 auto;
+
+        &.clickventure-float {
+          float: left;
+        }
+
+        .clickventure-action {
+          .standard-action-mixin;
+
+          &:hover {
+            background-color: @action-hover-color-background;
+          }
+
+          &.clickventure-action-finish {
+            background-color: @finish-action-color-background;
+            border: @finish-action-border;
+            color: @finish-action-color-text;
+            margin: 5px 0;
+            padding: 7px 10px;
+          }
+        }
+
+        .clickventure-music {
+          .standard-action-mixin;
+        }
+
+        .clickventure-quiz {
+          .standard-action-mixin;
+
+          text-decoration: none;
+          vertical-align: middle;
+          width: 100%;
+
+          &:first-child {
+            margin-top: 0;
+          }
+        }
+
+        .clickventure-word-bubble {
+          .BorderRadius(10px, 10px, 10px, 10px);
+
+          background-color: @action-dialog-color-background;
+          clear: both;
+          float: left;
+          margin: 0 0 30px;
+          padding: 7px 15px;
+          position: relative;
+
+          &:hover {
+            background-color: @action-dialog-hover-color-background;
+
+            &:after {
+              border-color: @action-dialog-hover-color-background transparent;
+            }
+          }
+
+          /* creates triangle */
+          &:after {
+            @border-width-bottom: 15px;
+            @border-width-top: 0;
+
+            border-color: @default-color-main transparent;
+            border-style: solid;
+            border-width: @border-width-top 15px @border-width-bottom 0;
+            bottom: 0 - @border-width-bottom;
+            content: "";
+            display: block;
+            left: @border-width-top - @border-width-bottom;
+            position: absolute;
+            width: 0;
+          }
+        }
+      }
     }
-  }
 
-  .clickventure-node-links {
-    .clearfix;
-  }
+    .clickventure-node-share {
 
-  .clickventure-node-link {
-    display: none;
-    cursor: pointer;
-    padding: 0 auto;
-  }
+      .share {
+        margin-bottom: 0 !important;
+      }
 
-  .clickventure-finish {
-    background: @finish-background;
-    color: #fff;
-    padding: 20px;
-  }
-
-  .clickventure-action {
-    .standard-input-mixin;
-
-    &:hover {
-      background-color: #ddd;
+      .share-title {
+        margin: 20px 0 0;
+        text-transform: uppercase;
+      }
     }
-  }
-
-  .clickventure-action-finish {
-    background-color: rgb(255, 96, 1);
-    border: 2px solid #4b4b49;
-    color: white;
-    margin: 5px 0;
-    padding: 7px 10px;
-  }
-
-  .clickventure-music {
-    .standard-input-mixin;
-
-    &:hover {
-      background-color: #ddd;
-    }
-  }
-
-  .clickventure-quiz {
-    .standard-input-mixin;
-
-    text-decoration: none;
-    vertical-align: middle;
-    width: 100%;
-
-    &:first-child {
-      margin-top: 0;
-    }
-  }
-
-  .clickventure-word-bubble {
-    .BorderRadius(10px,10px,10px,10px);
-
-    background-color: #33c5f3;
-    clear: both;
-    float: left;
-    margin: 0 0 30px;
-    padding: 7px 15px;
-    position: relative;
-
-    &:hover {
-      background-color: #5ad4fa;
-    }
-
-    &:hover:after {
-      border-color: #5ad4fa transparent;
-    }
-
-    /* creates triangle */
-    &:after {
-      content: "";
-      position: absolute;
-      bottom: -15px;
-      /* value = - border-top-width - border-bottom-width */
-      left: 15px;
-      border-width: 15px 15px 0 0;
-      /* vary these values to change the angle of the vertex */
-      border-style: solid;
-      border-color: @accent-color transparent;
-      /* reduce the damage in FF3.0 */
-      display: block;
-      width: 0;
-    }
-  }
-
-  .clickventure-float {
-    float: left;
   }
 }

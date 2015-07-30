@@ -29,8 +29,6 @@ install which should match the ```<version>``` used in ```requirements.txt```:
 ### Implementation
 1. Create a clickventure package in the site's app directory.
 1. Add ```"bulbs_component_clickventure"``` to ```INSTALLED_APPS``` in Django's settings file.
-1. If you're using the cms templates and scripts that come with this package by
-default, also include ```"bulbs_component_clickventure_cms"``` in ```INSTALLED_APPS```. Follow [Implementing CMS](#Implementing-cms) below to finish this implementation.
 1. Add a ```models.py``` that implements ```bulbs_component_clickventure.models.ClickventureMixin```.
 1. Create a migration for your app with Django migrations as you would any other app.
 

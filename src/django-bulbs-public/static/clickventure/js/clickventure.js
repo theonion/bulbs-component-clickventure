@@ -104,7 +104,7 @@
 
     // set up all node links
     var clickventure = this;
-    this.element('.clickventure-node-link').each(function (i, el) {
+    this.element.find('.clickventure-node-link').each(function (i, el) {
       $(el).on('click', function (event) {
         var $this = $(this);
         var targetNode = $this.attr('data-target-node');
@@ -114,7 +114,7 @@
     });
 
     // restart button
-    this.element.find('.clickventure-node-finish-restart').click(function (event) {
+    this.element.find('.clickventure-node-finish-links-restart').click(function (event) {
       event.preventDefault();
       clickventure.gotoStartNode();
     });

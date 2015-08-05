@@ -104,16 +104,17 @@
 
     // set up all node links
     var clickventure = this;
-    $('.clickventure-node-link', this.element).each(function (i, elLink) {
-      $(elLink).on('click', function (event) {
-        var targetNode = $(elLink).attr('data-target-node');
-        var transitionName = $(elLink).data('transition');
+    this.element('.clickventure-node-link').each(function (i, el) {
+      $(el).on('click', function (event) {
+        var $this = $(this);
+        var targetNode = $this.attr('data-target-node');
+        var transitionName = $this.data('transition');
         clickventure.gotoNodeId(targetNode, transitionName);
       });
     });
 
     // restart button
-    $('.clickventure-restart').click(function (event) {
+    this.element.find('.clickventure-node-finish-restart').click(function (event) {
       event.preventDefault();
       clickventure.gotoStartNode();
     });
@@ -181,12 +182,12 @@
    */
   Clickventure.prototype.gotoStartNode = function (transitionName) {
     // find all start nodes and choose a random one to go to
-    var startNodes = $('.clickventure-start');
+    var startNodes = this.element.find('.clickventure-node-start');
     var node = startNodes[Math.floor(startNodes.length * Math.random())];
 
     if (node) {
       // have at least one node, go to it
-      var nodeId = $(node).data('node-id');
+      var nodeId = $(node).data('nodeId');
       if (nodeId) {
         this.gotoNodeId(nodeId, transitionName);
       }
@@ -201,11 +202,11 @@
    */
   Clickventure.prototype.gotoNodeNamed = function (name, transitionName) {
     // find node with given name
-    var node = $('[data-node-name="' + name + '"]');
+    var node = this.element.find('[data-node-name="' + name + '"]');
 
     if (node.length) {
       // found a node by name, go to it
-      var nodeId = node.data('node-id');
+      var nodeId = node.data('nodeId');
       if (nodeId) {
         this.gotoNodeId(nodeId, transitionName);
       }
@@ -235,17 +236,17 @@
    */
    Clickventure.prototype.showNewNode = function (nodeId, transition) {
      // node to display
-    var newNode = $('#clickventure-node-' + nodeId, this.element);
+    var newNode = this.element.find('#clickventure-node-' + nodeId);
 
     // start transition
     newNode.velocity(transition.show.fx, {
       duration: 200,
       complete: (function () {
         // make node active
-        newNode.addClass('clickventure-active');
+        newNode.addClass('clickventure-node-active');
 
         // transition node in
-        $('.clickventure-node-link', newNode).velocity('transition.slideDownIn', {
+        newNode.find('.clickventure-node-link').velocity('transition.slideDownIn', {
           duration: 300,
           stagger: 100
         });
@@ -268,11 +269,14 @@
   Clickventure.prototype.gotoNode = function (nodeId, transitionName) {
 
     // find active node, and transition to use
-    var activeNode = $('.clickventure-active', this.element);
+    var activeNode = this.element.find('.clickventure-node-active');
     var transition = NODE_TRANSITIONS[transitionName || 'default'];
 
     // align with top of node
     this.alignWithTop();
+
+    // trigger page change event
+    this.element.trigger('clickventure-page-change-start', [this]);
 
     // hide existing page if there is one
     if (activeNode.length > 0) {
@@ -282,21 +286,11 @@
         complete: (function () {
 
           // hide existing node
-          activeNode.removeClass('clickventure-active');
-          $('.clickventure-node-link', activeNode).css('display', 'none');
-
-          // stop any running video video
-          $('.video', activeNode).each(function (i, el) {
-            if (el.contentWindow) {
-              el.contentWindow.postMessage('{"event":"command","func":"pauseVideo","args":""}', '*');
-            }
-          });
+          activeNode.removeClass('clickventure-node-active');
 
           // transition into new node
           this.showNewNode(nodeId, transition);
 
-          // trigger page change event
-          this.element.trigger('clickventure-page-change', [this]);
         }).bind(this)
       });
     } else {

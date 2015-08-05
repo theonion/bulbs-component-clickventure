@@ -1,7 +1,7 @@
 <div
-    class="clickventure-quiz fake-input"
+    class="clickventure-node-link-quiz"
     data-track-action="Next Page"
     data-track-label="#">
-  <input type="radio" name="fake-input" id="input-{{ node.id }}-{{ link.to_node }}">
+  <input type="radio" id="input-{{ node.id }}-{{ link.to_node }}">
   <label for="input-{{ node.id }}-{{ link.to_node }}">{{ link.body|safe }}</label>
 </div>

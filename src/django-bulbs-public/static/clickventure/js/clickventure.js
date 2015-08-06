@@ -104,11 +104,11 @@
 
     // set up all node links
     var clickventure = this;
-    this.element.find('.clickventure-node-link').each(function (i, el) {
+    this.element.find('.clickventure-node-link-action').each(function (i, el) {
       $(el).on('click', function (event) {
-        var $this = $(this);
-        var targetNode = $this.attr('data-target-node');
-        var transitionName = $this.data('transition');
+        var $dataContainer = $(this).closest('.clickventure-node-link');
+        var targetNode = $dataContainer.data('targetNode');
+        var transitionName = $dataContainer.data('transition');
         clickventure.gotoNodeId(targetNode, transitionName);
       });
     });

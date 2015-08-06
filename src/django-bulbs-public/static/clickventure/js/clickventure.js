@@ -104,7 +104,7 @@
 
     // set up all node links
     var clickventure = this;
-    this.element.find('.clickventure-node-link-action').each(function (i, el) {
+    this.element.find('.clickventure-node-link-button').each(function (i, el) {
       $(el).on('click', function (event) {
         var $dataContainer = $(this).closest('.clickventure-node-link');
         var targetNode = $dataContainer.data('targetNode');

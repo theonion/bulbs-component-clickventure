@@ -34,10 +34,10 @@ This should be included with an include tag, with the following variables:
               {% with link_style=link.link_style|default:node.link_style %}
                 {% if link_style %}
                   {% with "clickventure/partials/link/"|add:link_style|add:".html" as template_name %}
-                    {% include template_name %}
+                    {% include template_name with action_index=forloop.counter %}
                   {% endwith %}
                 {% else %}
-                  {% include "clickventure/partials/link/action.html" %}
+                  {% include "clickventure/partials/link/action.html" with action_index=forloop.counter %}
                 {% endif %}
               {% endwith %}
             {% endif %}

@@ -2,10 +2,12 @@
     class="clickventure-node-link-quiz"
     data-track-action="Next Page"
     data-track-label="#">
-  <input type="radio" id="input-{{ node.id }}-{{ link.to_node }}">
-  <label
-      class="clickventure-node-link-quiz-input-styler"
-      for="input-{{ node.id }}-{{ link.to_node }}">
+  <input
+      id="input-{{ node.id }}-{{ link.to_node }}-{{ action_index }}"
+      name="clickventure_quiz[{{ node.id }}][{{ link.to_node }}]"
+      type="radio">
+  <label for="input-{{ node.id }}-{{ link.to_node }}-{{ action_index }}">
+    <span class="clickventure-node-link-quiz-input-styler"></span>
+    <span class="clickventure-node-link-text">{{ link.body|safe }}</span>
   </label>
-  <label for="input-{{ node.id }}-{{ link.to_node }}">{{ link.body|safe }}</label>
 </div>

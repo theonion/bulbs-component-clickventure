@@ -3,5 +3,9 @@
     data-track-action="Next Page"
     data-track-label="#">
   <input type="radio" id="input-{{ node.id }}-{{ link.to_node }}">
+  <label
+      class="clickventure-node-link-quiz-input-styler"
+      for="input-{{ node.id }}-{{ link.to_node }}">
+  </label>
   <label for="input-{{ node.id }}-{{ link.to_node }}">{{ link.body|safe }}</label>
 </div>

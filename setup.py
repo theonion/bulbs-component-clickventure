@@ -1,11 +1,8 @@
 # -*- coding: utf-8 -*-
-import subprocess
-
-from setuptools import setup, find_packages
-from setuptools.command.install import install as _install
+from setuptools import setup
 
 name = "bulbs-component-clickventure"
-version = "0.0.11"
+version = "0.0.12"
 
 requires = [
     "django-bulbs==0.6.1",

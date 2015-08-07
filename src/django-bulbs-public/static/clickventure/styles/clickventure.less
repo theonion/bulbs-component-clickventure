@@ -1,0 +1,36 @@
+@import (reference) "mixins";
+
+.clickventure-container {
+  .clearfix;
+
+  min-height: 800px; // less hoppy for pages with large size differences
+  position: relative;
+
+  .clickventure-node {
+    display: none;
+    position: relative;
+
+    &.clickventure-node-active {
+      display: block;
+    }
+
+    .clickventure-node-links {
+
+      .clickventure-node-link {
+        position: relative;
+
+        &:not(.clickventure-node-link-float) {
+          clear: both;
+        }
+
+        &.clickventure-node-link-float {
+          float: left;
+        }
+      }
+    }
+
+    .clickventure-node-share {
+      clear: both;
+    }
+  }
+}

@@ -47,16 +47,6 @@ Django's settings file.
   Note: you can use the ```{% with %}``` Django template tag to customize variables in
   the share template.
 
-##### Overriding Public Styles
-If overriding styles with a ```clickventure-variable-overrides.less``` file, the
-following line must be added to the pipeline so ```lessc``` can correctly compile
-styles:
-```python
-PIPELINE_LESS_ARGUMENTS = "--include-path={}".format(STATIC_ROOT)
-```
-
-Then, add ```clickventure-variable-overrides.less``` to your app's ```static/styles``` folder.
-
 #### Implementing CMS Resources
 To use the CMS templates, scripts, and styles:
 

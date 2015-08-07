@@ -57,7 +57,7 @@ This should be included with an include tag, with the following variables:
             Share {% if node.finish %}Your Results{% else %}This Page{% endif %}
           </div>
           <div class="clickventure-node-share-widget">
-            {% include share_partial_template with share_title=share_text|add:" - "|add:content.title|safe share_text=node.share_text|default:node.title %}
+            {% include share_partial_template with share_title=node.share_text|add:" - "|add:content.title|safe %}
           </div>
         </div>
       {% endif %}

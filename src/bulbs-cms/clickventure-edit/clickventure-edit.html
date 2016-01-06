@@ -17,7 +17,11 @@
         </button>
       </div>
     </div>
-    <ul class="list-group">
+
+    <clickventure-edit-node-list nodes="article.nodes"></clickventure-edit-node-list>
+
+
+    <!-- <ul class="list-group">
       <li
           class="list-group-item clearfix"
           ng-repeat="node in article.nodes"
@@ -59,7 +63,7 @@
             ng-bind-html="node.title"></span>
         <span ng-show="!node.title">Page {{ node.id }}</span>
       </li>
-    </ul>
+    </ul> -->
   </div>
   <div class="col-xs-8">
     <div ng-show="!isEditing">

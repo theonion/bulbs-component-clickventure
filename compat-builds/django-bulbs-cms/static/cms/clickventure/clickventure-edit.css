@@ -1,0 +1,18 @@
+clickventure-edit .clickventure {
+  min-height: 600px;
+}
+clickventure-edit .clickventure .list-group {
+  cursor: pointer;
+  max-height: 600px;
+  overflow-y: scroll;
+}
+clickventure-edit .clickventure .active button {
+  color: white;
+}
+clickventure-edit .clickventure .node-text {
+  height: auto;
+}
+clickventure-edit .clickventure .editor,
+clickventure-edit .clickventure .editorPlaceholder {
+  padding: 0;
+}

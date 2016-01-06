@@ -7,7 +7,7 @@ angular.module('bulbs.clickventure.edit.node', [
   .directive('clickventureEditNode', function () {
     return {
       restrict: 'E',
-      templateUrl: '/cms/partials/clickventure/clickventure-edit-node.html',
+      templateUrl: 'clickventure-edit-node/clickventure-edit-node.html',
       scope: {
         node: '=',
         nodes: '=',

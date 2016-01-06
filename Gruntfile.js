@@ -33,8 +33,8 @@ module.exports = function (grunt) {
       // copy scripts and styles into a django compatibile package
       'copy:bulbs_cms_to_django_app_pre_1_scripts',
       'copy:bulbs_cms_to_django_app_pre_1_styles',
-      // copy html to package, do verbatim wrapping for django compatibility
-      'replace:bulbs_cms_to_django_app_pre_1_html',
+      // put html into template file
+      'ngtemplates',
       // do the rest of prep needed for django app
       'bulbs_cms_to_django_app_pre_1_init_py',
       // copy the whole thing into a place where setup.py can pick it up

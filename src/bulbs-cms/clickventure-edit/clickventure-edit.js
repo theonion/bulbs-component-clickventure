@@ -3,13 +3,14 @@
 angular.module('bulbs.clickventure.edit', [
   'jquery',
   'lodash',
-  'bulbs.clickventure.edit.node'
+  'bulbs.clickventure.edit.node',
+  'bulbs.clickventure.edit.nodeList'
 ])
   .directive('clickventureEdit', [
     function () {
       return {
         restrict: 'E',
-        templateUrl: '/cms/partials/clickventure/clickventure-edit.html',
+        templateUrl: 'clickventure-edit.html',
         scope: {
           article: '=',
           saveArticleDeferred: '='

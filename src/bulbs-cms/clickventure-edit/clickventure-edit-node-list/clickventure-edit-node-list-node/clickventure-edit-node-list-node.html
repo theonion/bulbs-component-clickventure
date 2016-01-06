@@ -1,0 +1,13 @@
+<div class="clickventure-edit-node-list-node-status">
+</div>
+<div class="clickventure-edit-node-list-node-title">
+  <span
+      ng-show="!!title"
+      ng-bind-html="title">
+  </span>
+  <span ng-show="!title">Page {{ node.id }}</span>
+</div>
+<div
+    class="clickventure-edit-node-list-node-tools"
+    ng-transclude>
+</div>

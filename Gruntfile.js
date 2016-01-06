@@ -43,5 +43,4 @@ module.exports = function (grunt) {
       'clean:tmp'
     ]
   );
-
 };

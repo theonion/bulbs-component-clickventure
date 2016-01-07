@@ -8,7 +8,7 @@ angular.module('bulbs.clickventure.edit.nodeList.node', [])
         templateUrl: 'clickventure-edit-node-list/clickventure-edit-node-list-node/clickventure-edit-node-list-node.html',
         transclude: true,
         scope: {
-          title: '@'
+          node: '='
         },
         require: '^clickventureEditNodeList'
       };

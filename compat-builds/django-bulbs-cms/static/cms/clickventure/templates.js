@@ -7,12 +7,15 @@ angular.module('bulbs.clickventure.templates', []).run(['$templateCache', functi
 
 
   $templateCache.put('clickventure-edit-node-list/clickventure-edit-node-list-node/clickventure-edit-node-list-node.html',
-    "<div class=clickventure-edit-node-list-node-status></div><div class=clickventure-edit-node-list-node-title><span ng-show=!!title ng-bind-html=title></span> <span ng-show=!title>Page {{ node.id }}</span></div><div class=clickventure-edit-node-list-node-tools ng-transclude></div>"
+    "<div class=clickventure-edit-node-list-node-status ng-class=\"{\n" +
+    "      'clickventure-edit-node-list-node-status-start': node.start,\n" +
+    "      'clickventure-edit-node-list-node-status-finish': node.finish\n" +
+    "    }\"></div><div class=clickventure-edit-node-list-node-title><span ng-show=!!node.title ng-bind-html=node.title></span> <span ng-show=!node.title>Page {{ node.id }}</span></div><div class=clickventure-edit-node-list-node-tools><ng-transclude></ng-transclude></div>"
   );
 
 
   $templateCache.put('clickventure-edit-node-list/clickventure-edit-node-list.html',
-    "<ol class=list-group><li class=\"list-group-item clearfix\" ng-repeat=\"node in nodes\" ng-class=\"{active: node.active}\" ng-click=selectNode(node)><clickventure-edit-node-list-node node=node.title><button class=\"btn btn-link btn-xs\" ng-click=\"onMoveListObject(article.nodes, $index, $index - 1)\" ng-disabled=$first><span class=\"glyphicon glyphicon-chevron-up\"></span></button> <button class=\"btn btn-link btn-xs\" ng-click=\"onMoveListObject(article.nodes, $index, $index + 1)\" ng-disabled=$last><span class=\"glyphicon glyphicon-chevron-down\"></span></button></clickventure-edit-node-list-node></li></ol>"
+    "<ol class=list-group><li ng-repeat=\"node in nodes\" ng-class=\"{active: node.active}\" ng-click=selectNode(node)><clickventure-edit-node-list-node node=node><input type=number min=1 step=1 ng-model=node.order ng-pattern=\"/^[1-9]{1}[0-9]*$/\" ng-blur=\"reorderNode($index, node.order)\"> <button class=\"btn btn-link btn-xs\" ng-click=\"onMoveListObject(article.nodes, $index, $index - 1)\" ng-disabled=$first><span class=\"glyphicon glyphicon-chevron-up\"></span></button> <button class=\"btn btn-link btn-xs\" ng-click=\"onMoveListObject(article.nodes, $index, $index + 1)\" ng-disabled=$last><span class=\"glyphicon glyphicon-chevron-down\"></span></button></clickventure-edit-node-list-node></li></ol>"
   );
 
 

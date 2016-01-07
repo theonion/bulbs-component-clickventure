@@ -1,12 +1,17 @@
 <ol class="list-group">
   <li
-      class="list-group-item clearfix"
       ng-repeat="node in nodes"
       ng-class="{active: node.active}"
       ng-click="selectNode(node)">
 
-    <clickventure-edit-node-list-node node="node.title">
-
+    <clickventure-edit-node-list-node node="node">
+      <input
+        type="number"
+        min="1"
+        step="1"
+        ng-model="node.order"
+        ng-pattern="/^[1-9]{1}[0-9]*$/"
+        ng-blur="reorderNode($index, node.order)">
       <button
           class="btn btn-link btn-xs"
           ng-click="onMoveListObject(article.nodes, $index, $index - 1)"
@@ -20,41 +25,5 @@
         <span class="glyphicon glyphicon-chevron-down"></span>
       </button>
     </clickventure-edit-node-list-node>
-
-    <!-- <div class="btn-group btn-group-vertical pull-right">
-      <button
-          class="btn btn-link btn-xs"
-          ng-click="onDeleteNode(article.nodes, node)">
-        <span class="glyphicon glyphicon-remove"></span>
-      </button>
-      <button
-          class="btn btn-link btn-xs"
-          ng-click="onMoveListObject(article.nodes, $index, $index - 1)"
-          ng-disabled="$index == 0">
-        <span class="glyphicon glyphicon-chevron-up"></span>
-      </button>
-      <button
-          class="btn btn-link btn-xs"
-          ng-click="onMoveListObject(article.nodes, $index, $index + 1)"
-          ng-disabled="$last">
-        <span class="glyphicon glyphicon-chevron-down"></span>
-      </button>
-    </div>
-    <span
-        ng-show="node.start"
-        class="fa fa-home">
-    </span>
-    <span
-        ng-show="node.finish"
-        class="fa fa-flag">
-    </span>
-    <span
-        ng-show="node.shareable"
-        class="fa fa-share-alt">
-    </span>
-    <span
-        ng-show="!!node.title"
-        ng-bind-html="node.title"></span>
-    <span ng-show="!node.title">Page {{ node.id }}</span> -->
   </li>
 </ol>

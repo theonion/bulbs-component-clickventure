@@ -5,7 +5,7 @@ from jsonfield import JSONField
 class ClickventureMixin(models.Model):
     """Mixin to use for clickventure (choose your own adventure) content types."""
 
-    # nodes = {
+    # nodes = [
     #     {
     #         id: integer,
     #         title: reference name,
@@ -21,7 +21,7 @@ class ClickventureMixin(models.Model):
     #         ]
     #     },
     #     ...
-    # }
+    # ]
     nodes = JSONField(default="[]", blank=True)
 
     class Meta:

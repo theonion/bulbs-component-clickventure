@@ -1,13 +1,19 @@
-clickventure-edit .clickventure {
+clickventure-edit {
   min-height: 600px;
 }
-clickventure-edit .clickventure .active button {
+clickventure-edit .clickventure-edit-node-list-tools {
+  background-color: #c8c8c8;
+  padding: 5px;
+  text-align: center;
+  width: 100%;
+}
+clickventure-edit .active button {
   color: white;
 }
-clickventure-edit .clickventure .node-text {
+clickventure-edit .node-text {
   height: auto;
 }
-clickventure-edit .clickventure .editor,
-clickventure-edit .clickventure .editorPlaceholder {
+clickventure-edit .editor,
+clickventure-edit .editorPlaceholder {
   padding: 0;
 }

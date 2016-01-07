@@ -1,9 +1,7 @@
 'use strict';
 
 angular.module('bulbs.clickventure.edit.nodeList', [
-  'bulbs.clickventure.edit.nodeList.node',
-  // HACK : these utils from bulbs-cms should be extracted as a dependency
-  'utils'
+  'bulbs.clickventure.edit.nodeList.node'
 ])
   .directive('clickventureEditNodeList', [
     function () {
@@ -11,28 +9,52 @@ angular.module('bulbs.clickventure.edit.nodeList', [
         restrict: 'E',
         templateUrl: 'clickventure-edit-node-list/clickventure-edit-node-list.html',
         scope: {
-          nodes: '='
+          nodes: '=',
+          onSelectNode: '&'
         },
         require: '^clickventureEdit',
         controller: [
           '$scope', 'Utils',
           function ($scope, Utils) {
 
+            $scope.nodeViewData = $scope.nodes.reduce(function (data, node, i) {
+              data[node.id] = {
+                // 1-based index for readability
+                order: i + 1,
+                active: false
+              };
+
+              return data;
+            }, {});
+
             var reindexNodes = function () {
               return $scope.nodes
                 .forEach(function (node, i) {
-                  node.order = i;
+                  $scope.nodeViewData[node.id].order = i + 1;
                 });
             };
 
             $scope.reorderNode = function (indexFrom, indexTo) {
-              if (typeof(indexTo) !== 'number') {
-                indexTo = 0;
+              var node = $scope.nodes[indexFrom];
+
+              if (typeof(indexTo) !== 'number' ||
+                  indexTo < 0 ||
+                  indexTo >= $scope.nodes.length) {
+                // don't move it if an invalid index was given
+                $scope.nodeViewData[node.id].order = indexFrom + 1;
+                return;
               }
 
-              Utils.moveTo($scope.nodes, indexFrom, indexTo);
+              $scope.nodes.splice(indexFrom, 1);
+              $scope.nodes.splice(indexTo, 0, node);
 
               reindexNodes();
+            };
+
+            $scope.selectNode = function (node) {
+              $scope.nodeViewData[node.id].active = true;
+
+              $scope.onSelectNode({node: node});
             };
 
             reindexNodes();

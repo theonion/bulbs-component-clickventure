@@ -3,12 +3,13 @@ clickventure-edit-node-list-node {
   display: block;
 }
 clickventure-edit-node-list-node.clickventure-edit-node-list-node-active {
-  border: 3px #288fc7 solid;
+  border: 1px #288fc7 solid;
 }
 clickventure-edit-node-list-node.clickventure-edit-node-list-node-active .clickventure-edit-node-list-node-status {
   background-color: #288fc7;
 }
 clickventure-edit-node-list-node .clickventure-edit-node-list-node-status {
+  background-color: #e0e0e0;
   height: 10px;
 }
 clickventure-edit-node-list-node .clickventure-edit-node-list-node-status.clickventure-edit-node-list-node-status-start {

@@ -52,7 +52,9 @@ angular.module('bulbs.clickventure.edit.nodeList', [
             };
 
             $scope.selectNode = function (node) {
-              $scope.nodeViewData[node.id].active = true;
+              Object.keys($scope.nodeViewData).forEach(function (id) {
+                $scope.nodeViewData[id].active = node.id === parseInt(id, 10);
+              });
 
               $scope.onSelectNode({node: node});
             };

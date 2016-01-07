@@ -4,7 +4,8 @@ angular.module('bulbs.clickventure.edit', [
   'jquery',
   'lodash',
   'bulbs.clickventure.edit.node',
-  'bulbs.clickventure.edit.nodeList'
+  'bulbs.clickventure.edit.nodeList',
+  'bulbs.clickventure.edit.nodeToolbar'
 ])
   .directive('clickventureEdit', [
     function () {

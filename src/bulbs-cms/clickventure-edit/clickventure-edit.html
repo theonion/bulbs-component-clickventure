@@ -1,6 +1,4 @@
 <div>
-  <clickventure-edit-node-toolbar></clickventure-edit-node-toolbar>
-
   <clickventure-edit-node-list
       nodes="article.nodes"
       on-select-node="">
@@ -20,9 +18,11 @@
       <span>Run Check</span>
     </button>
   </div>
-
 </div>
-<div class="col-xs-8">
+
+<div>
+  <clickventure-edit-node-toolbar></clickventure-edit-node-toolbar>
+
   <div ng-show="!isEditing">
     <h3>
       <span class="fa fa-arrow-left"></span>
@@ -30,19 +30,6 @@
     </h3>
   </div>
   <div ng-show="isEditing">
-    <div class="navbar navbar-default">
-      <header class="navbar-brand col-xs-7">Edit</header>
-      <div class="col-xs-5">
-        <a
-            style="text-decoration:none !important"
-            class="pull-right navbar-btn btn btn-link btn-sm"
-            target="_blank"
-            href="/r/{{ article.id }}#{{ selectedNode.id }}">
-          <span>Preview</span>
-          <i class="fa fa-share"></i>
-        </a>
-      </div>
-    </div>
     <clickventure-edit-node
         nodes="article.nodes"
         node="selectedNode"

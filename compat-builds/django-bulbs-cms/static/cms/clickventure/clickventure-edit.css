@@ -1,11 +1,6 @@
 clickventure-edit .clickventure {
   min-height: 600px;
 }
-clickventure-edit .clickventure .list-group {
-  cursor: pointer;
-  max-height: 600px;
-  overflow-y: scroll;
-}
 clickventure-edit .clickventure .active button {
   color: white;
 }

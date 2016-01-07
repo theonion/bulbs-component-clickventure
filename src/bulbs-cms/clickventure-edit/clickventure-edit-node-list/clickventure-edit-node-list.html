@@ -11,6 +11,7 @@
         step="1"
         ng-model="node.order"
         ng-pattern="/^[1-9]{1}[0-9]*$/"
+        ng-keyup="$event.which === 13 && reorderNode($index, node.order)"
         ng-blur="reorderNode($index, node.order)">
       <button
           class="btn btn-link btn-xs"

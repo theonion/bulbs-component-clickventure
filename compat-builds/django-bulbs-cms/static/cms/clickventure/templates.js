@@ -15,7 +15,7 @@ angular.module('bulbs.clickventure.templates', []).run(['$templateCache', functi
 
 
   $templateCache.put('clickventure-edit-node-list/clickventure-edit-node-list.html',
-    "<ol class=list-group><li ng-repeat=\"node in nodes\" ng-class=\"{active: node.active}\" ng-click=selectNode(node)><clickventure-edit-node-list-node node=node><input type=number min=1 step=1 ng-model=node.order ng-pattern=\"/^[1-9]{1}[0-9]*$/\" ng-blur=\"reorderNode($index, node.order)\"> <button class=\"btn btn-link btn-xs\" ng-click=\"reorderNode($index, $index - 1)\" ng-disabled=$first><span class=\"glyphicon glyphicon-chevron-up\"></span></button> <button class=\"btn btn-link btn-xs\" ng-click=\"reorderNode($index, $index + 1)\" ng-disabled=$last><span class=\"glyphicon glyphicon-chevron-down\"></span></button></clickventure-edit-node-list-node></li></ol>"
+    "<ol class=list-group><li ng-repeat=\"node in nodes\" ng-class=\"{active: node.active}\" ng-click=selectNode(node)><clickventure-edit-node-list-node node=node><input type=number min=1 step=1 ng-model=node.order ng-pattern=\"/^[1-9]{1}[0-9]*$/\" ng-keyup=\"$event.which === 13 && reorderNode($index, node.order)\" ng-blur=\"reorderNode($index, node.order)\"> <button class=\"btn btn-link btn-xs\" ng-click=\"reorderNode($index, $index - 1)\" ng-disabled=$first><span class=\"glyphicon glyphicon-chevron-up\"></span></button> <button class=\"btn btn-link btn-xs\" ng-click=\"reorderNode($index, $index + 1)\" ng-disabled=$last><span class=\"glyphicon glyphicon-chevron-down\"></span></button></clickventure-edit-node-list-node></li></ol>"
   );
 
 

@@ -5,7 +5,8 @@ angular.module('bulbs.clickventure.edit', [
   'lodash',
   'bulbs.clickventure.edit.node',
   'bulbs.clickventure.edit.nodeList',
-  'bulbs.clickventure.edit.nodeToolbar'
+  'bulbs.clickventure.edit.nodeToolbar',
+  'bulbs.clickventure.edit.service'
 ])
   .directive('clickventureEdit', [
     function () {
@@ -17,27 +18,17 @@ angular.module('bulbs.clickventure.edit', [
           saveArticleDeferred: '='
         },
         controller: [
-          '_', '$', '$scope', '$window', '$timeout',
-          function (_, $, $scope, $window, $timeout) {
-            $scope.isEditing = false;
-            $scope.selectedNode = null;
+          '_', '$', '$scope', '$window', '$timeout', 'ClickventureEdit',
+          function (_, $, $scope, $window, $timeout, ClickventureEdit) {
+
+
+
             $scope.$watch('article', function (newVal, oldVal) {
-              // make sure we're generating unique ids
-              var maxId = 0;
-              if (!newVal) return;
-              var nodes = newVal.nodes;
-              for (var i = 0; i < nodes.length; i++) {
-                maxId = Math.max(maxId, nodes[i].id);
-              }
-              nextNodeId = maxId + 1;
-              // the article object gets completely replaced so we have
-              // to update references
-              if ($scope.selectedNode) {
-                $scope.selectedNode = _.find(nodes, function (value) {
-                  return value.id == $scope.selectedNode.id;
-                });
-              }
+              ClickventureEdit.setNodes(newVal.nodes);
             });
+
+            $scope.isEditing = false;
+
             $scope.selectNode = function (node) {
               $scope.selectedNode = node;
               $scope.isEditing = !!node;

@@ -1,21 +1,21 @@
 <ol>
   <li
-      ng-repeat="node in nodes"
+      ng-repeat="node in nodeData.nodes"
       ng-click="selectNode(node)">
 
     <clickventure-edit-node-list-node
         node="node"
-        ng-class="{'clickventure-edit-node-list-node-active': nodeViewData[node.id].active}">
+        ng-class="{'clickventure-edit-node-list-node-active': nodeData.view[node.id].active}">
 
       <input
         class="clickventure-edit-node-list-node-tools-item"
         type="number"
         min="1"
         step="1"
-        ng-model="nodeViewData[node.id].order"
+        ng-model="nodeData.view[node.id].order"
         ng-pattern="/^[1-9]{1}[0-9]*$/"
-        ng-keyup="$event.which === 13 && reorderNode($index, nodeViewData[node.id].order - 1)"
-        ng-blur="reorderNode($index, nodeViewData[node.id].order - 1)">
+        ng-keyup="$event.which === 13 && reorderNode($index, nodeData.view[node.id].order - 1)"
+        ng-blur="reorderNode($index, nodeData.view[node.id].order - 1)">
       <button
           class="btn btn-link btn-xs clickventure-edit-node-list-node-tools-item"
           ng-click="reorderNode($index, $index - 1)"

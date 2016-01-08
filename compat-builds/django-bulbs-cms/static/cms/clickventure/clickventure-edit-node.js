@@ -20,8 +20,9 @@ angular.module('bulbs.clickventure.edit.node', [
         '_', '$scope', '$window', '$timeout', 'ClickventureEdit', 'ConfirmationModal',
         function (_, $scope, $window, $timeout, ClickventureEdit, ConfirmationModal) {
 
-          $scope.cloneNode = ClickventureEdit.cloneNode;
           $scope.addLink = ClickventureEdit.addLink;
+          $scope.cloneNode = ClickventureEdit.cloneNode;
+          $scope.linkStyles = ClickventureEdit.getValidLinkStyles();
           $scope.reorderLink = ClickventureEdit.reorderLink;
 
           $scope.deleteNode = function (node) {
@@ -42,21 +43,7 @@ angular.module('bulbs.clickventure.edit.node', [
 // TODO: >>>>>>> OLD
 
           $scope.inboundNodes = [];
-          $scope.linkStyles = [
-            '',
-            'Action',
-            'Dialogue',
-            'Music',
-            'Quiz'
-          ];
-          $scope.nodeTransitions = [
-            'default',
-            'slideLeft',
-            'slideRight',
-            'slideUp',
-            'slideDown',
-            'flipLeft'
-          ];
+
           $scope.$watch('node', function (newVal, oldVal) {
             if (!newVal) {
               return;

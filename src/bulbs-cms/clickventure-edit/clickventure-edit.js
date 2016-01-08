@@ -35,26 +35,6 @@ angular.module('bulbs.clickventure.edit', [
                 $window.picturefill($('.clickventure-node')[0]);
               });
             });
-
-
-// TODO: >>>>>>> OLD
-
-            $scope.linkStyles = [
-              '',
-              'Action',
-              'Dialogue',
-              'Music',
-              'Quiz'
-            ];
-
-            $scope.nodeTransitions = [
-              'default',
-              'slideLeft',
-              'slideRight',
-              'slideUp',
-              'slideDown',
-              'flipLeft'
-            ];
           }
         ]
       };

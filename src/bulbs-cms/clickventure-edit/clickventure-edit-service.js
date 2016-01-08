@@ -214,7 +214,7 @@ angular.module('bulbs.clickventure.edit.service', [
           body: '',
           to_node: null,
           transition: '',
-          link_style: '',
+          link_style: node.link_style,
           float: false
         };
 
@@ -238,6 +238,25 @@ angular.module('bulbs.clickventure.edit.service', [
       return {
         getData: function () {
           return data;
+        },
+        getValidLinkStyles: function () {
+          return [
+            '',
+            'Action',
+            'Dialogue',
+            'Music',
+            'Quiz'
+          ];
+        },
+        getValidNodeTransitions: function () {
+          return [
+            'default',
+            'slideLeft',
+            'slideRight',
+            'slideUp',
+            'slideDown',
+            'flipLeft'
+          ];
         },
         setNodes: setNodes,
         addNode: addNode,

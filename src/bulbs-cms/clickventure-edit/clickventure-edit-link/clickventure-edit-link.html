@@ -13,7 +13,7 @@
       <select
           class="form-control"
           ng-model="link.to_node"
-          ng-options="node.id as node.title || node.id for node in nodes">
+          ng-options="node.id as node.title || node.id for node in nodeData.nodes">
       </select>
     </label>
     <label class="col-xs-3">

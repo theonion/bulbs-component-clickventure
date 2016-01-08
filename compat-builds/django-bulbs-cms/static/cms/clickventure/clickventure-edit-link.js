@@ -8,13 +8,19 @@ angular.module('bulbs.clickventure.edit.link', [
     return {
       restrict: 'E',
       templateUrl: 'clickventure-edit-link/clickventure-edit-link.html',
-      scope: false,
+      scope: {
+        node: '=',
+        link: '='
+      },
       require: '^clickventureNode',
       controller: [
         '$scope', 'ClickventureEdit', 'ConfirmationModal',
         function ($scope, ClickventureEdit, ConfirmationModal) {
 
           $scope.deleteLink = ClickventureEdit.deleteLink;
+          $scope.linkStyles = ClickventureEdit.getValidLinkStyles();
+          $scope.nodeData = ClickventureEdit.getData();
+          $scope.nodeTransitions = ClickventureEdit.getValidNodeTransitions();
 
           $scope.deleteLink = function (node, link) {
             var modalScope = $scope.$new();

@@ -13,7 +13,7 @@ angular.module('bulbs.clickventure.edit.service', [])
         select: []
       };
 
-      var setNodeViewData = function (node, preset) {
+      var _setNodeViewData = function (node, preset) {
         var viewData;
         var settings = preset || {};
 
@@ -30,7 +30,7 @@ angular.module('bulbs.clickventure.edit.service', [])
         return viewData;
       };
 
-      var reindexNodes = function () {
+      var _reindexNodes = function () {
         data.nodes
           .forEach(function (node, i) {
             data.view[node.id].order = i + 1;
@@ -39,7 +39,7 @@ angular.module('bulbs.clickventure.edit.service', [])
         return data.nodes;
       };
 
-      var getNextNodeId = function () {
+      var _getNextNodeId = function () {
         return Math.max.apply(
           null,
           data.nodes.map(function (node) {
@@ -48,27 +48,23 @@ angular.module('bulbs.clickventure.edit.service', [])
         ) + 1;
       };
 
-      this.getData = function () {
-        return data;
-      };
-
-      this.setNodes = function (nodes) {
+      var setNodes = function (nodes) {
         data.nodes = nodes;
 
         data.view = {};
         data.nodes.forEach(function (node, i) {
           // 1-based index for readability
-          setNodeViewData(node, {order: i + 1});
+          _setNodeViewData(node, {order: i + 1});
         });
 
-        this.selectNode(nodes[0]);
+        selectNode(nodes[0]);
 
-        return reindexNodes();
+        return _reindexNodes();
       };
 
-      this.addNode = function () {
+      var addNode = function () {
         var node = {
-          id: getNextNodeId(),
+          id: _getNextNodeId(),
           title: '',
           body: '',
           link_style: 'action',
@@ -80,14 +76,14 @@ angular.module('bulbs.clickventure.edit.service', [])
         };
         data.nodes.push(node);
 
-        setNodeViewData(node);
+        _setNodeViewData(node);
 
-        this.selectNode(node);
+        selectNode(node);
 
-        return reindexNodes();
+        return _reindexNodes();
       };
 
-      this.reorderNode = function (indexFrom, indexTo) {
+      var reorderNode = function (indexFrom, indexTo) {
         var node = data.nodes[indexFrom];
 
         if (typeof(indexTo) !== 'number' ||
@@ -101,14 +97,14 @@ angular.module('bulbs.clickventure.edit.service', [])
         data.nodes.splice(indexFrom, 1);
         data.nodes.splice(indexTo, 0, node);
 
-        return reindexNodes();
+        return _reindexNodes();
       };
 
-      this.registerSelectNodeHandler = function (func) {
+      var registerSelectNodeHandler = function (func) {
         handlers.select.push(func);
       };
 
-      this.selectNode = function (node) {
+      var selectNode = function (node) {
         Object.keys(data.view).forEach(function (id) {
           data.view[id].active = node.id === parseInt(id, 10);
         });
@@ -118,19 +114,49 @@ angular.module('bulbs.clickventure.edit.service', [])
         });
       };
 
-      this.cloneNode = function (node) {
+      var cloneNode = function (node) {
         // TODO : fill in
         throw new Error('Not implemented yet.');
       };
 
-      this.deleteNdoe = function (node) {
+      var deleteNode = function (rmNode) {
+        var i = data.nodes.indexOf(rmNode);
+
+        if (i >= 0) {
+          data.nodes.splice(i, 1);
+          delete data.view[rmNode.id];
+
+          data.nodes.forEach(function (node) {
+            node.links.forEach(function (link) {
+              if (typeof link.to_node === 'number' && link.to_node.id === rmNode.id) {
+                link.to_node = null;
+              }
+            });
+          });
+        }
+
+        selectNode(data.nodes[i - 1]);
+
+        return _reindexNodes();
+      };
+
+      var addEmptyLink = function (node) {
         // TODO : fill in
         throw new Error('Not implemented yet.');
       };
 
-      this.addEmptyLink = function (node) {
-        // TODO : fill in
-        throw new Error('Not implemented yet.');
+      return {
+        getData: function () {
+          return data;
+        },
+        setNodes: setNodes,
+        addNode: addNode,
+        reorderNode: reorderNode,
+        registerSelectNodeHandler: registerSelectNodeHandler,
+        selectNode: selectNode,
+        cloneNode: cloneNode,
+        deleteNode: deleteNode,
+        addEmptyLink: addEmptyLink
       };
     }
   ]);

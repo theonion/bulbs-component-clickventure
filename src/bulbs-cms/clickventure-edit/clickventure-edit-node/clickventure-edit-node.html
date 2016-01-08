@@ -26,6 +26,15 @@
           ng-model="node.shareable">
       <span>Shareable</span>
     </label>
+
+    <button
+        class="btn btn-danger"
+        ng-click="deleteNode(node)">
+      <i class="fa fa-trash-o"></i>
+      <span>Delete Page</span>
+    </button>
+
+
     <button
         ng-click="cloneNode({node:node})"
         class="btn btn-xs btn-default checkbox-inline pull-right">

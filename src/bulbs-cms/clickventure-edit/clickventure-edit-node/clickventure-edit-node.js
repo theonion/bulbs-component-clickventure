@@ -1,8 +1,10 @@
 'use strict';
 
 angular.module('bulbs.clickventure.edit.node', [
+  'confirmationModal.factory',
   'lodash',
-  'bulbs.clickventure.edit.link'
+  'bulbs.clickventure.edit.link',
+  'bulbs.clickventure.edit.service'
 ])
   .directive('clickventureEditNode', function () {
     return {
@@ -15,8 +17,26 @@ angular.module('bulbs.clickventure.edit.node', [
         cloneNode: '&'
       },
       controller: [
-        '_', '$scope', '$window', '$timeout',
-        function (_, $scope, $window, $timeout) {
+        '_', '$scope', '$window', '$timeout', 'ClickventureEdit', 'ConfirmationModal',
+        function (_, $scope, $window, $timeout, ClickventureEdit, ConfirmationModal) {
+
+          $scope.deleteNode = function (node) {
+            var modalScope = $scope.$new();
+
+            modalScope.modalOnOk = ClickventureEdit.deleteNode.bind(ClickventureEdit, node);
+            modalScope.modalOnCancel = function () {};
+            modalScope.modalTitle = 'Confirm Page Delete';
+            modalScope.modalBody = 'Are you sure you wish to delete this page? This action cannot be undone!';
+            modalScope.modalOkText = 'Delete';
+            modalScope.modalCancelText = 'Cancel';
+
+            new ConfirmationModal(modalScope);
+          };
+
+
+
+// TODO: >>>>>>> OLD
+
           $scope.inboundNodes = [];
           $scope.linkStyles = [
             '',

@@ -40,7 +40,7 @@ angular.module('bulbs.clickventure.edit', [
             });
 
 
-// >>>>>>> OLD
+// TODO: >>>>>>> OLD
 
 // TODO : wtf is this variable?
             $scope.isEditing = false;
@@ -62,17 +62,6 @@ angular.module('bulbs.clickventure.edit', [
               'flipLeft'
             ];
 
-
-            $scope.onDeleteNode = function (objList, obj) {
-              var idx = objList.indexOf(obj);
-              if (idx >= 0) {
-                objList.splice(idx, 1);
-                if ($scope.selectedNode && obj.id == $scope.selectedNode.id) {
-                  $scope.selectNode(null);
-                }
-                updateLinksForMissingNodes();
-              }
-            };
             $scope.onCloneNode = function (obj) {
               $scope.onAddNode();
               var selected = $scope.selectedNode;
@@ -209,17 +198,6 @@ angular.module('bulbs.clickventure.edit', [
               for (var i = 0; i < objList.length; i++) {
                 objList[fieldName] = i;
               }
-            }
-            function updateLinksForMissingNodes() {
-              var validIds = _.pluck($scope.article.nodes, 'id');
-              _.forEach($scope.article.nodes, function (node) {
-                _.forEach(node.links, function (link) {
-                  var toNodeId = link.to_node;
-                  if (!_.contains(validIds, toNodeId)) {
-                    link.to_node = null;
-                  }
-                });
-              });
             }
             function checkForDuplicateNodeIds() {
               var visited = {};

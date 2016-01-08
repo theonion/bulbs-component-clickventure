@@ -4,6 +4,7 @@ angular.module('bulbs.clickventure.edit.node', [
   'confirmationModal.factory',
   'lodash',
   'bulbs.clickventure.edit.link',
+  'bulbs.clickventure.edit.nodeNameFilter',
   'bulbs.clickventure.edit.service'
 ])
   .directive('clickventureEditNode', function () {
@@ -23,7 +24,9 @@ angular.module('bulbs.clickventure.edit.node', [
           $scope.addLink = ClickventureEdit.addLink;
           $scope.cloneNode = ClickventureEdit.cloneNode;
           $scope.linkStyles = ClickventureEdit.getValidLinkStyles();
+          $scope.nodeData = ClickventureEdit.getData();
           $scope.reorderLink = ClickventureEdit.reorderLink;
+          $scope.selectNode = ClickventureEdit.selectNode;
 
           $scope.deleteNode = function (node) {
             var modalScope = $scope.$new();

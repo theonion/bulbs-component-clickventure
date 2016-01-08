@@ -122,5 +122,15 @@
           ng-click="selectNode({node:node})">
       </a>
     </div>
+
+    <h3>Sister Pages</h3>
+    <ul>
+      <li ng-repeat="nodeId in node.sister_pages">
+        <a
+            ng-bind="nodeData.view[nodeId].node | clickventure_node_name"
+            ng-click="selectNode(node)">
+        </a>
+      </li>
+    </ul>
   </div>
 </div>

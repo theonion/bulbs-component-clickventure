@@ -44,24 +44,39 @@ angular.module('bulbs.clickventure.edit.service', [
       };
 
       var _getNextNodeId = function () {
-        return Math.max.apply(
-          null,
-          data.nodes.map(function (node) {
-            return node.id;
-          })
-        ) + 1;
+        var lastId = 0;
+
+        if (data.nodes.length > 0) {
+          lastId = Math.max.apply(
+            null,
+            data.nodes.map(function (node) {
+              return node.id;
+            })
+          );
+        }
+
+        return lastId + 1;
       };
 
       var setNodes = function (nodes) {
+        if (!_.isArray(nodes)) {
+          nodes = [];
+        }
+
         data.nodes = nodes;
-
         data.view = {};
-        data.nodes.forEach(function (node, i) {
-          // 1-based index for readability
-          _setNodeViewData(node, {order: i + 1});
-        });
 
-        selectNode(nodes[0]);
+        if (nodes.length < 1) {
+          // ensure there's at least one node
+          addNode();
+        } else {
+          data.nodes.forEach(function (node, i) {
+            // 1-based index for readability
+            _setNodeViewData(node, {order: i + 1});
+          });
+
+          selectNode(nodes[0]);
+        }
 
         return _reindexNodes();
       };
@@ -179,7 +194,17 @@ angular.module('bulbs.clickventure.edit.service', [
           });
         }
 
-        selectNode(data.nodes[i - 1]);
+        if (data.nodes.length < 1) {
+          // ensure there's at least 1 node
+          addNode();
+        }
+
+        var nextNodeId = i - 1;
+        if (nextNodeId < 0) {
+          nextNodeId = 0;
+        }
+
+        selectNode(data.nodes[nextNodeId]);
 
         return _reindexNodes();
       };

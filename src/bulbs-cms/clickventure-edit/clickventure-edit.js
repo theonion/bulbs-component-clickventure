@@ -219,10 +219,6 @@ angular.module('bulbs.clickventure.edit', [
               }
               return !dupes;
             }
-            // start out with a page ready to go
-            if ($scope.article.nodes && $scope.article.nodes.length === 0) {
-              $scope.onAddNode();
-            }
           }
         ]
       };

@@ -62,15 +62,6 @@ angular.module('bulbs.clickventure.edit', [
               'flipLeft'
             ];
 
-            $scope.onCloneNode = function (obj) {
-              $scope.onAddNode();
-              var selected = $scope.selectedNode;
-              var selectedId = selected.id;  // save for later
-              angular.copy(obj, selected);
-              selected.id = selectedId; // well, now
-              selected.title = 'Clone ' + selected.title;
-            };
-
             $scope.validatePages = function () {
               if (checkForDuplicateNodeIds() &&
                   validateLinks() &&

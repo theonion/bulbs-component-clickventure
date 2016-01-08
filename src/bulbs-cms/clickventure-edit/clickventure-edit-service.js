@@ -1,8 +1,11 @@
 'use strict';
 
-angular.module('bulbs.clickventure.edit.service', [])
+angular.module('bulbs.clickventure.edit.service', [
+  'lodash'
+])
   .service('ClickventureEdit', [
-    function () {
+    '_',
+    function (_) {
 
       var data = {
         nodes: [],
@@ -18,6 +21,7 @@ angular.module('bulbs.clickventure.edit.service', [])
         var settings = preset || {};
 
         data.view[node.id] = {
+          node: node,
           order: settings.order ||
             Math.max.apply(null, data.nodes.map(function (node) {
               if (node.id in data.view) {
@@ -69,6 +73,7 @@ angular.module('bulbs.clickventure.edit.service', [])
           body: '',
           link_style: 'action',
           links: [],
+          sister_pages: [],
           start: data.nodes.length === 0,
           finish: false,
           shareable: false,
@@ -77,10 +82,9 @@ angular.module('bulbs.clickventure.edit.service', [])
         data.nodes.push(node);
 
         _setNodeViewData(node);
+        _reindexNodes();
 
-        selectNode(node);
-
-        return _reindexNodes();
+        return selectNode(node);
       };
 
       var reorderNode = function (indexFrom, indexTo) {
@@ -112,11 +116,49 @@ angular.module('bulbs.clickventure.edit.service', [])
         handlers.select.forEach(function (func) {
           func(node);
         });
+
+        return node;
       };
 
       var cloneNode = function (node) {
-        // TODO : fill in
-        throw new Error('Not implemented yet.');
+        var clonedNode = addNode();
+
+        clonedNode.title = 'Clone - ' + node.title;
+        clonedNode.body = node.body;
+        clonedNode.link_style = node.link_style;
+        clonedNode.start = false;
+        clonedNode.finish = node.finish;
+        clonedNode.shareable = true;
+        clonedNode.share_text = node.share_text;
+
+        // so we don't modify the original page's links
+        clonedNode.links = node.links.map(function (link) {
+          return _.clone(link);
+        });
+
+        if (!_.isArray(node.sister_pages)) {
+          node.sister_pages = [];
+        }
+
+        // this node gets the current list of siblings (which doesn't include itself)
+        clonedNode.sister_pages = _.clone(node.sister_pages);
+
+        // tell each sister that they have a new sibling
+        node.sister_pages.forEach(function (sisterId) {
+          var sister = data.view[sisterId].node;
+
+          if (!_.isArray(sister.sister_pages)) {
+            sister.sister_pages = [];
+          }
+
+          sister.sister_pages.push(clonedNode.id);
+        });
+
+        // tell the new siblings about eachother
+        clonedNode.sister_pages.push(node.id);
+        node.sister_pages.push(clonedNode.id);
+
+        return clonedNode;
       };
 
       var deleteNode = function (rmNode) {
@@ -132,6 +174,8 @@ angular.module('bulbs.clickventure.edit.service', [])
                 link.to_node = null;
               }
             });
+
+            node.sister_pages = _.without(node.sister_pages, rmNode.id);
           });
         }
 

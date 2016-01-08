@@ -20,6 +20,8 @@ angular.module('bulbs.clickventure.edit.node', [
         '_', '$scope', '$window', '$timeout', 'ClickventureEdit', 'ConfirmationModal',
         function (_, $scope, $window, $timeout, ClickventureEdit, ConfirmationModal) {
 
+          $scope.cloneNode = ClickventureEdit.cloneNode;
+
           $scope.deleteNode = function (node) {
             var modalScope = $scope.$new();
 

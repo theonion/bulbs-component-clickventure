@@ -1,6 +1,8 @@
 'use strict';
 
-angular.module('bulbs.clickventure.edit.nodeList.node', [])
+angular.module('bulbs.clickventure.edit.nodeList.node', [
+  'bulbs.clickventure.edit.nodeNameFilter',
+])
   .directive('clickventureEditNodeListNode', [
     function () {
       return {

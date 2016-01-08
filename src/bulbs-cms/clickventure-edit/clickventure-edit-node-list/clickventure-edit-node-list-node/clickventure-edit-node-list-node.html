@@ -5,13 +5,11 @@
       'clickventure-edit-node-list-node-status-finish': node.finish
     }">
 </div>
-<div class="clickventure-edit-node-list-node-title">
-  <span
-      ng-show="!!node.title"
-      ng-bind-html="node.title">
-  </span>
-  <span ng-show="!node.title">Page {{ node.id }}</span>
+<div
+    class="clickventure-edit-node-list-node-title"
+    ng-bind-html="node | clickventure_node_name">
 </div>
+
 <div class="clickventure-edit-node-list-node-tools">
   <ng-transclude></ng-transclude>
 </div>

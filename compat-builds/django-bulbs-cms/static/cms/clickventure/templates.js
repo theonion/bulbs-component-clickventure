@@ -2,7 +2,7 @@ angular.module('bulbs.clickventure.templates', []).run(['$templateCache', functi
   'use strict';
 
   $templateCache.put('clickventure-edit-link/clickventure-edit-link.html',
-    "<div class=clickventure-link><div class=\"form-control form-group node-text\"><onion-editor ng-model=link.body role=singleline formatting=bold,italic,strike placeholder=Body></onion-editor></div><div class=row><label class=col-xs-4><span>To page:</span><select class=form-control ng-model=link.to_node ng-options=\"node.id as node.title || node.id for node in nodeData.nodes\"></select></label><label class=col-xs-3><span>Transition:</span><select class=form-control ng-model=link.transition ng-options=\"transition for transition in nodeTransitions\"></select></label><label class=col-xs-3><span>Style:</span><select class=form-control ng-options=\"style.toLowerCase() as style for style in linkStyles\" ng-model=link.link_style></select></label><label class=col-xs-2><span>Float:</span> <input type=checkbox class=form-control ng-model=link.float></label></div><button class=\"btn btn-link\" ng-click=\"deleteLink(node, link)\"><span class=text-danger><span class=\"fa fa-trash-o\"></span> <span>Delete Link</span></span></button></div>"
+    "<div class=clickventure-link><div class=\"form-control form-group node-text\"><onion-editor ng-model=link.body role=singleline formatting=bold,italic,strike placeholder=Body></onion-editor></div><div class=row><label class=col-xs-4><span>To page:</span><select class=form-control ng-model=link.to_node ng-options=\"node.id as (node | clickventure_node_name) || node.id for node in nodeData.nodes\"></select></label><label class=col-xs-3><span>Transition:</span><select class=form-control ng-model=link.transition ng-options=\"transition for transition in nodeTransitions\"></select></label><label class=col-xs-3><span>Style:</span><select class=form-control ng-options=\"style.toLowerCase() as style for style in linkStyles\" ng-model=link.link_style></select></label><label class=col-xs-2><span>Float:</span> <input type=checkbox class=form-control ng-model=link.float></label></div><button class=\"btn btn-link\" ng-click=\"deleteLink(node, link)\"><span class=text-danger><span class=\"fa fa-trash-o\"></span> <span>Delete Link</span></span></button></div>"
   );
 
 
@@ -10,7 +10,7 @@ angular.module('bulbs.clickventure.templates', []).run(['$templateCache', functi
     "<div class=clickventure-edit-node-list-node-status ng-class=\"{\n" +
     "      'clickventure-edit-node-list-node-status-start': node.start,\n" +
     "      'clickventure-edit-node-list-node-status-finish': node.finish\n" +
-    "    }\"></div><div class=clickventure-edit-node-list-node-title><span ng-show=!!node.title ng-bind-html=node.title></span> <span ng-show=!node.title>Page {{ node.id }}</span></div><div class=clickventure-edit-node-list-node-tools><ng-transclude></ng-transclude></div>"
+    "    }\"></div><div class=clickventure-edit-node-list-node-title ng-bind-html=\"node | clickventure_node_name\"></div><div class=clickventure-edit-node-list-node-tools><ng-transclude></ng-transclude></div>"
   );
 
 

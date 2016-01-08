@@ -2,7 +2,8 @@
 
 angular.module('bulbs.clickventure.edit.validator.service', [])
   .service('ClickventureEditValidator', [
-    function () {
+    '$filter',
+    function ($filter) {
 
       this.validateGraph = function (nodes) {
         // TODO : fill in
@@ -91,7 +92,7 @@ angular.module('bulbs.clickventure.edit.validator.service', [])
         if (_.size(unreachables) > 0) {
           var node = nodes.find({id: _.first(unreachables)}).value();
           $scope.selectNode(node);
-          alert('Unreachable from start: ' + node.title);
+          alert('Unreachable from start: ' + $filter('clickventure_node_name')(node));
           return false;
         }
         return true;
@@ -121,7 +122,7 @@ angular.module('bulbs.clickventure.edit.validator.service', [])
         if (_.size(unreachables) > 0) {
           var node = nodes.find({id: _.first(unreachables)}).value();
           $scope.selectNode(node);
-          alert('No path to finish: ' + node.title);
+          alert('No path to finish: ' + $filter('clickventure_node_name')(node));
           return false;
         }
         return true;

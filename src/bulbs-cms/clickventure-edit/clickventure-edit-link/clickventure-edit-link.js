@@ -2,6 +2,7 @@
 
 angular.module('bulbs.clickventure.edit.link', [
   'confirmationModal.factory',
+  'bulbs.clickventure.edit.nodeNameFilter',
   'bulbs.clickventure.edit.service'
 ])
   .directive('clickventureEditLink', function (routes) {

@@ -4,8 +4,8 @@ angular.module('bulbs.clickventure.edit.service', [
   'lodash'
 ])
   .service('ClickventureEdit', [
-    '_',
-    function (_) {
+    '_', '$filter',
+    function (_, $filter) {
 
       var data = {
         nodes: [],
@@ -138,7 +138,7 @@ angular.module('bulbs.clickventure.edit.service', [
       var cloneNode = function (node) {
         var clonedNode = addNode();
 
-        clonedNode.title = 'Clone - ' + node.title;
+        clonedNode.title = 'Clone - ' + $filter('clickventure_node_name')(node);
         clonedNode.body = node.body;
         clonedNode.link_style = node.link_style;
         clonedNode.start = false;

@@ -232,7 +232,7 @@ angular.module('bulbs.clickventure.edit.service', [
       };
 
       var deleteLink = function (node, rmLink) {
-        node.links = _.without(rmLink);
+        node.links = _.without(node.links, rmLink);
       };
 
       return {

@@ -19,6 +19,7 @@ angular.module('bulbs.clickventure.edit.link', [
         function ($scope, ClickventureEdit, ConfirmationModal) {
 
           $scope.deleteLink = ClickventureEdit.deleteLink;
+          $scope.updateInboundLinks = ClickventureEdit.updateInboundLinks;
           $scope.linkStyles = ClickventureEdit.getValidLinkStyles();
           $scope.nodeData = ClickventureEdit.getData();
           $scope.nodeTransitions = ClickventureEdit.getValidNodeTransitions();

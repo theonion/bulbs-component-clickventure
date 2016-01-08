@@ -40,23 +40,6 @@ angular.module('bulbs.clickventure.edit.node', [
 
             new ConfirmationModal(modalScope);
           };
-
-
-
-// TODO: >>>>>>> OLD
-
-          $scope.inboundNodes = [];
-
-          $scope.$watch('node', function (newVal, oldVal) {
-            if (!newVal) {
-              return;
-            }
-            $scope.inboundNodes = _.filter($scope.nodes, function (inNode) {
-              return _.any(inNode.links, function (link) {
-                return link.to_node == newVal.id;
-              });
-            });
-          });
         }
       ],
       require: '^clickventureEdit'

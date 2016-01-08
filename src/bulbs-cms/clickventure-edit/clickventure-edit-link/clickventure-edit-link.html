@@ -13,6 +13,7 @@
       <select
           class="form-control"
           ng-model="link.to_node"
+          ng-change="updateInboundLinks(link)"
           ng-options="node.id as (node | clickventure_node_name) || node.id for node in nodeData.nodes">
       </select>
     </label>

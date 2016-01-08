@@ -115,19 +115,21 @@
   </div>
 
   <div class="row">
-    <h3>Inbound links</h3>
-    <div ng-repeat="node in inboundNodes">
-      <a
-          ng-bind="node.title"
-          ng-click="selectNode({node:node})">
-      </a>
-    </div>
+    <h3>Inbound Links</h3>
+    <ul>
+      <li ng-repeat="nodeId in nodeData.view[node.id].inboundLinks">
+        <a
+            ng-bind-html="nodeData.view[nodeId].node | clickventure_node_name"
+            ng-click="selectNode(node)">
+        </a>
+    </li>
+    </ul>
 
     <h3>Sister Pages</h3>
     <ul>
       <li ng-repeat="nodeId in node.sister_pages">
         <a
-            ng-bind="nodeData.view[nodeId].node | clickventure_node_name"
+            ng-bind-html="nodeData.view[nodeId].node | clickventure_node_name"
             ng-click="selectNode(node)">
         </a>
       </li>

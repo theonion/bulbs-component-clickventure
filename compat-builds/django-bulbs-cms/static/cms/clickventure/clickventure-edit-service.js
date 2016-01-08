@@ -28,7 +28,8 @@ angular.module('bulbs.clickventure.edit.service', [
                 return data.view[node.id].order;
               }
             })) + 1,
-          active: settings.active || false
+          active: settings.active || false,
+          inboundLinks: []
         };
 
         return viewData;
@@ -71,6 +72,11 @@ angular.module('bulbs.clickventure.edit.service', [
           addNode();
         } else {
           data.nodes.forEach(function (node, i) {
+            // some cleanup to ensure old nodes are in a good state
+            node.links.forEach(function (link) {
+              link.from_node = node.id;
+            });
+
             // 1-based index for readability
             _setNodeViewData(node, {order: i + 1});
           });
@@ -212,6 +218,7 @@ angular.module('bulbs.clickventure.edit.service', [
       var addLink = function (node) {
         var link = {
           body: '',
+          from_node: node.id,
           to_node: null,
           transition: '',
           link_style: node.link_style,
@@ -221,6 +228,10 @@ angular.module('bulbs.clickventure.edit.service', [
         node.links.push(link);
 
         return link;
+      };
+
+      var updateInboundLinks = function (link) {
+        data.view[link.to_node].inboundLinks.push(link.from_node);
       };
 
       var reorderLink = function (node, indexFrom, indexTo) {
@@ -233,6 +244,11 @@ angular.module('bulbs.clickventure.edit.service', [
 
       var deleteLink = function (node, rmLink) {
         node.links = _.without(node.links, rmLink);
+
+        data.view[rmLink.to_node].inboundLinks = _.without(
+          data.view[rmLink.to_node].inboundLinks,
+          rmLink.from_node
+        );
       };
 
       return {
@@ -266,6 +282,7 @@ angular.module('bulbs.clickventure.edit.service', [
         cloneNode: cloneNode,
         deleteNode: deleteNode,
         addLink: addLink,
+        updateInboundLinks: updateInboundLinks,
         reorderLink: reorderLink,
         deleteLink: deleteLink
       };

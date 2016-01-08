@@ -27,23 +27,23 @@ angular.module('bulbs.clickventure.edit', [
 
             $scope.addNode = ClickventureEdit.addNode;
 
-
-
-
-// >>>>>>> OLD
-
-            $scope.isEditing = false;
-
-            $scope.selectNode = function (node) {
+            ClickventureEdit.registerSelectNodeHandler(function (node) {
               $scope.selectedNode = node;
               $scope.isEditing = !!node;
+// TODO : this looks bad?
               // terrible code alarm
               if ($scope.isEditing) {
                 $timeout(function () {
                   $window.picturefill($('.clickventure-node')[0]);
                 });
               }
-            };
+            });
+
+
+// >>>>>>> OLD
+
+// TODO : wtf is this variable?
+            $scope.isEditing = false;
 
             $scope.linkStyles = [
               '',

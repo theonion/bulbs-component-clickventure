@@ -55,15 +55,6 @@ angular.module('bulbs.clickventure.edit', [
               'slideDown',
               'flipLeft'
             ];
-
-
-            $scope.onMoveListObject = function (objList, startIndex, newIndex) {
-              if (startIndex >= 0 && newIndex >= 0 && newIndex < objList.length) {
-                var obj = objList[startIndex];
-                objList.splice(startIndex, 1);
-                objList.splice(newIndex, 0, obj);
-              }
-            };
           }
         ]
       };

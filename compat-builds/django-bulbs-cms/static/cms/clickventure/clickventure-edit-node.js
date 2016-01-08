@@ -22,6 +22,7 @@ angular.module('bulbs.clickventure.edit.node', [
 
           $scope.cloneNode = ClickventureEdit.cloneNode;
           $scope.addLink = ClickventureEdit.addLink;
+          $scope.reorderLink = ClickventureEdit.reorderLink;
 
           $scope.deleteNode = function (node) {
             var modalScope = $scope.$new();
@@ -66,20 +67,6 @@ angular.module('bulbs.clickventure.edit.node', [
               });
             });
           });
-
-          $scope.onDeleteObject = function (objList, obj) {
-            var idx = objList.indexOf(obj);
-            if (idx >= 0) {
-              objList.splice(idx, 1);
-            }
-          };
-          $scope.onMoveListObject = function (objList, startIndex, newIndex) {
-            if (startIndex >= 0 && newIndex >= 0 && newIndex < objList.length) {
-              var obj = objList[startIndex];
-              objList.splice(startIndex, 1);
-              objList.splice(newIndex, 0, obj);
-            }
-          };
         }
       ],
       require: '^clickventureEdit'

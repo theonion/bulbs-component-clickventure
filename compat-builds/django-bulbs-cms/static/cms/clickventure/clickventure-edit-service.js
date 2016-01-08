@@ -223,6 +223,14 @@ angular.module('bulbs.clickventure.edit.service', [
         return link;
       };
 
+      var reorderLink = function (node, indexFrom, indexTo) {
+        if (indexFrom >= 0 && indexTo >= 0 && indexTo < node.links.length) {
+          var link = node.links[indexFrom];
+          node.links.splice(indexFrom, 1);
+          node.links.splice(indexTo, 0, link);
+        }
+      };
+
       var deleteLink = function (node, rmLink) {
         node.links = _.without(rmLink);
       };
@@ -239,6 +247,7 @@ angular.module('bulbs.clickventure.edit.service', [
         cloneNode: cloneNode,
         deleteNode: deleteNode,
         addLink: addLink,
+        reorderLink: reorderLink,
         deleteLink: deleteLink
       };
     }

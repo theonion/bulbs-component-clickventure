@@ -90,14 +90,14 @@
           <div class="btn-group pull-right">
             <button
                 class="btn btn-link btn-xs"
-                ng-click="onMoveListObject(node.links, $index, $index + 1)"
+                ng-click="reorderLink(node, $index, $index + 1)"
                 ng-disabled="$last">
               <span class="glyphicon glyphicon-chevron-down"></span>
             </button>
             <button
                 class="btn btn-link btn-xs"
-                ng-click="onMoveListObject(node.links, $index, $index - 1)"
-                ng-disabled="$index == 0">
+                ng-click="reorderLink(node, $index, $index - 1)"
+                ng-disabled="$index === 0">
               <span class="glyphicon glyphicon-chevron-up"></span>
             </button>
           </div>

@@ -209,9 +209,22 @@ angular.module('bulbs.clickventure.edit.service', [
         return _reindexNodes();
       };
 
-      var addEmptyLink = function (node) {
-        // TODO : fill in
-        throw new Error('Not implemented yet.');
+      var addLink = function (node) {
+        var link = {
+          body: '',
+          to_node: null,
+          transition: '',
+          link_style: '',
+          float: false
+        };
+
+        node.links.push(link);
+
+        return link;
+      };
+
+      var deleteLink = function (node, rmLink) {
+        node.links = _.without(rmLink);
       };
 
       return {
@@ -225,7 +238,8 @@ angular.module('bulbs.clickventure.edit.service', [
         selectNode: selectNode,
         cloneNode: cloneNode,
         deleteNode: deleteNode,
-        addEmptyLink: addEmptyLink
+        addLink: addLink,
+        deleteLink: deleteLink
       };
     }
   ]);

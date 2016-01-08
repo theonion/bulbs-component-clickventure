@@ -56,22 +56,7 @@ angular.module('bulbs.clickventure.edit', [
               'flipLeft'
             ];
 
-            $scope.onAddLink = function (node) {
-              var link = {
-                body: '',
-                to_node: null,
-                transition: '',
-                link_style: '',
-                float: false
-              };
-              node.links.push(link);
-            };
-            $scope.onDeleteObject = function (objList, obj) {
-              var idx = objList.indexOf(obj);
-              if (idx >= 0) {
-                objList.splice(idx, 1);
-              }
-            };
+
             $scope.onMoveListObject = function (objList, startIndex, newIndex) {
               if (startIndex >= 0 && newIndex >= 0 && newIndex < objList.length) {
                 var obj = objList[startIndex];

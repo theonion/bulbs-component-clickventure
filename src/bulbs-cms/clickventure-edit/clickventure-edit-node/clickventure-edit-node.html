@@ -71,6 +71,16 @@
     </label>
   </div>
   <div class="panel-group">
+    <div>
+      <div>Links</div>
+      <button
+          class="btn btn-success"
+          ng-click="addLink(node)">
+        <span class="glyphicon glyphicon-plus"></span>
+        <span>Add Link</span>
+      </button>
+    </div>
+
     <div
         ng-repeat="link in node.links"
         class="clearfix panel panel-default">
@@ -83,11 +93,6 @@
                 ng-click="onMoveListObject(node.links, $index, $index + 1)"
                 ng-disabled="$last">
               <span class="glyphicon glyphicon-chevron-down"></span>
-            </button>
-            <button
-                class="btn btn-link btn-xs"
-                ng-click="onDeleteObject(node.links, link)">
-              <span class="glyphicon glyphicon-remove text-danger"></span>
             </button>
             <button
                 class="btn btn-link btn-xs"
@@ -107,12 +112,7 @@
       </div>
     </div>
   </div>
-  <button
-      class="btn btn-default"
-      ng-click="onAddLink(node)">
-    <span class="glyphicon glyphicon-plus"></span>
-    <span>Add Link</span>
-  </button>
+
   <div class="row">
     <h3>Inbound links</h3>
     <div ng-repeat="node in inboundNodes">

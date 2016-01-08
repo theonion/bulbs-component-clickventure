@@ -40,4 +40,13 @@
           ng-model="link.float">
     </label>
   </div>
+
+  <button
+      class="btn btn-link"
+      ng-click="deleteLink(node, link)">
+    <span class="text-danger">
+      <span class="fa fa-trash-o"></span>
+      <span>Delete Link</span>
+    </span>
+  </button>
 </div>

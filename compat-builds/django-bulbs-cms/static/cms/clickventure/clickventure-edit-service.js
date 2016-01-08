@@ -13,6 +13,23 @@ angular.module('bulbs.clickventure.edit.service', [])
         select: []
       };
 
+      var setNodeViewData = function (node, preset) {
+        var viewData;
+        var settings = preset || {};
+
+        data.view[node.id] = {
+          order: settings.order ||
+            Math.max.apply(null, data.nodes.map(function (node) {
+              if (node.id in data.view) {
+                return data.view[node.id].order;
+              }
+            })) + 1,
+          active: settings.active || false
+        };
+
+        return viewData;
+      };
+
       var reindexNodes = function () {
         data.nodes
           .forEach(function (node, i) {
@@ -23,7 +40,7 @@ angular.module('bulbs.clickventure.edit.service', [])
       };
 
       var getNextNodeId = function () {
-        return Math.max.call(
+        return Math.max.apply(
           null,
           data.nodes.map(function (node) {
             return node.id;
@@ -38,15 +55,11 @@ angular.module('bulbs.clickventure.edit.service', [])
       this.setNodes = function (nodes) {
         data.nodes = nodes;
 
-        data.view = data.nodes.reduce(function (data, node, i) {
-          data[node.id] = {
-            // 1-based index for readability
-            order: i + 1,
-            active: false
-          };
-
-          return data;
-        }, {});
+        data.view = {};
+        data.nodes.forEach(function (node, i) {
+          // 1-based index for readability
+          setNodeViewData(node, {order: i + 1});
+        });
 
         this.selectNode(nodes[0]);
 
@@ -60,12 +73,14 @@ angular.module('bulbs.clickventure.edit.service', [])
           body: '',
           link_style: 'action',
           links: [],
-          start: nodes.length === 0,
+          start: data.nodes.length === 0,
           finish: false,
           shareable: false,
           share_text: ''
         };
         data.nodes.push(node);
+
+        setNodeViewData(node);
 
         this.selectNode(node);
 
@@ -98,7 +113,7 @@ angular.module('bulbs.clickventure.edit.service', [])
           data.view[id].active = node.id === parseInt(id, 10);
         });
 
-        handlers.select.each(function (func) {
+        handlers.select.forEach(function (func) {
           func(node);
         });
       };

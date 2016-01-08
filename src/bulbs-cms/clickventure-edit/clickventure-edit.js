@@ -21,11 +21,16 @@ angular.module('bulbs.clickventure.edit', [
           '_', '$', '$scope', '$window', '$timeout', 'ClickventureEdit',
           function (_, $, $scope, $window, $timeout, ClickventureEdit) {
 
-
-
             $scope.$watch('article', function (newVal, oldVal) {
               ClickventureEdit.setNodes(newVal.nodes);
             });
+
+            $scope.addNode = ClickventureEdit.addNode;
+
+
+
+
+// >>>>>>> OLD
 
             $scope.isEditing = false;
 
@@ -39,11 +44,6 @@ angular.module('bulbs.clickventure.edit', [
                 });
               }
             };
-
-            var nextNodeId = 1;
-            function getNextNodeId() {
-              return nextNodeId++;
-            }
 
             $scope.linkStyles = [
               '',
@@ -62,23 +62,7 @@ angular.module('bulbs.clickventure.edit', [
               'flipLeft'
             ];
 
-            $scope.onAddNode = function () {
-              var id = getNextNodeId();
-              var node = {
-                id: id,
-                title: '',
-                body: '',
-                link_style: 'action',
-                links: [],
-                start: false,
-                finish: false,
-                shareable: false,
-                share_text: ''
-              };
-              node.start = $scope.article.nodes.length === 0;
-              $scope.article.nodes.push(node);
-              $scope.selectNode(node);
-            };
+
             $scope.onDeleteNode = function (objList, obj) {
               var idx = objList.indexOf(obj);
               if (idx >= 0) {

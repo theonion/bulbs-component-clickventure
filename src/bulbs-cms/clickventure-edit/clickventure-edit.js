@@ -18,7 +18,7 @@ angular.module('bulbs.clickventure.edit', [
         },
         controller: [
           '$', '$scope', '$window', '$timeout', 'ClickventureEdit',
-          function (_, $, $scope, $window, $timeout, ClickventureEdit) {
+          function ($, $scope, $window, $timeout, ClickventureEdit) {
 
             $scope.$watch('article', function (newVal, oldVal) {
               ClickventureEdit.setNodes(newVal.nodes);

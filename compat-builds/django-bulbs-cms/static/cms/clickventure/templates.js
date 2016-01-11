@@ -33,7 +33,25 @@ angular.module('bulbs.clickventure.templates', []).run(['$templateCache', functi
 
 
   $templateCache.put('clickventure-edit-node/clickventure-edit-node-settings/clickventure-edit-node-settings.html',
-    "<div ng-show=\"data.configPageActive === 'Settings'\"><div class=\"form-control form-group clearfix node-text\"><onion-editor ng-model=node.title role=singleline formatting=bold,italic,strike placeholder=\"Name (used for display in CMS)\"></onion-editor></div><div class=form-group><label class=checkbox-inline><input type=checkbox ng-model=node.start> <span>Start</span></label><label class=checkbox-inline><input type=checkbox ng-model=node.finish> <span>Finish</span></label><label class=checkbox-inline><input type=checkbox ng-model=node.shareable> <span>Shareable</span></label><button class=\"btn btn-danger\" ng-click=deleteNode(node)><i class=\"fa fa-trash-o\"></i> <span>Delete Page</span></button> <button class=\"btn btn-primary\" ng-click=cloneNode(node)><i class=\"fa fa-copy\"></i> <span>Clone Page</span></button></div><div ng-show=node.shareable class=form-group><span>Share Message</span><div class=form-control><onion-editor role=singleline ng-model=node.share_text placeholder=\"Message for sharing\"></onion-editor></div></div><div class=row><h3>Inbound Links</h3><ul><li ng-repeat=\"nodeId in data.view[node.id].inboundLinks\"><a ng-bind-html=\"data.view[nodeId].node | clickventure_node_name\" ng-click=selectNode(node)></a></li></ul><h3>Sister Pages</h3><ul><li ng-repeat=\"nodeId in node.sister_pages\"><a ng-bind-html=\"data.view[nodeId].node | clickventure_node_name\" ng-click=selectNode(node)></a></li></ul></div></div>"
+    "<div class=container-fluid ng-show=\"data.configPageActive === 'Settings'\"><div class=\"row form-group\"><div class=col-xs-8><label for=nodePageName>Page Name (Internal Use)</label><input id=nodePageName class=form-control placeholder=\"Page Name (Internal Use)\"></div><div class=col-xs-4><button class=\"btn btn-primary\" ng-click=cloneNode(node)><i class=\"fa fa-copy\"></i> <span>Clone Page</span></button></div></div><div class=\"row form-group\"><div class=col-xs-12><label>Select Page Types</label></div><div class=\"col-xs-12 form-group\"><button class=btn ng-class=\"{\n" +
+    "            'btn-info': node.start,\n" +
+    "            'btn-default': !node.start\n" +
+    "          }\" ng-click=\"node.start = !node.start\"><span class=fa ng-class=\"{\n" +
+    "              'fa-check-square-o': node.start,\n" +
+    "              'fa-square-o': !node.start\n" +
+    "            }\"></span> <span>Start</span></button> <button class=btn ng-class=\"{\n" +
+    "            'btn-info': node.finish,\n" +
+    "            'btn-default': !node.finish\n" +
+    "          }\" ng-click=\"node.finish = !node.finish\"><span class=fa ng-class=\"{\n" +
+    "              'fa-check-square-o': node.finish,\n" +
+    "              'fa-square-o': !node.finish\n" +
+    "            }\"></span> <span>End</span></button> <button class=btn ng-class=\"{\n" +
+    "            'btn-info': node.shareable,\n" +
+    "            'btn-default': !node.shareable\n" +
+    "          }\" ng-click=\"node.shareable = !node.shareable\"><span class=fa ng-class=\"{\n" +
+    "              'fa-check-square-o': node.shareable,\n" +
+    "              'fa-square-o': !node.shareable\n" +
+    "            }\"></span> <span>Shareable</span></button></div><div ng-show=node.shareable class=col-xs-12><label for=nodeShareText>Share Message</label><input id=nodeShareText class=form-control placeholder=\"Page Name (Internal Use)\"></div></div><div class=\"row form-group\"><div class=col-xs-6><label>Inbound Links</label><ul ng-show=\"data.view[node.id].inboundLinks.length > 0\"><li ng-repeat=\"nodeId in data.view[node.id].inboundLinks\"><a ng-bind-html=\"data.view[nodeId].node | clickventure_node_name\" ng-click=selectNode(node)></a></li></ul><div ng-show=\"data.view[node.id].inboundLinks.length === 0\">No inbound links yet, link a page to this one to make the first one.</div></div><div class=col-xs-6><label>Sister Pages</label><ul ng-show=\"node.sister_pages.length > 0\"><li ng-repeat=\"nodeId in node.sister_pages\"><a ng-bind-html=\"data.view[nodeId].node | clickventure_node_name\" ng-click=selectNode(node)></a></li></ul><div ng-show=\"node.sister_pages.length === 0\">No sister pages yet, clone this page to make the first one.</div></div></div><div class=\"row col-xs-12 form-group\"><button class=\"btn btn-danger\" ng-click=deleteNode(node)><i class=\"fa fa-trash-o\"></i> <span>Delete Page</span></button></div></div>"
   );
 
 

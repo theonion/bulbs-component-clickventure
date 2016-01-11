@@ -16,7 +16,10 @@ angular.module('bulbs.clickventure.edit.node.copy', [
         '$scope', 'ClickventureEdit',
         function ($scope, ClickventureEdit) {
 
+          ClickventureEdit.registerConfigPage('Copy');
+
           $scope.addLink = ClickventureEdit.addLink;
+          $scope.data = ClickventureEdit.getData();
           $scope.linkStyles = ClickventureEdit.getValidLinkStyles();
           $scope.reorderLink = ClickventureEdit.reorderLink;
         }

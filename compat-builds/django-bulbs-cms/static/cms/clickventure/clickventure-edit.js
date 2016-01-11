@@ -32,7 +32,7 @@ angular.module('bulbs.clickventure.edit', [
 // TODO : this looks bad?
               // terrible code alarm
               $timeout(function () {
-                $window.picturefill($('.clickventure-node')[0]);
+                $window.picturefill($('clickventure-node')[0]);
               });
             });
           }

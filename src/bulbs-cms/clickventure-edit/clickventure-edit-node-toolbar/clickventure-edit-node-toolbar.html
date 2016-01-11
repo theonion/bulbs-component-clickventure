@@ -2,11 +2,15 @@
   Edit
 </div>
 <div class="clickventure-edit-node-toolbar-view btn-group">
-  <button class="btn btn-default">
-    Settings
-  </button>
-  <button class="btn btn-default">
-    Copy
+  <button
+      ng-repeat="title in data.configPages"
+      ng-click="changeConfigPage(title)"
+      ng-class="{
+        'btn-default': data.configPageActive !== title,
+        'btn-primary': data.configPageActive === title
+      }"
+      class="btn">
+    {{ title }}
   </button>
 </div>
 <div class="clickventure-edit-node-toolbar-preview">

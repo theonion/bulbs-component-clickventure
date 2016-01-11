@@ -1,0 +1,78 @@
+<div ng-show="data.configPageActive === 'Settings'">
+  <div class="form-control form-group clearfix node-text">
+    <onion-editor
+        ng-model="node.title"
+        role="singleline"
+        formatting="bold,italic,strike"
+        placeholder="Name (used for display in CMS)">
+    </onion-editor>
+  </div>
+  <div class="form-group">
+    <label class="checkbox-inline">
+      <input
+          type="checkbox"
+          ng-model="node.start">
+      <span>Start</span>
+    </label>
+    <label class="checkbox-inline">
+      <input
+          type="checkbox"
+          ng-model="node.finish">
+      <span>Finish</span>
+    </label>
+    <label class="checkbox-inline">
+      <input
+          type="checkbox"
+          ng-model="node.shareable">
+      <span>Shareable</span>
+    </label>
+
+    <button
+        class="btn btn-danger"
+        ng-click="deleteNode(node)">
+      <i class="fa fa-trash-o"></i>
+      <span>Delete Page</span>
+    </button>
+
+    <button
+        class="btn btn-primary"
+        ng-click="cloneNode(node)">
+      <i class="fa fa-copy"></i>
+      <span>Clone Page</span>
+    </button>
+  </div>
+  <div
+      ng-show="node.shareable"
+      class="form-group">
+    <span>Share Message</span>
+    <div class="form-control">
+      <onion-editor
+          role="singleline"
+          ng-model="node.share_text"
+          placeholder="Message for sharing">
+      </onion-editor>
+    </div>
+  </div>
+
+  <div class="row">
+    <h3>Inbound Links</h3>
+    <ul>
+      <li ng-repeat="nodeId in data.view[node.id].inboundLinks">
+        <a
+            ng-bind-html="data.view[nodeId].node | clickventure_node_name"
+            ng-click="selectNode(node)">
+        </a>
+    </li>
+    </ul>
+
+    <h3>Sister Pages</h3>
+    <ul>
+      <li ng-repeat="nodeId in node.sister_pages">
+        <a
+            ng-bind-html="data.view[nodeId].node | clickventure_node_name"
+            ng-click="selectNode(node)">
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>

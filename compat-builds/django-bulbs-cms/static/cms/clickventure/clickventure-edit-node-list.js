@@ -12,8 +12,8 @@ angular.module('bulbs.clickventure.edit.nodeList', [
         scope: {},
         require: '^clickventureEdit',
         controller: [
-          '$scope', 'ClickventureEdit', 'Utils',
-          function ($scope, ClickventureEdit, Utils) {
+          '$scope', 'ClickventureEdit',
+          function ($scope, ClickventureEdit) {
             $scope.reorderNode = ClickventureEdit.reorderNode;
             $scope.selectNode = ClickventureEdit.selectNode;
 

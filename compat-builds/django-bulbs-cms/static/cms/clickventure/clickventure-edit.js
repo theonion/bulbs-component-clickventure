@@ -2,7 +2,6 @@
 
 angular.module('bulbs.clickventure.edit', [
   'jquery',
-  'lodash',
   'bulbs.clickventure.edit.node',
   'bulbs.clickventure.edit.nodeList',
   'bulbs.clickventure.edit.nodeToolbar',
@@ -18,7 +17,7 @@ angular.module('bulbs.clickventure.edit', [
           saveArticleDeferred: '='
         },
         controller: [
-          '_', '$', '$scope', '$window', '$timeout', 'ClickventureEdit',
+          '$', '$scope', '$window', '$timeout', 'ClickventureEdit',
           function (_, $, $scope, $window, $timeout, ClickventureEdit) {
 
             $scope.$watch('article', function (newVal, oldVal) {

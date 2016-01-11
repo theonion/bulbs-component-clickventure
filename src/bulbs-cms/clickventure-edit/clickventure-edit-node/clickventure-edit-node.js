@@ -3,7 +3,7 @@
 angular.module('bulbs.clickventure.edit.node', [
   'confirmationModal.factory',
   'lodash',
-  'bulbs.clickventure.edit.link',
+  'bulbs.clickventure.edit.node.copy',
   'bulbs.clickventure.edit.nodeNameFilter',
   'bulbs.clickventure.edit.service'
 ])
@@ -18,14 +18,11 @@ angular.module('bulbs.clickventure.edit.node', [
         cloneNode: '&'
       },
       controller: [
-        '_', '$scope', '$window', '$timeout', 'ClickventureEdit', 'ConfirmationModal',
-        function (_, $scope, $window, $timeout, ClickventureEdit, ConfirmationModal) {
+        '$scope', 'ClickventureEdit', 'ConfirmationModal',
+        function ($scope, ClickventureEdit, ConfirmationModal) {
 
-          $scope.addLink = ClickventureEdit.addLink;
           $scope.cloneNode = ClickventureEdit.cloneNode;
-          $scope.linkStyles = ClickventureEdit.getValidLinkStyles();
           $scope.nodeData = ClickventureEdit.getData();
-          $scope.reorderLink = ClickventureEdit.reorderLink;
           $scope.selectNode = ClickventureEdit.selectNode;
 
           $scope.deleteNode = function (node) {

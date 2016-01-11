@@ -53,66 +53,6 @@
       </onion-editor>
     </div>
   </div>
-  <div class="well">
-    <onion-editor
-        ng-model="node.body"
-        role="multiline"
-        placeholder="Body (displays on site)">
-    </onion-editor>
-  </div>
-  <div class="navbar navbar-default">
-    <label>
-      <span>Default link Style</span>
-      <select
-          class="form-control"
-          ng-options="style.toLowerCase() as style for style in linkStyles"
-          ng-model="node.link_style">
-      </select>
-    </label>
-  </div>
-  <div class="panel-group">
-    <div>
-      <div>Links</div>
-      <button
-          class="btn btn-success"
-          ng-click="addLink(node)">
-        <span class="glyphicon glyphicon-plus"></span>
-        <span>Add Link</span>
-      </button>
-    </div>
-
-    <div
-        ng-repeat="link in node.links"
-        class="clearfix panel panel-default">
-      <div class="panel-heading">
-        <h4 class="panel-title">
-          <span>Link</span>
-          <div class="btn-group pull-right">
-            <button
-                class="btn btn-link btn-xs"
-                ng-click="reorderLink(node, $index, $index + 1)"
-                ng-disabled="$last">
-              <span class="glyphicon glyphicon-chevron-down"></span>
-            </button>
-            <button
-                class="btn btn-link btn-xs"
-                ng-click="reorderLink(node, $index, $index - 1)"
-                ng-disabled="$index === 0">
-              <span class="glyphicon glyphicon-chevron-up"></span>
-            </button>
-          </div>
-        </h4>
-      </div>
-      <div class="panel-body">
-
-        <clickventure-edit-link
-            node="node"
-            link="link">
-        </clickventure-edit-link>
-
-      </div>
-    </div>
-  </div>
 
   <div class="row">
     <h3>Inbound Links</h3>
@@ -135,4 +75,6 @@
       </li>
     </ul>
   </div>
+
+  <clickventure-edit-node-copy node="node"></clickventure-edit-node-copy>
 </div>

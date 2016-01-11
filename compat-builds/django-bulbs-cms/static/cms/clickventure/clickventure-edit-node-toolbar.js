@@ -22,7 +22,7 @@ angular.module('bulbs.clickventure.edit.nodeToolbar', [
         link: function (scope, elements) {
           var $nav = $('nav-bar nav');
 
-          $(window).on('scroll', requestAnimationFrame.bind(null, function () {
+          $(window).on('scroll resize', requestAnimationFrame.bind(null, function () {
             var container = elements.parent();
 
             if (container[0].getBoundingClientRect().top - $nav.height() <= 0) {

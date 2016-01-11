@@ -243,12 +243,12 @@ angular.module('bulbs.clickventure.edit.service', [
       };
 
       var deleteLink = function (node, rmLink) {
-        node.links = _.without(node.links, rmLink);
+        var indexLinks = node.links.indexOf(rmLink);
+        node.links.splice(indexLinks, 1);
 
-        data.view[rmLink.to_node].inboundLinks = _.without(
-          data.view[rmLink.to_node].inboundLinks,
-          rmLink.from_node
-        );
+        var linksInbound = data.view[rmLink.to_node].inboundLinks;
+        var indexInbound = linksInbound.indexOf(rmLink.from_node);
+        linksInbound.splice(indexInbound, 1);
       };
 
       return {

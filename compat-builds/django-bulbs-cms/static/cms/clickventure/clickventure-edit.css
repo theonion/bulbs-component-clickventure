@@ -1,0 +1,32 @@
+clickventure-edit {
+  display: flex;
+  min-height: 600px;
+}
+clickventure-edit .clickventure-edit-col-1 {
+  flex: 1;
+  min-width: 250px;
+}
+clickventure-edit .clickventure-edit-col-2 {
+  flex: 3;
+  min-width: 550px;
+}
+clickventure-edit .clickventure-edit-node-list-tools {
+  background-color: #c8c8c8;
+  min-width: 35px;
+  padding: 5px;
+  text-align: center;
+  width: 100%;
+}
+clickventure-edit .btn-link:hover {
+  text-decoration: none;
+}
+clickventure-edit .active button {
+  color: white;
+}
+clickventure-edit .node-text {
+  height: auto;
+}
+clickventure-edit .editor,
+clickventure-edit .editorPlaceholder {
+  padding: 0;
+}

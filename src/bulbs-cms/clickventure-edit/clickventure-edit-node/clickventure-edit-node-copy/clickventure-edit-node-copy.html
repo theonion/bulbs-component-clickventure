@@ -1,5 +1,9 @@
-<div ng-show="data.configPageActive === 'Copy'">
-  <div class="well">
+<div
+    class="container-fluid"
+    ng-show="data.configPageActive === 'Copy'">
+
+  <div class="row col-xs-12">
+    <label>Page Body</label>
     <onion-editor
         ng-model="node.body"
         role="multiline"
@@ -7,19 +11,18 @@
     </onion-editor>
   </div>
 
-  <div class="panel-group">
+  <div class="row col-xs-12">
     <div>
-      <div>Links</div>
+      <label>Links</label>
 
-      <div class="navbar navbar-default">
-        <label>
-          <span>Default link Style</span>
-          <select
-              class="form-control"
-              ng-options="style.toLowerCase() as style for style in linkStyles"
-              ng-model="node.link_style">
-          </select>
-        </label>
+      <div class="form-group">
+        <label for="nodeDefaultLinkStyle">Default Link Style</label>
+        <select
+            id="nodeDefaultLinkStyle"
+            class="form-control"
+            ng-options="style.toLowerCase() as style for style in linkStyles"
+            ng-model="node.link_style">
+        </select>
       </div>
 
       <button
@@ -32,9 +35,19 @@
 
     <div
         ng-repeat="link in node.links"
+        ng-init="linkOpen = false"
         class="clearfix panel panel-default">
-      <div class="panel-heading">
+      <div
+          class="panel-heading"
+          ng-click="linkOpen = !linkOpen">
         <h4 class="panel-title">
+          <span
+              class="fa fa-caret-right"
+              ng-class="{
+                'fa-caret-right': !linkOpen,
+                'fa-caret-down': linkOpen
+              }">
+          </span>
           <span>Link</span>
           <div class="btn-group pull-right">
             <button
@@ -52,13 +65,13 @@
           </div>
         </h4>
       </div>
-      <div class="panel-body">
-
+      <div
+          class="panel-body"
+          ng-show="linkOpen">
         <clickventure-edit-link
             node="node"
             link="link">
         </clickventure-edit-link>
-
       </div>
     </div>
   </div>

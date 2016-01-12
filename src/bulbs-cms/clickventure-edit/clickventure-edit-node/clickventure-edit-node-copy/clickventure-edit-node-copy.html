@@ -25,7 +25,7 @@
       <button
           class="btn btn-success"
           ng-click="addLink(node)">
-        <span class="glyphicon glyphicon-plus"></span>
+        <span class="fa fa-plus"></span>
         <span>Add Link</span>
       </button>
     </div>
@@ -41,13 +41,13 @@
                 class="btn btn-link btn-xs"
                 ng-click="reorderLink(node, $index, $index + 1)"
                 ng-disabled="$last">
-              <span class="glyphicon glyphicon-chevron-down"></span>
+              <span class="fa fa-chevron-down"></span>
             </button>
             <button
                 class="btn btn-link btn-xs"
                 ng-click="reorderLink(node, $index, $index - 1)"
                 ng-disabled="$index === 0">
-              <span class="glyphicon glyphicon-chevron-up"></span>
+              <span class="fa fa-chevron-up"></span>
             </button>
           </div>
         </h4>

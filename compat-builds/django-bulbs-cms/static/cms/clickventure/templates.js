@@ -33,7 +33,7 @@ angular.module('bulbs.clickventure.templates', []).run(['$templateCache', functi
 
 
   $templateCache.put('clickventure-edit-node/clickventure-edit-node-settings/clickventure-edit-node-settings.html',
-    "<div class=container-fluid ng-show=\"data.configPageActive === 'Settings'\"><div class=\"row form-group\"><div class=col-xs-8><label for=nodePageName>Page Name (Internal Use)</label><input id=nodePageName class=form-control placeholder=\"Page Name (Internal Use)\"></div><div class=col-xs-4><button class=\"btn btn-primary\" ng-click=cloneNode(node)><i class=\"fa fa-copy\"></i> <span>Clone Page</span></button></div></div><div class=\"row form-group\"><div class=col-xs-12><label>Select Page Types</label></div><div class=\"col-xs-12 form-group\"><button class=btn ng-class=\"{\n" +
+    "<div class=container-fluid ng-show=\"data.configPageActive === 'Settings'\"><div class=\"row form-group\"><div class=col-xs-8><label for=nodePageName>Page Name (Internal Use)</label><input id=nodePageName class=form-control placeholder=\"Page Name (Internal Use)\" ng-model=node.title></div><div class=col-xs-4><button class=\"btn btn-primary\" ng-click=cloneNode(node)><i class=\"fa fa-copy\"></i> <span>Clone Page</span></button></div></div><div class=\"row form-group\"><div class=col-xs-12><label>Select Page Types</label></div><div class=\"col-xs-12 form-group\"><button class=btn ng-class=\"{\n" +
     "            'btn-info': node.start,\n" +
     "            'btn-default': !node.start\n" +
     "          }\" ng-click=\"node.start = !node.start\"><span class=fa ng-class=\"{\n" +

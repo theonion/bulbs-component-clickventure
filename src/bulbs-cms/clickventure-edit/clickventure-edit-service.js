@@ -206,7 +206,7 @@ angular.module('bulbs.clickventure.edit.service', [
 
           data.nodes.forEach(function (node) {
             node.links.forEach(function (link) {
-              if (typeof link.to_node === 'number' && link.to_node.id === rmNode.id) {
+              if (typeof link.to_node === 'number' && link.to_node === rmNode.id) {
                 link.to_node = null;
               }
             });

@@ -49,7 +49,7 @@ This should be included with an include tag, with the following variables:
         {% include "clickventure/partials/link/restart.html" %}
       </div>
       {% endif %}
-      {% if node.shareable and share_partial_template %}
+      {% if node.shareable and node.finish and share_partial_template %}
         <div
             class="clickventure-node-share"
             data-track-action="Share Result">

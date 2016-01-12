@@ -1,37 +1,16 @@
 'use strict';
 
-angular.module('bulbs.clickventure.edit.validator.service', [])
+angular.module('bulbs.clickventure.edit.validator.service', [
+  'bulbs.clickventure.edit.service',
+])
   .service('ClickventureEditValidator', [
-    '$filter',
-    function ($filter) {
+    '$filter', 'ClickventureEdit',
+    function ($filter, ClickventureEdit) {
 
-      this.validateGraph = function (nodes) {
-        // TODO : fill in
-        throw new Error('Not implemented yet.');
-      };
-
-
-
-
-
-
-
-
-// TODO : >>>>>>>>> OLD
-      $scope.validatePages = function () {
-        if (checkForDuplicateNodeIds() &&
-            validateLinks() &&
-            validateNoOrphanedPages() &&
-            validateAllCanFinish()) {
-           alert('Looks great! The pages are fully linked.');
-        }
-      };
-
-      var checkForDuplicateNodeIds = function () {
+      var checkForDuplicateNodeIds = function (nodes) {
         var visited = {};
         var duplicates = {};
         var dupes = false;
-        var nodes = $scope.article.nodes;
         for (var i = 0; i < nodes.length; i++) {
           var node = nodes[i];
           if (visited[node.id]) {
@@ -57,10 +36,9 @@ angular.module('bulbs.clickventure.edit.validator.service', [])
         return !dupes;
       };
 
-      var validateLinks = function () {
+      var validateLinks = function (nodes) {
         // make sure all links are good to go
         var invalidNode = null;
-        var nodes = $scope.article.nodes;
         for (var i = 0; i < nodes.length; i++) {
           var node = nodes[i];
           var numBad = _.size(_.reject(node.links, 'to_node'));
@@ -70,19 +48,19 @@ angular.module('bulbs.clickventure.edit.validator.service', [])
           }
         }
         if (invalidNode) {
-          $scope.selectNode(invalidNode);
+          ClickventureEdit.selectNode(invalidNode);
           alert('A link has no target page');
         }
         return !invalidNode;
       };
 
-      var validateNoOrphanedPages = function () {
+      var validateNoOrphanedPages = function (nodes) {
         // ensure there's no pages which cannot be reached
         // from a start page
-        var nodes = _.chain($scope.article.nodes);
-        var visited = nodes.filter('start').pluck('id').value();
-        var notVisited = nodes.reject('start').pluck('id').value();
-        var linksById = nodes.transform(function (result, node) {
+        var chain = _.chain(nodes);
+        var visited = chain.filter('start').pluck('id').value();
+        var notVisited = chain.reject('start').pluck('id').value();
+        var linksById = chain.transform(function (result, node) {
           result[node.id] = _.pluck(node.links, 'to_node');
         }, {}).value();
         // check it out
@@ -90,23 +68,23 @@ angular.module('bulbs.clickventure.edit.validator.service', [])
         // display an error if there are unreachable pages
         var unreachables = result.unreachable;
         if (_.size(unreachables) > 0) {
-          var node = nodes.find({id: _.first(unreachables)}).value();
-          $scope.selectNode(node);
+          var node = chain.find({id: _.first(unreachables)}).value();
+          ClickventureEdit.selectNode(node);
           alert('Unreachable from start: ' + $filter('clickventure_node_name')(node));
           return false;
         }
         return true;
       };
 
-      var validateAllCanFinish = function () {
+      var validateAllCanFinish = function (nodes) {
         // ensure all pages can eventually reach a finish
-        var nodes = _.chain($scope.article.nodes);
-        var visited = nodes.filter('finish').pluck('id').value();
-        var notVisited = nodes.reject('finish').pluck('id').value();
-        var linksById = nodes.transform(function (result, node) {
+        var chain = _.chain(nodes);
+        var visited = chain.filter('finish').pluck('id').value();
+        var notVisited = chain.reject('finish').pluck('id').value();
+        var linksById = chain.transform(function (result, node) {
           result[node.id] = [];
         }, {}).value();
-        linksById = nodes.transform(function (result, node) {
+        linksById = chain.transform(function (result, node) {
           _.forEach(node.links, function (link) {
             var to_node = link.to_node;
             if (to_node) {
@@ -120,8 +98,8 @@ angular.module('bulbs.clickventure.edit.validator.service', [])
         // display an error if there are unreachable pages
         var unreachables = result.unreachable;
         if (_.size(unreachables) > 0) {
-          var node = nodes.find({id: _.first(unreachables)}).value();
-          $scope.selectNode(node);
+          var node = chain.find({id: _.first(unreachables)}).value();
+          ClickventureEdit.selectNode(node);
           alert('No path to finish: ' + $filter('clickventure_node_name')(node));
           return false;
         }
@@ -150,6 +128,17 @@ angular.module('bulbs.clickventure.edit.validator.service', [])
           reachable: visited,
           unreachable: notVisited
         };
+      };
+
+      return {
+        validateGraph: function (nodes) {
+          if (checkForDuplicateNodeIds(nodes) &&
+              validateLinks(nodes) &&
+              validateNoOrphanedPages(nodes) &&
+              validateAllCanFinish(nodes)) {
+             alert('Looks great! The pages are fully linked.');
+          }
+        }
       };
     }
   ]);

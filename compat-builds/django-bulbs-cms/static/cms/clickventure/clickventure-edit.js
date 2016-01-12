@@ -5,7 +5,8 @@ angular.module('bulbs.clickventure.edit', [
   'bulbs.clickventure.edit.node',
   'bulbs.clickventure.edit.nodeList',
   'bulbs.clickventure.edit.nodeToolbar',
-  'bulbs.clickventure.edit.service'
+  'bulbs.clickventure.edit.service',
+  'bulbs.clickventure.edit.validator.service'
 ])
   .directive('clickventureEdit', [
     function () {
@@ -18,13 +19,18 @@ angular.module('bulbs.clickventure.edit', [
         },
         controller: [
           '$', '$scope', '$window', '$timeout', 'ClickventureEdit',
-          function ($, $scope, $window, $timeout, ClickventureEdit) {
+            'ClickventureEditValidator',
+          function ($, $scope, $window, $timeout, ClickventureEdit,
+              ClickventureEditValidator) {
 
             $scope.$watch('article', function (newVal, oldVal) {
               ClickventureEdit.setNodes(newVal.nodes);
             });
 
             $scope.addNode = ClickventureEdit.addNode;
+            $scope.validateGraph = function () {
+              ClickventureEditValidator.validateGraph(ClickventureEdit.getData().nodes);
+            };
 
             ClickventureEdit.registerSelectNodeHandler(function (node) {
               $scope.selectedNode = node;

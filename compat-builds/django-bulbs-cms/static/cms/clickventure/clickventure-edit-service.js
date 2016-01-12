@@ -242,7 +242,11 @@ angular.module('bulbs.clickventure.edit.service', [
       };
 
       var updateInboundLinks = function (link) {
-        data.view[link.to_node].inboundLinks.push(link.from_node);
+        var links = data.view[link.to_node].inboundLinks;
+
+        if (links.indexOf(link.from_node) < 0) {
+          links.push(link.from_node);
+        }
       };
 
       var reorderLink = function (node, indexFrom, indexTo) {

@@ -10,6 +10,9 @@ angular.module('bulbs.clickventure.edit.nodeToolbar', [
       return {
         restrict: 'E',
         templateUrl: 'clickventure-edit-node-toolbar/clickventure-edit-node-toolbar.html',
+        scope: {
+          article: '='
+        },
         require: '^clickventureEdit',
         controller: [
           '$scope', 'ClickventureEdit',
@@ -17,6 +20,10 @@ angular.module('bulbs.clickventure.edit.nodeToolbar', [
 
             $scope.data = ClickventureEdit.getData();
             $scope.changeConfigPage = ClickventureEdit.changeConfigPage;
+
+            ClickventureEdit.registerSelectNodeHandler(function (node) {
+              $scope.selectedNode = node;
+            });
           }
         ],
         link: function (scope, elements) {

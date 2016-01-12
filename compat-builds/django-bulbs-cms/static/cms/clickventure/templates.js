@@ -23,7 +23,7 @@ angular.module('bulbs.clickventure.templates', []).run(['$templateCache', functi
     "<div class=clickventure-edit-node-toolbar-title>Edit</div><div class=\"clickventure-edit-node-toolbar-view btn-group\"><button ng-repeat=\"title in data.configPages\" ng-click=changeConfigPage(title) ng-class=\"{\n" +
     "        'btn-default': data.configPageActive !== title,\n" +
     "        'btn-primary': data.configPageActive === title\n" +
-    "      }\" class=btn>{{ title }}</button></div><div class=clickventure-edit-node-toolbar-preview><a class=\"btn btn-link text-primary\" target=_blank href=\"/r/{{ article.id }}#{{ activeNode.id }}\"><i class=\"fa fa-share\"></i> <span>Preview Page</span></a></div>"
+    "      }\" class=btn>{{ title }}</button></div><div class=clickventure-edit-node-toolbar-preview><a class=\"btn btn-link text-primary\" target=_blank href=\"/r/{{ article.id }}#{{ selectedNode.id }}\"><i class=\"fa fa-share\"></i> <span>Preview Page</span></a></div>"
   );
 
 
@@ -61,7 +61,7 @@ angular.module('bulbs.clickventure.templates', []).run(['$templateCache', functi
 
 
   $templateCache.put('clickventure-edit.html',
-    "<div class=clickventure-edit-col-1><clickventure-edit-node-list></clickventure-edit-node-list><div class=clickventure-edit-node-list-tools><button class=\"btn btn-primary\" ng-click=addNode()><span class=\"fa fa-plus\"></span> <span>New Page</span></button> <button class=\"btn btn-default\" ng-click=validatePages()><span class=\"fa fa-ok\"></span> <span>Run Check</span></button></div></div><div class=clickventure-edit-col-2><clickventure-edit-node-toolbar></clickventure-edit-node-toolbar><clickventure-edit-node node=selectedNode></clickventure-edit-node></div>"
+    "<div class=clickventure-edit-col-1><clickventure-edit-node-list></clickventure-edit-node-list><div class=clickventure-edit-node-list-tools><button class=\"btn btn-primary\" ng-click=addNode()><span class=\"fa fa-plus\"></span> <span>New Page</span></button> <button class=\"btn btn-default\" ng-click=validatePages()><span class=\"fa fa-ok\"></span> <span>Run Check</span></button></div></div><div class=clickventure-edit-col-2><clickventure-edit-node-toolbar article=article></clickventure-edit-node-toolbar><clickventure-edit-node node=selectedNode></clickventure-edit-node></div>"
   );
 
 }]);

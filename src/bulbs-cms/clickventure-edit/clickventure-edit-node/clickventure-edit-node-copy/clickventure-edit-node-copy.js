@@ -1,8 +1,10 @@
+
 'use strict';
 
 angular.module('bulbs.clickventure.edit.node.copy', [
   'bulbs.clickventure.edit.link',
-  'bulbs.clickventure.edit.service'
+  'bulbs.clickventure.edit.service',
+  'ui.bootstrap.tooltip'
 ])
   .directive('clickventureEditNodeCopy', function () {
     return {

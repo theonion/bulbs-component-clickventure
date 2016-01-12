@@ -164,7 +164,12 @@ angular.module('bulbs.clickventure.edit.service', [
 
         // so we don't modify the original page's links
         clonedNode.links = node.links.map(function (link) {
-          return _.clone(link);
+          var newLink = _.clone(link);
+
+          newLink.from_node = clonedNode.id;
+          updateInboundLinks(newLink);
+
+          return newLink;
         });
 
         if (!_.isArray(node.sister_pages)) {

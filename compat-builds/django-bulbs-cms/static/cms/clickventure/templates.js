@@ -2,7 +2,13 @@ angular.module('bulbs.clickventure.templates', []).run(['$templateCache', functi
   'use strict';
 
   $templateCache.put('clickventure-edit-link/clickventure-edit-link.html',
-    "<div class=clickventure-link><div class=\"form-control form-group node-text\"><onion-editor ng-model=link.body role=singleline formatting=bold,italic,strike placeholder=Body></onion-editor></div><div class=row><label class=col-xs-4><span>To page:</span><select class=form-control ng-model=link.to_node ng-change=updateInboundLinks(link) ng-options=\"node.id as (node | clickventure_node_name) || node.id for node in nodeData.nodes\"></select></label><label class=col-xs-3><span>Transition:</span><select class=form-control ng-model=link.transition ng-options=\"transition for transition in nodeTransitions\"></select></label><label class=col-xs-3><span>Style:</span><select class=form-control ng-options=\"style.toLowerCase() as style for style in linkStyles\" ng-model=link.link_style></select></label><label class=col-xs-2><span>Float:</span> <input type=checkbox class=form-control ng-model=link.float></label></div><button class=\"btn btn-link\" ng-click=\"deleteLink(node, link)\"><span class=text-danger><span class=\"fa fa-trash-o\"></span> <span>Delete Link</span></span></button></div>"
+    "<div class=clickventure-link><div class=\"form-control form-group node-text\"><onion-editor ng-model=link.body role=multiline formatting=bold,italic,strike placeholder=\"Link Content (displays on site)\"></onion-editor></div><div class=row><div class=col-xs-5><label for=\"linkTo{{ uuid }}\">Link To</label><select id=\"linkTo{{ uuid }}\" class=form-control ng-model=link.to_node ng-change=updateInboundLinks(link) ng-options=\"node.id as (node | clickventure_node_name) || node.id for node in nodeData.nodes\"></select></div><div class=col-xs-4><label for=\"linkStyle{{ uuid }}\">Style</label><select id=\"linkStyle{{ uuid }}\" class=form-control ng-options=\"style.toLowerCase() as style for style in linkStyles\" ng-model=link.link_style></select></div><div class=col-xs-3><button class=\"btn form-button\" ng-class=\"{\n" +
+    "            'btn-info': link.float,\n" +
+    "            'btn-default': !link.flaot\n" +
+    "          }\" ng-click=\"link.float = !link.float\"><span class=fa ng-class=\"{\n" +
+    "              'fa-check-square-o': link.float,\n" +
+    "              'fa-square-o': !link.float\n" +
+    "            }\"></span> <span>Float Link</span></button></div></div><div class=row><div class=col-xs-12><button class=\"btn btn-danger form-button\" ng-click=\"deleteLink(node, link)\"><span class=\"fa fa-trash-o\"></span> <span>Delete Link</span></button></div></div></div>"
   );
 
 
@@ -36,7 +42,7 @@ angular.module('bulbs.clickventure.templates', []).run(['$templateCache', functi
 
 
   $templateCache.put('clickventure-edit-node/clickventure-edit-node-settings/clickventure-edit-node-settings.html',
-    "<div class=container-fluid ng-show=\"data.configPageActive === 'Settings'\"><div class=\"row form-group\"><div class=col-xs-8><label for=nodePageName>Page Name (Internal Use)</label><input id=nodePageName class=form-control placeholder=\"Page Name (Internal Use)\" ng-model=node.title></div><div class=col-xs-4><button class=\"btn btn-primary\" ng-click=cloneNode(node)><i class=\"fa fa-copy\"></i> <span>Clone Page</span></button></div></div><div class=\"row form-group\"><div class=col-xs-12><label>Select Page Types</label></div><div class=\"col-xs-12 form-group\"><button class=btn ng-class=\"{\n" +
+    "<div class=container-fluid ng-show=\"data.configPageActive === 'Settings'\"><div class=\"row form-group\"><div class=col-xs-8><label for=nodePageName>Page Name (Internal Use)</label><input id=nodePageName class=form-control placeholder=\"Page Name (Internal Use)\" ng-model=node.title></div><div class=col-xs-4><button class=\"btn btn-primary form-button\" ng-click=cloneNode(node)><i class=\"fa fa-copy\"></i> <span>Clone Page</span></button></div></div><div class=\"row form-group\"><div class=col-xs-12><label>Select Page Types</label></div><div class=\"col-xs-12 form-group\"><button class=btn ng-class=\"{\n" +
     "            'btn-info': node.start,\n" +
     "            'btn-default': !node.start\n" +
     "          }\" ng-click=\"node.start = !node.start\"><span class=fa ng-class=\"{\n" +

@@ -3,7 +3,8 @@
 angular.module('bulbs.clickventure.edit.link', [
   'confirmationModal.factory',
   'bulbs.clickventure.edit.nodeNameFilter',
-  'bulbs.clickventure.edit.service'
+  'bulbs.clickventure.edit.service',
+  'uuid4'
 ])
   .directive('clickventureEditLink', function (routes) {
     return {
@@ -15,14 +16,15 @@ angular.module('bulbs.clickventure.edit.link', [
       },
       require: '^clickventureNode',
       controller: [
-        '$scope', 'ClickventureEdit', 'ConfirmationModal',
-        function ($scope, ClickventureEdit, ConfirmationModal) {
+        '$scope', 'ClickventureEdit', 'ConfirmationModal', 'uuid4',
+        function ($scope, ClickventureEdit, ConfirmationModal, uuid4) {
+
+          $scope.uuid = uuid4.generate();
 
           $scope.deleteLink = ClickventureEdit.deleteLink;
           $scope.updateInboundLinks = ClickventureEdit.updateInboundLinks;
           $scope.linkStyles = ClickventureEdit.getValidLinkStyles();
           $scope.nodeData = ClickventureEdit.getData();
-          $scope.nodeTransitions = ClickventureEdit.getValidNodeTransitions();
 
           $scope.deleteLink = function (node, link) {
             var modalScope = $scope.$new();

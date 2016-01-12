@@ -84,6 +84,13 @@ angular.module('bulbs.clickventure.edit.service', [
             _setNodeViewData(node, {order: i + 1});
           });
 
+          // setup inboundLinks
+          data.nodes.forEach(function (node) {
+            node.links.forEach(function (link) {
+              updateInboundLinks(link);
+            });
+          });
+
           selectNode(nodes[0]);
         }
 
@@ -200,6 +207,7 @@ angular.module('bulbs.clickventure.edit.service', [
             });
 
             node.sister_pages = _.without(node.sister_pages, rmNode.id);
+            data.view[node.id].inboundLinks = _.without(data.view[node.id].inboundLinks, rmNode.id);
           });
         }
 

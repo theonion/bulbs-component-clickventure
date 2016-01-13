@@ -7,13 +7,14 @@
     <span>This link doesn't link to another page!</span>
   </div>
 
-  <div class="form-control form-group node-text">
-    <onion-editor
+  <div class="form-group form-group">
+    <label for="linkText{{ uuid }}">Link Content</label>
+    <input
+        id="linkText{{ uuid }}"
+        type="text"
+        class="form-control"
         ng-model="link.body"
-        role="multiline"
-        formatting="bold,italic,strike"
         placeholder="Link Content (displays on site)">
-    </onion-editor>
   </div>
 
   <div class="row">

@@ -20,10 +20,6 @@ angular.module('bulbs.clickventure.edit.nodeToolbar', [
 
             $scope.data = ClickventureEdit.getData();
             $scope.changeConfigPage = ClickventureEdit.changeConfigPage;
-
-            ClickventureEdit.registerSelectNodeHandler(function (node) {
-              $scope.selectedNode = node;
-            });
           }
         ],
         link: function (scope, elements) {

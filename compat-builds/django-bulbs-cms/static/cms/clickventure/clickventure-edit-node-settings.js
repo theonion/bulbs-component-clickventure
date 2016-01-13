@@ -9,7 +9,7 @@ angular.module('bulbs.clickventure.edit.node.settings', [
     return {
       restrict: 'E',
       templateUrl: 'clickventure-edit-node/clickventure-edit-node-settings/clickventure-edit-node-settings.html',
-      require: '^clickventureEditNode',
+      require: '^clickventureEdit',
       scope: {
         node: '='
       },

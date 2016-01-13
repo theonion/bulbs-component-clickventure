@@ -5,7 +5,7 @@
 
     <clickventure-edit-node-list-node
         node="node"
-        ng-class="{'clickventure-edit-node-list-node-active': nodeData.view[node.id].active}">
+        ng-class="{'clickventure-edit-node-list-node-active': nodeData.nodeActive === node}">
 
       <input
         class="clickventure-edit-node-list-node-tools-item"

@@ -18,10 +18,10 @@ angular.module('bulbs.clickventure.edit', [
           saveArticleDeferred: '='
         },
         controller: [
-          '$', '$scope', '$window', '$timeout', 'ClickventureEdit',
-            'ClickventureEditValidator',
-          function ($, $scope, $window, $timeout, ClickventureEdit,
-              ClickventureEditValidator) {
+          '$scope', 'ClickventureEdit', 'ClickventureEditValidator',
+          function ($scope, ClickventureEdit, ClickventureEditValidator) {
+
+            $scope.data = ClickventureEdit.getData();
 
             $scope.$watch('article', function (newVal, oldVal) {
               ClickventureEdit.setNodes(newVal.nodes);
@@ -31,15 +31,6 @@ angular.module('bulbs.clickventure.edit', [
             $scope.validateGraph = function () {
               ClickventureEditValidator.validateGraph(ClickventureEdit.getData().nodes);
             };
-
-            ClickventureEdit.registerSelectNodeHandler(function (node) {
-              $scope.selectedNode = node;
-// TODO : this looks bad?
-              // terrible code alarm
-              $timeout(function () {
-                $window.picturefill($('clickventure-node')[0]);
-              });
-            });
           }
         ]
       };

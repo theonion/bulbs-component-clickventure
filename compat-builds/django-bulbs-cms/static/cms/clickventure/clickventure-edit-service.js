@@ -10,6 +10,7 @@ angular.module('bulbs.clickventure.edit.service', [
       var data = {
         configPageActive: '',
         configPages: [],
+        nodeActive: null,
         nodes: [],
         view: {}
       };
@@ -31,7 +32,6 @@ angular.module('bulbs.clickventure.edit.service', [
                 return data.view[node.id].order;
               }
             })) + 1,
-          active: settings.active || false,
           inboundLinks: []
         };
 
@@ -140,9 +140,7 @@ angular.module('bulbs.clickventure.edit.service', [
       };
 
       var selectNode = function (node) {
-        Object.keys(data.view).forEach(function (id) {
-          data.view[id].active = node.id === parseInt(id, 10);
-        });
+        data.nodeActive = node;
 
         handlers.select.forEach(function (func) {
           func(node);

@@ -8,3 +8,6 @@ clickventure-edit-node-copy ol {
 clickventure-edit-node-copy .panel {
   margin-bottom: 0;
 }
+clickventure-edit-node-copy .editor-wrapper .editor div[data-type="image"] > div {
+  background-size: 100%;
+}

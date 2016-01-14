@@ -43,7 +43,7 @@ module.exports = function (grunt) {
       // copy the whole thing into a place where setup.py can pick it up
       'copy:bulbs_cms_to_django_app_complete',
       // cleanup
-      // 'clean:tmp'
+      'clean:tmp'
     ]
   );
 };

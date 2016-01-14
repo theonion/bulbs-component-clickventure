@@ -264,9 +264,11 @@ angular.module('bulbs.clickventure.edit.service', [
         var indexLinks = node.links.indexOf(rmLink);
         node.links.splice(indexLinks, 1);
 
-        var linksInbound = data.view[rmLink.to_node].inboundLinks;
-        var indexInbound = linksInbound.indexOf(rmLink.from_node);
-        linksInbound.splice(indexInbound, 1);
+        if (typeof rmLink.to_node !== 'number') {
+          var linksInbound = data.view[rmLink.to_node].inboundLinks;
+          var indexInbound = linksInbound.indexOf(rmLink.from_node);
+          linksInbound.splice(indexInbound, 1);
+        }
       };
 
       var registerConfigPage = function (title) {

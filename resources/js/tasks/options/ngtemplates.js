@@ -8,7 +8,7 @@ module.exports = {
   templates: {
     cwd: 'src/bulbs-cms/clickventure-edit',
     src: '**/*.html',
-    dest: '.tmp/django-bulbs-cms-pre-1/static/cms/clickventure/templates.js',
+    dest: '.tmp/django-bulbs-cms-pre-1/templates.js',
     options: {
       htmlmin: {
         collapseBooleanAttributes: true,

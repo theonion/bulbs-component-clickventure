@@ -28,7 +28,7 @@ cms_css = PipelineWrapper()
 cms_css \
     .set_name("clickventure_cms") \
     .set_output_filename("css/clickventure-cms.css") \
-    .add_source_filename("cms/clickventure/*.less")
+    .add_source_filename("cms/clickventure/clickventure.css")
 
 public_css = PipelineWrapper()
 public_css \
@@ -40,7 +40,7 @@ cms_js = PipelineWrapper()
 cms_js \
     .set_name("clickventure_cms") \
     .set_output_filename("js/clickventure-cms.js") \
-    .add_source_filename("cms/clickventure/*.js")
+    .add_source_filename("cms/clickventure/clickventure.js")
 
 public_js = PipelineWrapper()
 public_js \

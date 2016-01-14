@@ -1,5 +1,3 @@
-'use strict';
-
 angular.module('bulbs.clickventure.edit', [
   'jquery',
   'bulbs.clickventure.edit.node',

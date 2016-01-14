@@ -1,5 +1,3 @@
-'use strict';
-
 angular.module('bulbs.clickventure.edit.nodeToolbar', [
   'bulbs.clickventure.edit.service'
 ])

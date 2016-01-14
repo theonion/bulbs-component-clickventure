@@ -1,5 +1,3 @@
-'use strict';
-
 angular.module('bulbs.clickventure.edit.link', [
   'confirmationModal.factory',
   'bulbs.clickventure.edit.nodeNameFilter',

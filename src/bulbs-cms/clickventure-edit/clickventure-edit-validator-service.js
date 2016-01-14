@@ -1,5 +1,3 @@
-'use strict';
-
 angular.module('bulbs.clickventure.edit.validator.service', [
   'bulbs.clickventure.edit.service',
 ])

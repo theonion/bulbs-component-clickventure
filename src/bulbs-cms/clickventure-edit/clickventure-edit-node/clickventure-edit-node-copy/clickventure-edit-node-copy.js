@@ -1,6 +1,3 @@
-
-'use strict';
-
 angular.module('bulbs.clickventure.edit.node.copy', [
   'bulbs.clickventure.edit.link',
   'bulbs.clickventure.edit.service',

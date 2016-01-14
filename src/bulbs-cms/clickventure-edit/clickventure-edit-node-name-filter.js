@@ -1,5 +1,3 @@
-'use strict';
-
 angular.module('bulbs.clickventure.edit.nodeNameFilter', [])
   .filter('clickventure_node_name', [
     function () {

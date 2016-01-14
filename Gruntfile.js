@@ -37,10 +37,13 @@ module.exports = function (grunt) {
       'ngtemplates',
       // do the rest of prep needed for django app
       'bulbs_cms_to_django_app_pre_1_init_py',
+      // concat/compile files
+      'concat:bulbs_cms_to_django_app_pre_2_scripts',
+      'less:bulbs_cms_to_django_app_pre_2_styles',
       // copy the whole thing into a place where setup.py can pick it up
       'copy:bulbs_cms_to_django_app_complete',
       // cleanup
-      'clean:tmp'
+      // 'clean:tmp'
     ]
   );
 };

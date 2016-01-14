@@ -103,7 +103,7 @@
         <li ng-repeat="nodeId in data.view[node.id].inboundLinks">
           <a
               ng-bind-html="data.view[nodeId].node | clickventure_node_name"
-              ng-click="selectNode(node)">
+              ng-click="selectNode(data.view[nodeId].node)">
           </a>
         </li>
       </ul>
@@ -118,7 +118,7 @@
         <li ng-repeat="nodeId in node.sister_pages">
           <a
               ng-bind-html="data.view[nodeId].node | clickventure_node_name"
-              ng-click="selectNode(node)">
+              ng-click="selectNode(data.view[nodeId].node)">
           </a>
         </li>
       </ul>

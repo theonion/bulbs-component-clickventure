@@ -46,10 +46,10 @@
           ng-repeat="link in node.links"
           ng-init="linkOpen = false"
           class="clearfix panel panel-default">
-        <div
-            class="panel-heading"
-            ng-click="linkOpen = !linkOpen">
-          <h4 class="panel-title">
+        <div class="panel-heading">
+          <button
+              class="btn btn-link btn-xs panel-title"
+              ng-click="linkOpen = !linkOpen">
             <span
                 class="fa fa-caret-right"
                 ng-class="{
@@ -67,21 +67,21 @@
                 class="fa fa-exclamation-circle text-danger"
                 ng-show="!link.to_node">
             </span>
-            <div class="btn-group pull-right">
-              <button
-                  class="btn btn-link btn-xs"
-                  ng-click="reorderLink(node, $index, $index + 1)"
-                  ng-disabled="$last">
-                <span class="fa fa-chevron-down"></span>
-              </button>
-              <button
-                  class="btn btn-link btn-xs"
-                  ng-click="reorderLink(node, $index, $index - 1)"
-                  ng-disabled="$index === 0">
-                <span class="fa fa-chevron-up"></span>
-              </button>
-            </div>
-          </h4>
+          </button>
+          <div class="btn-group pull-right">
+            <button
+                class="btn btn-link btn-xs"
+                ng-click="reorderLink(node, $index, $index + 1)"
+                ng-disabled="$last">
+              <span class="fa fa-chevron-down"></span>
+            </button>
+            <button
+                class="btn btn-link btn-xs"
+                ng-click="reorderLink(node, $index, $index - 1)"
+                ng-disabled="$index === 0">
+              <span class="fa fa-chevron-up"></span>
+            </button>
+          </div>
         </div>
         <div
             class="panel-body"

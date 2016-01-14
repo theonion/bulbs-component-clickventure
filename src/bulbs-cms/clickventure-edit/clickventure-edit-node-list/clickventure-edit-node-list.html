@@ -8,14 +8,12 @@
         ng-class="{'clickventure-edit-node-list-node-active': nodeData.nodeActive === node}">
 
       <input
-        class="clickventure-edit-node-list-node-tools-item"
-        type="number"
-        min="1"
-        step="1"
-        ng-model="nodeData.view[node.id].order"
-        ng-pattern="/^[1-9]{1}[0-9]*$/"
-        ng-keyup="$event.which === 13 && reorderNode($index, nodeData.view[node.id].order - 1)"
-        ng-blur="reorderNode($index, nodeData.view[node.id].order - 1)">
+          class="clickventure-edit-node-list-node-tools-item"
+          type="text"
+          ng-model="nodeData.view[node.id].order"
+          ng-pattern="/^[1-9]{1}[0-9]*$/"
+          ng-keyup="$event.which === 13 && reorderNode($index, nodeData.view[node.id].order - 1)"
+          ng-blur="reorderNode($index, nodeData.view[node.id].order - 1)">
       <button
           class="btn btn-link btn-xs clickventure-edit-node-list-node-tools-item"
           ng-click="reorderNode($index, $index - 1)"

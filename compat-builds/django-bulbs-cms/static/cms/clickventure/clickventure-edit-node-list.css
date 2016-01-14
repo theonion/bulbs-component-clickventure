@@ -16,6 +16,9 @@ clickventure-edit-node-list ol li {
 clickventure-edit-node-list ol li clickventure-edit-node-list-node {
   cursor: pointer;
 }
+clickventure-edit-node-list ol li clickventure-edit-node-list-node input {
+  text-align: center;
+}
 clickventure-edit-node-list ol li clickventure-edit-node-list-node .clickventure-edit-node-list-node-tools-item {
   width: 100%;
 }

@@ -110,7 +110,13 @@ angular.module('bulbs.clickventure.edit.service', [
           shareable: false,
           share_text: ''
         };
-        data.nodes.push(node);
+
+        var activeNodeIndex = data.nodes.indexOf(data.nodeActive);
+        if (activeNodeIndex >= 0) {
+          data.nodes.splice(activeNodeIndex + 1, 0, node);
+        } else {
+          data.nodes.push(node);
+        }
 
         _setNodeViewData(node);
         _reindexNodes();

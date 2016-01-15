@@ -255,10 +255,12 @@ angular.module('bulbs.clickventure.edit.service', [
       };
 
       var updateInboundLinks = function (link) {
-        var links = data.view[link.to_node].inboundLinks;
+        if (typeof link.to_node === 'number') {
+          var links = data.view[link.to_node].inboundLinks;
 
-        if (links.indexOf(link.from_node) < 0) {
-          links.push(link.from_node);
+          if (links.indexOf(link.from_node) < 0) {
+            links.push(link.from_node);
+          }  
         }
       };
 

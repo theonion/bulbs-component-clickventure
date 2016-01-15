@@ -1,0 +1,42 @@
+clickventure-edit-node-list-node {
+  background-color: #ffffff;
+  border: 3px #e0e0e0 solid;
+  display: flex;
+  font-size: 12px;
+  max-height: 75px;
+
+  &.clickventure-edit-node-list-node-active {
+    border: 3px #288fc7 solid;
+
+    .clickventure-edit-node-list-node-status {
+      background-color: #288fc7;
+    }
+  }
+
+  .clickventure-edit-node-list-node-status {
+    background-color: #e0e0e0;
+    flex-basis: 10%;
+    flex-grow: 1;
+
+    &.clickventure-edit-node-list-node-status-start {
+      background-color: #d2e7f7;
+    }
+
+    &.clickventure-edit-node-list-node-status-finish {
+      background-color: #e0fad4;
+    }
+  }
+
+  .clickventure-edit-node-list-node-title {
+    flex-basis: 75%;
+    flex-grow: 8;
+    overflow: hidden;
+    padding: 5px;
+  }
+
+  .clickventure-edit-node-list-node-tools {
+    border-left: 1px #e0e0e0 solid;
+    flex-basis: 15%;
+    flex-grow: 1;
+  }
+}

@@ -1,23 +1,29 @@
 clickventure-edit {
-  .clickventure {
-    min-height: 600px;
+  display: flex;
+  min-height: 800px;
+  position: relative;
 
-    .list-group {
-      cursor: pointer;
-      max-height: 600px;
-      overflow-y: scroll;
-    }
+  label {
+    padding-right: 5px;
+  }
 
-    .active button {
-      color: white;
-    }
+  .btn-link:hover {
+    text-decoration: none;
+  }
 
-    .node-text {
-      height: auto;
-    }
+  .active button {
+    color: white;
+  }
 
-    .editor, .editorPlaceholder {
-      padding: 0;
-    }
+  .node-text {
+    height: auto;
+  }
+
+  .editor, .editorPlaceholder {
+    padding: 0;
+  }
+
+  .form-button {
+    margin-top: 25px;
   }
 }

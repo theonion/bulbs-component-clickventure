@@ -1,0 +1,46 @@
+<ol>
+  <li
+      ng-repeat="node in nodeData.nodes track by node.id"
+      ng-click="selectNode(node)">
+
+    <clickventure-edit-node-list-node
+        node="node"
+        ng-class="{'clickventure-edit-node-list-node-active': nodeData.nodeActive === node}">
+
+      <input
+          class="clickventure-edit-node-list-node-tools-item"
+          type="text"
+          ng-model="nodeData.view[node.id].order"
+          ng-pattern="/^[1-9]{1}[0-9]*$/"
+          ng-keyup="$event.which === 13 && reorderNode($index, nodeData.view[node.id].order - 1)"
+          ng-blur="reorderNode($index, nodeData.view[node.id].order - 1)">
+      <button
+          class="btn btn-link btn-xs clickventure-edit-node-list-node-tools-item"
+          ng-click="reorderNode($index, $index - 1)"
+          ng-disabled="$first">
+        <span class="fa fa-chevron-up"></span>
+      </button>
+      <button
+          class="btn btn-link btn-xs clickventure-edit-node-list-node-tools-item"
+          ng-click="reorderNode($index, $index + 1)"
+          ng-disabled="$last">
+        <span class="fa fa-chevron-down"></span>
+      </button>
+    </clickventure-edit-node-list-node>
+  </li>
+</ol>
+
+<div class="clickventure-edit-node-list-tools">
+  <button
+      class="btn btn-primary"
+      ng-click="addNode()">
+    <span class="fa fa-plus"></span>
+    <span>New Page</span>
+  </button>
+  <button
+      class="btn btn-default"
+      ng-click="validateGraph()">
+    <span class="fa fa-check"></span>
+    <span>Run Check</span>
+  </button>
+</div>

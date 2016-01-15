@@ -16,10 +16,10 @@ module.exports = function (grunt) {
   grunt.loadTasks('resources/js/tasks');
 
   grunt.task.registerTask(
-    'bulbs_cms_to_django_app_pre_1_init_py',
+    'bulbs_cms_to_django_app_init_py',
     'Create an __init__.py file for django-bulbs-cms app.',
     function () {
-      grunt.file.write('.tmp/django-bulbs-cms-pre-1/__init__.py');
+      grunt.file.write('compat-builds/django-bulbs-cms/__init__.py');
     }
   );
 
@@ -33,15 +33,17 @@ module.exports = function (grunt) {
       // copy scripts and styles into a django compatibile package
       'copy:bulbs_cms_to_django_app_pre_1_scripts',
       'copy:bulbs_cms_to_django_app_pre_1_styles',
-      // copy html to package, do verbatim wrapping for django compatibility
-      'replace:bulbs_cms_to_django_app_pre_1_html',
+      // put html into template file
+      'ngtemplates',
+      // concat/compile files
+      'concat:bulbs_cms_to_django_app_pre_2_scripts',
+      'less:bulbs_cms_to_django_app_pre_2_styles',
       // do the rest of prep needed for django app
-      'bulbs_cms_to_django_app_pre_1_init_py',
+      'bulbs_cms_to_django_app_init_py',
       // copy the whole thing into a place where setup.py can pick it up
       'copy:bulbs_cms_to_django_app_complete',
       // cleanup
       'clean:tmp'
     ]
   );
-
 };

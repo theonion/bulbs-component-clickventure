@@ -35,16 +35,12 @@ clickventure-edit-node-list-node .clickventure-edit-node-list-node-tools {
 }
 
 clickventure-edit-node-list {
-  display: block;
-  flex: 1;
-  max-height: 300px;
-  min-width: 250px;
   position: absolute;
   width: 250px;
 }
 clickventure-edit-node-list ol {
   background-color: #ebebeb;
-  max-height: 400px;
+  height: 550px;
   margin-bottom: 0;
   overflow-y: scroll;
   padding: 10px;
@@ -73,8 +69,6 @@ clickventure-edit-node-list .clickventure-edit-node-list-tools {
 clickventure-edit-node-toolbar {
   background-color: #ebebeb;
   display: flex;
-  flex: 3;
-  flex-wrap: wrap;
   margin-left: 250px;
   position: absolute;
   width: 550px;
@@ -136,7 +130,7 @@ clickventure-edit-node .panel .panel-heading {
 
 clickventure-edit {
   display: flex;
-  min-height: 600px;
+  min-height: 800px;
   position: relative;
 }
 clickventure-edit label {

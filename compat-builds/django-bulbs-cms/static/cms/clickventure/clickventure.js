@@ -120,7 +120,8 @@ angular.module('bulbs.clickventure.edit.nodeList.node', [
 
 angular.module('bulbs.clickventure.edit.nodeList', [
   'bulbs.clickventure.edit.nodeList.node',
-  'bulbs.clickventure.edit.service'
+  'bulbs.clickventure.edit.service',
+  'bulbs.clickventure.edit.validator.service'
 ])
   .directive('clickventureEditNodeList', [
     function () {
@@ -130,12 +131,17 @@ angular.module('bulbs.clickventure.edit.nodeList', [
         scope: {},
         require: '^clickventureEdit',
         controller: [
-          '$scope', 'ClickventureEdit',
-          function ($scope, ClickventureEdit) {
+          '$scope', 'ClickventureEdit', 'ClickventureEditValidator',
+          function ($scope, ClickventureEdit, ClickventureEditValidator) {
+            $scope.addNode = ClickventureEdit.addNode;
             $scope.reorderNode = ClickventureEdit.reorderNode;
             $scope.selectNode = ClickventureEdit.selectNode;
 
             $scope.nodeData = ClickventureEdit.getData();
+
+            $scope.validateGraph = function () {
+              ClickventureEditValidator.validateGraph(ClickventureEdit.getData().nodes);
+            };
           }
         ]
       };
@@ -228,16 +234,18 @@ angular.module('bulbs.clickventure.edit.node', [
   'bulbs.clickventure.edit.node.copy',
   'bulbs.clickventure.edit.node.settings'
 ])
-  .directive('clickventureEditNode', function () {
-    return {
-      restrict: 'E',
-      templateUrl: 'clickventure-edit-node/clickventure-edit-node.html',
-      scope: {
-        node: '='
-      },
-      require: '^clickventureEdit'
-    };
-  });
+  .directive('clickventureEditNode', [
+    function () {
+      return {
+        restrict: 'E',
+        templateUrl: 'clickventure-edit-node/clickventure-edit-node.html',
+        scope: {
+          node: '='
+        },
+        require: '^clickventureEdit'
+      };
+    }
+  ]);
 
 angular.module('bulbs.clickventure.edit.service', [
   'lodash'
@@ -577,6 +585,38 @@ angular.module('bulbs.clickventure.edit.service', [
     }
   ]);
 
+angular.module('bulbs.clickventure.edit.toolFixture', [
+  'jquery'
+])
+  .directive('clickventureEditToolFixture', [
+    '$',
+    function ($) {
+      return {
+        restrict: 'A',
+        scope: false,
+        link: function (scope, elements) {
+          var $nav = $('nav-bar nav');
+
+          $(window).on('scroll resize', requestAnimationFrame.bind(null, function () {
+            var container = elements.parent();
+
+            if (container[0].getBoundingClientRect().top - $nav.height() <= 0) {
+              var padding = $nav.height();
+
+              elements.css('position', 'fixed');
+              elements.css('top', padding + 'px');
+              elements.css('z-index', 100);
+            } else {
+              elements.css('position', '');
+              elements.css('top', '');
+              elements.css('z-index', '');
+            }
+          }));
+        }
+      };
+    }
+  ]);
+
 angular.module('bulbs.clickventure.edit.validator.service', [
   'bulbs.clickventure.edit.service',
 ])
@@ -721,12 +761,11 @@ angular.module('bulbs.clickventure.edit.validator.service', [
   ]);
 
 angular.module('bulbs.clickventure.edit', [
-  'jquery',
   'bulbs.clickventure.edit.node',
   'bulbs.clickventure.edit.nodeList',
   'bulbs.clickventure.edit.nodeToolbar',
   'bulbs.clickventure.edit.service',
-  'bulbs.clickventure.edit.validator.service'
+  'bulbs.clickventure.edit.toolFixture'
 ])
   .directive('clickventureEdit', [
     function () {
@@ -738,19 +777,14 @@ angular.module('bulbs.clickventure.edit', [
           saveArticleDeferred: '='
         },
         controller: [
-          '$scope', 'ClickventureEdit', 'ClickventureEditValidator',
-          function ($scope, ClickventureEdit, ClickventureEditValidator) {
+          '$scope', 'ClickventureEdit',
+          function ($scope, ClickventureEdit) {
 
             $scope.data = ClickventureEdit.getData();
 
             $scope.$watch('article', function (newVal, oldVal) {
               ClickventureEdit.setNodes(newVal.nodes);
             });
-
-            $scope.addNode = ClickventureEdit.addNode;
-            $scope.validateGraph = function () {
-              ClickventureEditValidator.validateGraph(ClickventureEdit.getData().nodes);
-            };
           }
         ]
       };
@@ -785,7 +819,7 @@ angular.module('bulbs.clickventure.templates', []).run(['$templateCache', functi
 
 
   $templateCache.put('clickventure-edit-node-list/clickventure-edit-node-list.html',
-    "<ol><li ng-repeat=\"node in nodeData.nodes\" ng-click=selectNode(node)><clickventure-edit-node-list-node node=node ng-class=\"{'clickventure-edit-node-list-node-active': nodeData.nodeActive === node}\"><input class=clickventure-edit-node-list-node-tools-item ng-model=nodeData.view[node.id].order ng-pattern=\"/^[1-9]{1}[0-9]*$/\" ng-keyup=\"$event.which === 13 && reorderNode($index, nodeData.view[node.id].order - 1)\" ng-blur=\"reorderNode($index, nodeData.view[node.id].order - 1)\"> <button class=\"btn btn-link btn-xs clickventure-edit-node-list-node-tools-item\" ng-click=\"reorderNode($index, $index - 1)\" ng-disabled=$first><span class=\"fa fa-chevron-up\"></span></button> <button class=\"btn btn-link btn-xs clickventure-edit-node-list-node-tools-item\" ng-click=\"reorderNode($index, $index + 1)\" ng-disabled=$last><span class=\"fa fa-chevron-down\"></span></button></clickventure-edit-node-list-node></li></ol>"
+    "<ol><li ng-repeat=\"node in nodeData.nodes\" ng-click=selectNode(node)><clickventure-edit-node-list-node node=node ng-class=\"{'clickventure-edit-node-list-node-active': nodeData.nodeActive === node}\"><input class=clickventure-edit-node-list-node-tools-item ng-model=nodeData.view[node.id].order ng-pattern=\"/^[1-9]{1}[0-9]*$/\" ng-keyup=\"$event.which === 13 && reorderNode($index, nodeData.view[node.id].order - 1)\" ng-blur=\"reorderNode($index, nodeData.view[node.id].order - 1)\"> <button class=\"btn btn-link btn-xs clickventure-edit-node-list-node-tools-item\" ng-click=\"reorderNode($index, $index - 1)\" ng-disabled=$first><span class=\"fa fa-chevron-up\"></span></button> <button class=\"btn btn-link btn-xs clickventure-edit-node-list-node-tools-item\" ng-click=\"reorderNode($index, $index + 1)\" ng-disabled=$last><span class=\"fa fa-chevron-down\"></span></button></clickventure-edit-node-list-node></li></ol><div class=clickventure-edit-node-list-tools><button class=\"btn btn-primary\" ng-click=addNode()><span class=\"fa fa-plus\"></span> <span>New Page</span></button> <button class=\"btn btn-default\" ng-click=validateGraph()><span class=\"fa fa-check\"></span> <span>Run Check</span></button></div>"
   );
 
 
@@ -834,7 +868,7 @@ angular.module('bulbs.clickventure.templates', []).run(['$templateCache', functi
 
 
   $templateCache.put('clickventure-edit.html',
-    "<div class=clickventure-edit-col-1><clickventure-edit-node-list></clickventure-edit-node-list><div class=clickventure-edit-node-list-tools><button class=\"btn btn-primary\" ng-click=addNode()><span class=\"fa fa-plus\"></span> <span>New Page</span></button> <button class=\"btn btn-default\" ng-click=validateGraph()><span class=\"fa fa-check\"></span> <span>Run Check</span></button></div></div><div class=clickventure-edit-col-2><clickventure-edit-node-toolbar article=article></clickventure-edit-node-toolbar><clickventure-edit-node node=data.nodeActive></clickventure-edit-node></div>"
+    "<clickventure-edit-node-list clickventure-edit-tool-fixture></clickventure-edit-node-list><clickventure-edit-node-toolbar clickventure-edit-tool-fixture article=article></clickventure-edit-node-toolbar><clickventure-edit-node node=data.nodeActive></clickventure-edit-node>"
   );
 
 }]);

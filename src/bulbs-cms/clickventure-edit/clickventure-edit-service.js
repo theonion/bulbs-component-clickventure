@@ -68,6 +68,7 @@ angular.module('bulbs.clickventure.edit.service', [
         data.nodes = nodes;
         data.view = {};
 
+        var newActiveNode = null;
         if (nodes.length < 1) {
           // ensure there's at least one node
           addNode();
@@ -80,6 +81,11 @@ angular.module('bulbs.clickventure.edit.service', [
 
             // 1-based index for readability
             _setNodeViewData(node, {order: i + 1});
+
+            if (i === 0 && data.nodeActive === null ||
+                newActiveNode === null && data.nodeActive.id === node.id) {
+              newActiveNode = node;
+            }
           });
 
           // setup inboundLinks
@@ -89,7 +95,7 @@ angular.module('bulbs.clickventure.edit.service', [
             });
           });
 
-          selectNode(nodes[0]);
+          selectNode(newActiveNode);
         }
 
         return _reindexNodes();

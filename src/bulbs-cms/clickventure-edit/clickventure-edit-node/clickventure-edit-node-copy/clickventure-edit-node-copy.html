@@ -43,7 +43,7 @@
         class="col-xs-12"
         ng-show="node.links.length > 0">
       <li
-          ng-repeat="link in node.links"
+          ng-repeat="link in node.links track by $index"
           ng-init="linkOpen = false"
           class="clearfix panel panel-default">
         <div class="panel-heading">

@@ -100,7 +100,7 @@
     <div class="col-xs-6">
       <label>Inbound Links</label>
       <ul ng-show="data.view[node.id].inboundLinks.length > 0">
-        <li ng-repeat="nodeId in data.view[node.id].inboundLinks">
+        <li ng-repeat="nodeId in data.view[node.id].inboundLinks track by nodeId">
           <a
               ng-bind-html="data.view[nodeId].node | clickventure_node_name"
               ng-click="selectNode(data.view[nodeId].node)">
@@ -115,7 +115,7 @@
     <div class="col-xs-6">
       <label>Sister Pages</label>
       <ul ng-show="node.sister_pages.length > 0">
-        <li ng-repeat="nodeId in node.sister_pages">
+        <li ng-repeat="nodeId in node.sister_pages track by nodeId">
           <a
               ng-bind-html="data.view[nodeId].node | clickventure_node_name"
               ng-click="selectNode(data.view[nodeId].node)">

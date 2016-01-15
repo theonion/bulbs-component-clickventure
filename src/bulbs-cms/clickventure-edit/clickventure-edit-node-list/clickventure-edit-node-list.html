@@ -1,6 +1,6 @@
 <ol>
   <li
-      ng-repeat="node in nodeData.nodes"
+      ng-repeat="node in nodeData.nodes track by node.id"
       ng-click="selectNode(node)">
 
     <clickventure-edit-node-list-node

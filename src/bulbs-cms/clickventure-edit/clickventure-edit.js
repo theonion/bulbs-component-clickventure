@@ -20,8 +20,8 @@ angular.module('bulbs.clickventure.edit', [
 
             $scope.data = ClickventureEdit.getData();
 
-            $scope.$watch('article', function (newVal, oldVal) {
-              ClickventureEdit.setNodes(newVal.nodes);
+            $scope.$watch('article.nodes', function (newVal, oldVal) {
+              ClickventureEdit.setNodes(newVal);
             });
           }
         ]

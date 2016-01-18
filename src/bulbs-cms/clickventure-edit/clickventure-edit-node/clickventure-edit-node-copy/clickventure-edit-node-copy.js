@@ -1,5 +1,6 @@
 angular.module('bulbs.clickventure.edit.node.copy', [
   'bulbs.clickventure.edit.link',
+  'bulbs.clickventure.edit.node.container',
   'bulbs.clickventure.edit.service',
   'ui.bootstrap.tooltip'
 ])
@@ -18,8 +19,6 @@ angular.module('bulbs.clickventure.edit.node.copy', [
           function ($scope) {
             $scope.configPageTitle = 'Copy';
 
-            ClickventureEdit.registerConfigPage($scope.configPageTitle);
-
             $scope.addLink = ClickventureEdit.addLink;
             $scope.data = ClickventureEdit.getData();
             $scope.linkStyles = ClickventureEdit.getValidLinkStyles();
@@ -27,13 +26,8 @@ angular.module('bulbs.clickventure.edit.node.copy', [
           }
         ],
         link: function (scope, elements) {
-
-          var data = ClickventureEdit.getData();
-
           scope.$watch(
-            function () {
-              return data.configPageActive;
-            },
+            'data.configPageActive',
             $timeout.bind(null, function (newVal) {
               if (newVal === scope.configPageTitle) {
                 $window.picturefill(elements[0]);
@@ -42,9 +36,7 @@ angular.module('bulbs.clickventure.edit.node.copy', [
           );
 
           scope.$watch(
-            function () {
-              return data.nodeActive;
-            },
+            'data.nodeActive',
             $timeout.bind(null, function () {
               $window.picturefill(elements[0]);
             })

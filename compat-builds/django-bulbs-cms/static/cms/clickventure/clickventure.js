@@ -693,7 +693,7 @@ angular.module('bulbs.clickventure.edit.toolFixture', [
 
               elements.css('position', 'fixed');
               elements.css('top', padding + 'px');
-              elements.css('z-index', 100);
+              elements.css('z-index', 1000);
             } else {
               elements.css('position', '');
               elements.css('top', '');

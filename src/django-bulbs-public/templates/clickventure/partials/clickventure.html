@@ -1,3 +1,5 @@
+{% load betty %}
+
 {% comment %}
 This should be included with an include tag, with the following variables:
   - content <= the clickventure content object.
@@ -19,6 +21,13 @@ This should be included with an include tag, with the following variables:
         class="clickventure-node {% if node.start %}clickventure-node-start{% endif %} {% if node.finish %}clickventure-node-finish{% endif %}"
         data-node-name="{{ node.title }}"
         data-node-id="{{ node.id }}">
+      <div class="clickventure-node-image">
+        {% if node.photo_final %}
+          {% cropped node.photo_final.id ratio="16x9" %}
+        {% elif node.photo_placeholder_url %}
+          <img src="{{ node.photo_placeholder_url }}" alt="{{ node.photo_placeholder_page_url }}">
+        {% endif %}
+      </div>
       <div class="clickventure-node-body">
         {{ node.body|safe }}
       </div>

@@ -114,28 +114,22 @@ clickventure-edit-node-copy .editor-wrapper .editor div[data-type="image"] > div
   background-size: 100%;
 }
 
-clickventure-edit-node-photo .clickventure-photo-button-container {
-  cursor: pointer;
-  display: block;
-}
-clickventure-edit-node-photo .clickventure-photo-button-container .clickventure-photo-button {
-  background-color: #ebebeb;
-  color: #b3b3b3;
-  display: block;
-  width: 100%;
-  border: none;
-  font-size: 5em;
+clickventure-edit-node-photo .clickventure-photo-box {
   height: 315px;
 }
 clickventure-edit-node-photo .clickventure-photo-placeholder-preview {
   background-color: #ebebeb;
   color: #b3b3b3;
   display: block;
-  width: 100%;
-  height: 100px;
+  height: 108px;
   font-size: 2em;
   line-height: 100px;
   text-align: center;
+  width: 100%;
+}
+clickventure-edit-node-photo .clickventure-photo-placeholder-preview img {
+  max-height: 108px;
+  max-width: 108px;
 }
 clickventure-edit-node-photo .clickventure-photo-description-field {
   resize: vertical;

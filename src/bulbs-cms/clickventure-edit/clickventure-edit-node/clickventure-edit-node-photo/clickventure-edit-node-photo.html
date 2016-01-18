@@ -1,12 +1,14 @@
-<clickventure-edit-node-container config-page-title="{{ configPageTitle }}">
+<clickventure-edit-node-container
+    config-page-title="{{ configPageTitle }}"
+    on-config-page-render="onConfigPageActive()">
 
   <div class="row">
-    <label class="clickventure-photo-button-container form-group col-xs-12">
+    <label class="form-group col-xs-12">
       <span>Image</span>
       <betty-editable
-          image="node.photo.final_image"
+          image="node.photo_final"
           ratio="1x1"
-          add-styles="fa fa-picture-o clickventure-photo-button">
+          add-styles="fa fa-picture-o add-image-box clickventure-photo-box">
     </label>
   </div>
 
@@ -18,7 +20,7 @@
             id="photoPlaceholderUrl{{ uuid }}"
             type="url"
             class="form-control"
-            ng-model="node.photo.placeholder_image.url">
+            ng-model="node.photo_placeholder_url">
       </div>
 
       <div class="form-group">
@@ -27,14 +29,21 @@
             id="photoPlaceholderPageUrl{{ uuid }}"
             type="url"
             class="form-control"
-            ng-model="node.photo.placeholder_image.page_url">
+            ng-model="node.photo_placeholder_page_url">
       </div>
     </div>
 
     <div class="col-xs-4 form-group">
       <label>Preview</label>
+
       <div class="clickventure-photo-placeholder-preview">
-        <span class="fa fa-picture-o"></span>
+        <span
+            class="fa fa-picture-o"
+            ng-if="!node.photo_placeholder_url">
+        </span>
+        <img
+            ng-if="node.photo_placeholder_url"
+            ng-src="{{ node.photo_placeholder_url }}">
       </div>
     </div>
   </div>
@@ -45,7 +54,7 @@
       <textarea
           id="photoDescription{{ uuid }}"
           class="form-control clickventure-photo-description-field"
-          ng-model="node.photo.description">
+          ng-model="node.photo_description">
       </textarea>
     </div>
   </div>
@@ -57,8 +66,7 @@
           id="photoNote{{ uuid }}"
           type="text"
           class="form-control"
-          ng-model="node.photo.note">
+          ng-model="node.photo_note">
     </div>
   </div>
-
 </clickventure-edit-node-container>

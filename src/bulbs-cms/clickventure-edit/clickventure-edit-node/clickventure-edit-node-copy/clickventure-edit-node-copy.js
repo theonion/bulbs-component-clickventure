@@ -5,8 +5,8 @@ angular.module('bulbs.clickventure.edit.node.copy', [
   'ui.bootstrap.tooltip'
 ])
   .directive('clickventureEditNodeCopy', [
-    '$window', '$timeout', 'ClickventureEdit',
-    function ($window, $timeout, ClickventureEdit) {
+    '$window', 'ClickventureEdit',
+    function ($window, ClickventureEdit) {
       return {
         restrict: 'E',
         templateUrl: 'clickventure-edit-node/clickventure-edit-node-copy/clickventure-edit-node-copy.html',
@@ -26,21 +26,9 @@ angular.module('bulbs.clickventure.edit.node.copy', [
           }
         ],
         link: function (scope, elements) {
-          scope.$watch(
-            'data.configPageActive',
-            $timeout.bind(null, function (newVal) {
-              if (newVal === scope.configPageTitle) {
-                $window.picturefill(elements[0]);
-              }
-            })
-          );
-
-          scope.$watch(
-            'data.nodeActive',
-            $timeout.bind(null, function () {
-              $window.picturefill(elements[0]);
-            })
-          );
+          scope.onConfigPageActive = function () {
+            $window.picturefill(elements[0]);
+          };
         }
       };
     }

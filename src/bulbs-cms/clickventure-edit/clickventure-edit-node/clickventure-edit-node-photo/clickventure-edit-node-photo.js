@@ -1,5 +1,7 @@
 angular.module('bulbs.clickventure.edit.node.photo', [
-  'bulbs.clickventure.edit.node.container'
+  'bettyEditable',
+  'bulbs.clickventure.edit.node.container',
+  'uuid4'
 ])
   .directive('clickventureEditNodePhoto', function () {
     return {
@@ -10,9 +12,10 @@ angular.module('bulbs.clickventure.edit.node.photo', [
         node: '='
       },
       controller: [
-        '$scope',
-        function ($scope) {
+        '$scope', 'uuid4',
+        function ($scope, uuid4) {
           $scope.configPageTitle = 'Photo';
+          $scope.uuid = uuid4.generate();
         }
       ]
     };

@@ -46,25 +46,27 @@ angular.module('bulbs.clickventure.edit.link', [
 angular.module('bulbs.clickventure.edit.node.container', [
   'bulbs.clickventure.edit.service'
 ])
-  .directive('clickventureEditNodeContainer', function () {
-    return {
-      restrict: 'E',
-      templateUrl: 'clickventure-edit-node/clickventure-edit-node-container/clickventure-edit-node-container.html',
-      require: '^clickventureEdit',
-      transclude: true,
-      scope: {
-        configPageTitle: '@'
-      },
-      controller: [
-        '$scope', 'ClickventureEdit',
-        function ($scope, ClickventureEdit) {
-          ClickventureEdit.registerConfigPage($scope.configPageTitle);
+  .directive('clickventureEditNodeContainer', [
+    function () {
+      return {
+        restrict: 'E',
+        templateUrl: 'clickventure-edit-node/clickventure-edit-node-container/clickventure-edit-node-container.html',
+        require: '^clickventureEdit',
+        transclude: true,
+        scope: {
+          configPageTitle: '@'
+        },
+        controller: [
+          '$scope', 'ClickventureEdit',
+          function ($scope, ClickventureEdit) {
+            ClickventureEdit.registerConfigPage($scope.configPageTitle);
 
-          $scope.data = ClickventureEdit.getData();
-        }
-      ]
-    };
-  });
+            $scope.data = ClickventureEdit.getData();
+          }
+        ]
+      };
+    }
+  ]);
 
 angular.module('bulbs.clickventure.edit.node.copy', [
   'bulbs.clickventure.edit.link',
@@ -180,7 +182,9 @@ angular.module('bulbs.clickventure.edit.nodeNameFilter', [])
   ]);
 
 angular.module('bulbs.clickventure.edit.node.photo', [
-  'bulbs.clickventure.edit.node.container'
+  'bettyEditable',
+  'bulbs.clickventure.edit.node.container',
+  'uuid4'
 ])
   .directive('clickventureEditNodePhoto', function () {
     return {
@@ -191,9 +195,10 @@ angular.module('bulbs.clickventure.edit.node.photo', [
         node: '='
       },
       controller: [
-        '$scope',
-        function ($scope) {
+        '$scope', 'uuid4',
+        function ($scope, uuid4) {
           $scope.configPageTitle = 'Photo';
+          $scope.uuid = uuid4.generate();
         }
       ]
     };
@@ -887,7 +892,8 @@ angular.module('bulbs.clickventure.templates', []).run(['$templateCache', functi
 
 
   $templateCache.put('clickventure-edit-node/clickventure-edit-node-photo/clickventure-edit-node-photo.html',
-    "<clickventure-edit-node-container config-page-title=\"{{ configPageTitle }}\"><div>PHOTO PANE</div></clickventure-edit-node-container>"
+    "<clickventure-edit-node-container config-page-title=\"{{ configPageTitle }}\"><div class=row><label class=\"clickventure-photo-button-container form-group col-xs-12\"><span>Image</span><betty-editable image=node.photo.final_image ratio=1x1 add-styles=\"fa fa-picture-o clickventure-photo-button\"></betty-editable></label></div><div class=\"row form-group\"><div class=col-xs-8><div class=form-group><label for=\"photoPlaceholderUrl{{ uuid }}\">Stock/Placeholder Image URL</label><input id=\"photoPlaceholderUrl{{ uuid }}\" type=url class=form-control ng-model=node.photo.placeholder_image.url></div><div class=form-group><label for=\"photoPlaceholderPageUrl{{ uuid }}\">Stock/Placeholder Image Page URL</label><input id=\"photoPlaceholderPageUrl{{ uuid }}\" type=url class=form-control ng-model=node.photo.placeholder_image.page_url></div></div><div class=\"col-xs-4 form-group\"><label>Preview</label><div class=clickventure-photo-placeholder-preview><span class=\"fa fa-picture-o\"></span></div></div></div><div class=row><div class=\"col-xs-12 form-group\"><label for=\"photoDescription{{ uuid }}\">Description</label><textarea id=\"photoDescription{{ uuid }}\" class=\"form-control clickventure-photo-description-field\" ng-model=node.photo.description>\n" +
+    "      </textarea></div></div><div class=row><div class=\"col-xs-12 form-group\"><label for=\"photoNote{{ uuid }}\">Image Note</label><input id=\"photoNote{{ uuid }}\" class=form-control ng-model=node.photo.note></div></div></clickventure-edit-node-container>"
   );
 
 

@@ -1,2 +1,37 @@
 clickventure-edit-node-photo {
+
+  .clickventure-photo-mixin () {
+    background-color: #ebebeb;
+    color: #b3b3b3;
+    display: block;
+    width: 100%;
+  }
+
+  .clickventure-photo-button-container {
+    cursor: pointer;
+    display: block;
+
+    .clickventure-photo-button {
+      .clickventure-photo-mixin;
+
+      border: none;
+      font-size: 5em;
+      height: 315px;
+    }
+  }
+
+  .clickventure-photo-placeholder-preview {
+    .clickventure-photo-mixin;
+
+    @height: 100px;
+
+    height: @height;
+    font-size: 2em;
+    line-height: @height;
+    text-align: center;
+  }
+
+  .clickventure-photo-description-field {
+    resize: vertical;
+  }
 }

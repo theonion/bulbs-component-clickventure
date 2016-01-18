@@ -91,10 +91,11 @@ clickventure-edit-node-toolbar .clickventure-edit-node-toolbar-preview {
   min-width: 120px;
 }
 
-clickventure-edit-node-copy {
+clickventure-edit-node-container {
   display: block;
   padding-top: 10px;
 }
+
 clickventure-edit-node-copy ol {
   list-style: none;
 }
@@ -111,10 +112,7 @@ clickventure-edit-node-copy .editor-wrapper .editor div[data-type="image"] > div
   background-size: 100%;
 }
 
-clickventure-edit-node-settings {
-  display: block;
-  padding-top: 10px;
-}
+
 clickventure-edit-node-settings ul {
   padding-left: 25px;
 }

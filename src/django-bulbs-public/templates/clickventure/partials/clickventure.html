@@ -24,8 +24,30 @@ This should be included with an include tag, with the following variables:
       <div class="clickventure-node-image">
         {% if node.photo_final %}
           {% cropped node.photo_final.id ratio="16x9" %}
-        {% elif node.photo_placeholder_url %}
+        {% elif node.photo_placeholder_url and CMS_TOOLS_ENABLED %}
           <img src="{{ node.photo_placeholder_url }}" alt="{{ node.photo_placeholder_page_url }}">
+          <div class="clickventure-node-image-stock">
+            <div>
+              <span class="fa fa-exclamation-triangle"></span>
+              <span>Stock Photo</span>
+            </div>
+            {% if node.photo_placeholder_url %}
+              <a
+                  href="{{ node.photo_placeholder_url }}"
+                  target="_blank">
+                <span class="fa fa-external-link"></span>
+                <span>Image Location</span>
+              </a>
+            {% endif %}
+            {% if node.photo_placeholder_page_url %}
+              <a
+                  href="{{ node.photo_placeholder_page_url }}"
+                  target="_blank">
+                <span class="fa fa-external-link"></span>
+                <span>Image Page</span>
+              </a>
+            {% endif %}
+          </div>
         {% endif %}
       </div>
       <div class="clickventure-node-body">

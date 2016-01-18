@@ -2,7 +2,7 @@
 from setuptools import setup
 
 name = "bulbs-component-clickventure"
-version = "0.1.0"
+version = "0.1.1"
 
 requires = [
     "django-bulbs==0.6.1",

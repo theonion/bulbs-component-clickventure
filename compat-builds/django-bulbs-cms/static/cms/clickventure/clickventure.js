@@ -348,6 +348,28 @@ angular.module('bulbs.clickventure.edit.service', [
         return lastId + 1;
       };
 
+      /**
+       * Ensure node is up to date with newest fields.
+       *
+       * @param {Object} node - node to update.
+       * @returns {Object} updated node.
+       */
+      var _updateNodeData = function (node) {
+        if (_.isArray(node.links)) {
+          node.links.forEach(function (link) {
+            link.from_node = node.id;
+          });
+        } else {
+          node.links = [];
+        }
+
+        if (!_.isArray(node.sister_pages)) {
+          node.sister_pages = [];
+        }
+
+        return node;
+      };
+
       var setNodes = function (nodes) {
         if (!_.isArray(nodes)) {
           nodes = [];
@@ -363,9 +385,7 @@ angular.module('bulbs.clickventure.edit.service', [
         } else {
           data.nodes.forEach(function (node, i) {
             // some cleanup to ensure old nodes are in a good state
-            node.links.forEach(function (link) {
-              link.from_node = node.id;
-            });
+            _updateNodeData(node);
 
             // 1-based index for readability
             _setNodeViewData(node, {order: i + 1});
@@ -548,7 +568,7 @@ angular.module('bulbs.clickventure.edit.service', [
 
           if (links.indexOf(link.from_node) < 0) {
             links.push(link.from_node);
-          }  
+          }
         }
       };
 

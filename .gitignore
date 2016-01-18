@@ -1,3 +1,8 @@
+############################
+# compiled project garbage #
+############################
+src/django-bulbs-public/static/clickventure/styles/clickventure.css
+
 ##########
 # python #
 ##########

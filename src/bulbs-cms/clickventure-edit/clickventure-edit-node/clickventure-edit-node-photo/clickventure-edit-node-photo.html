@@ -2,6 +2,18 @@
     config-page-title="{{ configPageTitle }}"
     on-config-page-render="onConfigPageActive()">
 
+  <div class="row form-group">
+    <div class="col-xs-12">
+      <label for="nodePageName">Page Name (Internal Use)</label>
+      <input
+          id="nodePageName"
+          class="form-control"
+          placeholder="Page Name (Internal Use)"
+          ng-model="node.title"
+          type="text">
+    </div>
+  </div>
+
   <div class="row">
     <label class="form-group col-xs-12">
       <span>Image</span>

@@ -1,0 +1,18 @@
+<div class="input-with-icon-container form-control">
+  <label>
+    <i class="fa fa-search"></i>
+    <input
+        type="text"
+        placeholder="Search pages..."
+        ng-model="searchTerm"
+        ng-change="search(searchTerm)"
+        ng-keydown="keypress($event)">
+    <i>
+      <button
+          class="fa fa-times"
+          ng-show="searchTerm.length > 0"
+          ng-click="searchTerm = ''">
+      </button>
+    </i>
+  </label>
+</div>

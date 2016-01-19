@@ -1,5 +1,6 @@
 angular.module('bulbs.clickventure.edit.nodeList', [
   'bulbs.clickventure.edit.nodeList.node',
+  'bulbs.clickventure.edit.nodeList.search',
   'bulbs.clickventure.edit.service',
   'bulbs.clickventure.edit.validator.service'
 ])

@@ -140,8 +140,34 @@ angular.module('bulbs.clickventure.edit.nodeList.node', [
     }
   ]);
 
+angular.module('bulbs.clickventure.edit.nodeList.search', [
+  'autocompleteBasic',
+  'bulbs.clickventure.edit.service'
+])
+  .directive('clickventureEditNodeListSearch', [
+    function () {
+      return {
+        restrict: 'E',
+        templateUrl: 'clickventure-edit-node-list/clickventure-edit-node-list-search/clickventure-edit-node-list-search.html',
+        require: '^clickventureEditNodeList',
+        controller: [
+          '$scope', 'ClickventureEdit',
+          function ($scope, ClickventureEdit) {
+
+            $scope.data = ClickventureEdit.getData();
+
+            $scope.search = function (searchTerm) {
+              console.log('searching', searchTerm);
+            };
+          }
+        ]
+      };
+    }
+  ]);
+
 angular.module('bulbs.clickventure.edit.nodeList', [
   'bulbs.clickventure.edit.nodeList.node',
+  'bulbs.clickventure.edit.nodeList.search',
   'bulbs.clickventure.edit.service',
   'bulbs.clickventure.edit.validator.service'
 ])
@@ -906,8 +932,13 @@ angular.module('bulbs.clickventure.templates', []).run(['$templateCache', functi
   );
 
 
+  $templateCache.put('clickventure-edit-node-list/clickventure-edit-node-list-search/clickventure-edit-node-list-search.html',
+    "<div class=\"input-with-icon-container form-control\"><label><i class=\"fa fa-search\"></i> <input placeholder=\"Search pages...\" ng-model=searchTerm ng-change=search(searchTerm) ng-keydown=keypress($event)> <i><button class=\"fa fa-times\" ng-show=\"searchTerm.length > 0\" ng-click=\"searchTerm = ''\"></button></i></label></div>"
+  );
+
+
   $templateCache.put('clickventure-edit-node-list/clickventure-edit-node-list.html',
-    "<ol><li ng-repeat=\"node in nodeData.nodes track by node.id\" ng-click=selectNode(node)><clickventure-edit-node-list-node node=node ng-class=\"{'clickventure-edit-node-list-node-active': nodeData.nodeActive === node}\"><input class=clickventure-edit-node-list-node-tools-item ng-model=nodeData.view[node.id].order ng-pattern=\"/^[1-9]{1}[0-9]*$/\" ng-keyup=\"$event.which === 13 && reorderNode($index, nodeData.view[node.id].order - 1)\" ng-blur=\"reorderNode($index, nodeData.view[node.id].order - 1)\"> <button class=\"btn btn-link btn-xs clickventure-edit-node-list-node-tools-item\" ng-click=\"reorderNode($index, $index - 1)\" ng-disabled=$first><span class=\"fa fa-chevron-up\"></span></button> <button class=\"btn btn-link btn-xs clickventure-edit-node-list-node-tools-item\" ng-click=\"reorderNode($index, $index + 1)\" ng-disabled=$last><span class=\"fa fa-chevron-down\"></span></button></clickventure-edit-node-list-node></li></ol><div class=clickventure-edit-node-list-tools><button class=\"btn btn-primary\" ng-click=addNode()><span class=\"fa fa-plus\"></span> <span>New Page</span></button> <button class=\"btn btn-default\" ng-click=validateGraph()><span class=\"fa fa-check\"></span> <span>Run Check</span></button></div>"
+    "<clickventure-edit-node-list-search></clickventure-edit-node-list-search><ol><li ng-repeat=\"node in nodeData.nodes track by node.id\" ng-click=selectNode(node)><clickventure-edit-node-list-node node=node ng-class=\"{'clickventure-edit-node-list-node-active': nodeData.nodeActive === node}\"><input class=clickventure-edit-node-list-node-tools-item ng-model=nodeData.view[node.id].order ng-pattern=\"/^[1-9]{1}[0-9]*$/\" ng-keyup=\"$event.which === 13 && reorderNode($index, nodeData.view[node.id].order - 1)\" ng-blur=\"reorderNode($index, nodeData.view[node.id].order - 1)\"> <button class=\"btn btn-link btn-xs clickventure-edit-node-list-node-tools-item\" ng-click=\"reorderNode($index, $index - 1)\" ng-disabled=$first><span class=\"fa fa-chevron-up\"></span></button> <button class=\"btn btn-link btn-xs clickventure-edit-node-list-node-tools-item\" ng-click=\"reorderNode($index, $index + 1)\" ng-disabled=$last><span class=\"fa fa-chevron-down\"></span></button></clickventure-edit-node-list-node></li></ol><div class=clickventure-edit-node-list-tools><button class=\"btn btn-primary\" ng-click=addNode()><span class=\"fa fa-plus\"></span> <span>New Page</span></button> <button class=\"btn btn-default\" ng-click=validateGraph()><span class=\"fa fa-check\"></span> <span>Run Check</span></button></div>"
   );
 
 

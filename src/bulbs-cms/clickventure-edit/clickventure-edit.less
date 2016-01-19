@@ -3,6 +3,39 @@ clickventure-edit {
   min-height: 800px;
   position: relative;
 
+  .input-with-icon-container {
+    label {
+      background-color: #fff;
+      display: table;
+      font-weight: normal;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+
+      i {
+        display: table-cell;
+        text-align: center;
+        width: 1em;
+
+        + input {
+          padding: 0 5px;
+        }
+
+        button {
+          background: none;
+          border: none;
+        }
+      }
+
+      input {
+        border: none;
+        display: table-cell;
+        outline: 0;
+        width: 100%;
+      }
+    }
+  }
+
   label {
     padding-right: 5px;
   }

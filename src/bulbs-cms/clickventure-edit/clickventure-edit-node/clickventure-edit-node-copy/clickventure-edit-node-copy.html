@@ -1,6 +1,18 @@
-<div
-    class="container-fluid"
-    ng-show="data.configPageActive === 'Copy'">
+<clickventure-edit-node-container
+    config-page-title="{{ configPageTitle }}"
+    on-config-page-render="onConfigPageActive()">
+
+  <div class="row form-group">
+    <div class="col-xs-12">
+      <label for="nodePageName">Page Name (Internal Use)</label>
+      <input
+          id="nodePageName"
+          class="form-control"
+          placeholder="Page Name (Internal Use)"
+          ng-model="node.title"
+          type="text">
+    </div>
+  </div>
 
   <div class="row">
     <div class="col-xs-12">
@@ -99,4 +111,4 @@
       No outbound links yet, click "Add Link" to add the first one.
     </div>
   </div>
-</div>
+</clickventure-edit-node-container>

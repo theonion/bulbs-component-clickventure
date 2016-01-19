@@ -1,5 +1,6 @@
 angular.module('bulbs.clickventure.edit.node.settings', [
   'confirmationModal.factory',
+  'bulbs.clickventure.edit.node.container',
   'bulbs.clickventure.edit.nodeNameFilter',
   'bulbs.clickventure.edit.service'
 ])
@@ -14,8 +15,7 @@ angular.module('bulbs.clickventure.edit.node.settings', [
       controller: [
         '$scope', 'ClickventureEdit', 'ConfirmationModal',
         function ($scope, ClickventureEdit, ConfirmationModal) {
-
-          ClickventureEdit.registerConfigPage('Settings');
+          $scope.configPageTitle = 'Settings';
 
           $scope.cloneNode = ClickventureEdit.cloneNode;
           $scope.data = ClickventureEdit.getData();

@@ -1,5 +1,6 @@
 angular.module('bulbs.clickventure.edit.node', [
   'bulbs.clickventure.edit.node.copy',
+  'bulbs.clickventure.edit.node.photo',
   'bulbs.clickventure.edit.node.settings'
 ])
   .directive('clickventureEditNode', [

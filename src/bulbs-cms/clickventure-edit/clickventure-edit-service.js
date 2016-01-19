@@ -124,15 +124,20 @@ angular.module('bulbs.clickventure.edit.service', [
       var addNode = function () {
         var node = {
           id: _getNextNodeId(),
-          title: '',
           body: '',
+          finish: false,
           link_style: 'action',
           links: [],
+          photo_description: '',
+          photo_final: null,
+          photo_note: null,
+          photo_placeholder_page_url: '',
+          photo_placeholder_url: '',
+          share_text: '',
+          shareable: false,
           sister_pages: [],
           start: data.nodes.length === 0,
-          finish: false,
-          shareable: false,
-          share_text: ''
+          title: ''
         };
 
         var activeNodeIndex = data.nodes.indexOf(data.nodeActive);

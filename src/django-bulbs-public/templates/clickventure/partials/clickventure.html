@@ -23,7 +23,7 @@ This should be included with an include tag, with the following variables:
         data-node-id="{{ node.id }}">
       <div class="clickventure-node-image">
         {% if node.photo_final %}
-          {% cropped node.photo_final.id ratio="16x9" %}
+          {% cropped node.photo_final.id ratio="original" %}
         {% elif node.photo_placeholder_url and CMS_TOOLS_ENABLED %}
           <img src="{{ node.photo_placeholder_url }}" alt="{{ node.photo_placeholder_page_url }}">
           <div class="clickventure-node-image-stock">

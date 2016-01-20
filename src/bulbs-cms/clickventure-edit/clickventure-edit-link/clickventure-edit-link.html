@@ -27,13 +27,13 @@
           for="linkTo{{ uuid }}">
         Link To
       </label>
-      <select
-          id="linkTo{{ uuid }}"
+      <autocomplete-basic
           class="form-control"
           ng-model="link.to_node"
-          ng-change="updateInboundLinks(link)"
-          ng-options="node.id as (node | clickventure_node_name) || node.id for node in nodeData.nodes">
-      </select>
+          item-display-formatter="nodeDisplay(item)"
+          input-placeholder="Page number or title"
+          search-function="searchNodes">
+      </autocomplete-basic>
     </div>
     <div class="col-xs-4">
       <label for="linkStyle{{ uuid }}">Style</label>

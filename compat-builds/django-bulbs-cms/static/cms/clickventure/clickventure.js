@@ -1,4 +1,5 @@
 angular.module('bulbs.clickventure.edit.link', [
+  'autocompleteBasic',
   'confirmationModal.factory',
   'bulbs.clickventure.edit.nodeNameFilter',
   'bulbs.clickventure.edit.service',
@@ -14,8 +15,8 @@ angular.module('bulbs.clickventure.edit.link', [
       },
       require: '^clickventureNode',
       controller: [
-        '$scope', 'ClickventureEdit', 'ConfirmationModal', 'uuid4',
-        function ($scope, ClickventureEdit, ConfirmationModal, uuid4) {
+        '$q', '$scope', 'ClickventureEdit', 'ConfirmationModal', 'uuid4',
+        function ($q, $scope, ClickventureEdit, ConfirmationModal, uuid4) {
 
           $scope.uuid = uuid4.generate();
 
@@ -37,7 +38,38 @@ angular.module('bulbs.clickventure.edit.link', [
             new ConfirmationModal(modalScope);
           };
 
+          $scope.nodeDisplay = function (id) {
+            var view = $scope.nodeData.view[id];
+            return '(' + view.order + ') ' + view.node.title;
+          };
 
+          $scope.searchTerm = '';
+          $scope.searchNodes = function (searchTerm) {
+            var selections = [];
+
+            // check if they're searching by order number first
+            var searchNumber = parseInt(searchTerm, 10);
+            if (searchNumber > 0) {
+              var nodeId = Object.keys($scope.nodeData.view).find(function (id) {
+                return $scope.nodeData.view[id].order === searchNumber;
+              });
+
+              if (nodeId) {
+                selections.push(parseInt(nodeId, 10));
+              }
+            } else {
+              // not a number, try searching as a string
+              selections = $scope.nodeData.nodes
+                .filter(function (node) {
+                  return !!node.title.match(new RegExp(searchTerm, 'i'));
+                })
+                .map(function (node) {
+                  return node.id;
+                });
+            }
+
+            return $q.when(selections);
+          };
         }
       ]
     };
@@ -922,7 +954,7 @@ angular.module('bulbs.clickventure.templates', []).run(['$templateCache', functi
 
   $templateCache.put('clickventure-edit-link/clickventure-edit-link.html',
     "<div class=clickventure-link><div ng-show=!link.to_node class=\"alert alert-danger\" role=alert><span class=\"fa fa-exclamation-circle\"></span> <span>This link doesn't link to another page!</span></div><div class=\"form-group form-group\"><label for=\"linkText{{ uuid }}\">Link Content</label><textarea id=\"linkText{{ uuid }}\" type=text class=\"clickventure-textarea-vertical form-control\" ng-model=link.body placeholder=\"Link Content (displays on site)\">\n" +
-    "    </textarea></div><div class=row><div class=col-xs-5 ng-class=\"{'has-error': !link.to_node}\"><label class=control-label for=\"linkTo{{ uuid }}\">Link To</label><select id=\"linkTo{{ uuid }}\" class=form-control ng-model=link.to_node ng-change=updateInboundLinks(link) ng-options=\"node.id as (node | clickventure_node_name) || node.id for node in nodeData.nodes\"></select></div><div class=col-xs-4><label for=\"linkStyle{{ uuid }}\">Style</label><select id=\"linkStyle{{ uuid }}\" class=form-control ng-options=\"style.toLowerCase() as style for style in linkStyles\" ng-model=link.link_style></select></div><div class=col-xs-3><button class=\"btn form-button\" ng-class=\"{\n" +
+    "    </textarea></div><div class=row><div class=col-xs-5 ng-class=\"{'has-error': !link.to_node}\"><label class=control-label for=\"linkTo{{ uuid }}\">Link To</label><autocomplete-basic class=form-control ng-model=link.to_node item-display-formatter=nodeDisplay(item) input-placeholder=\"Page number or title\" search-function=searchNodes></autocomplete-basic></div><div class=col-xs-4><label for=\"linkStyle{{ uuid }}\">Style</label><select id=\"linkStyle{{ uuid }}\" class=form-control ng-options=\"style.toLowerCase() as style for style in linkStyles\" ng-model=link.link_style></select></div><div class=col-xs-3><button class=\"btn form-button\" ng-class=\"{\n" +
     "            'btn-info': link.float,\n" +
     "            'btn-default': !link.flaot\n" +
     "          }\" ng-click=\"link.float = !link.float\"><span class=fa ng-class=\"{\n" +

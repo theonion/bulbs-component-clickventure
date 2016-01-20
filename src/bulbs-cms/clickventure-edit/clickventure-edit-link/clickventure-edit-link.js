@@ -1,4 +1,5 @@
 angular.module('bulbs.clickventure.edit.link', [
+  'autocompleteBasic',
   'confirmationModal.factory',
   'bulbs.clickventure.edit.nodeNameFilter',
   'bulbs.clickventure.edit.service',
@@ -14,8 +15,8 @@ angular.module('bulbs.clickventure.edit.link', [
       },
       require: '^clickventureNode',
       controller: [
-        '$scope', 'ClickventureEdit', 'ConfirmationModal', 'uuid4',
-        function ($scope, ClickventureEdit, ConfirmationModal, uuid4) {
+        '$q', '$scope', 'ClickventureEdit', 'ConfirmationModal', 'uuid4',
+        function ($q, $scope, ClickventureEdit, ConfirmationModal, uuid4) {
 
           $scope.uuid = uuid4.generate();
 
@@ -37,7 +38,38 @@ angular.module('bulbs.clickventure.edit.link', [
             new ConfirmationModal(modalScope);
           };
 
+          $scope.nodeDisplay = function (id) {
+            var view = $scope.nodeData.view[id];
+            return '(' + view.order + ') ' + view.node.title;
+          };
 
+          $scope.searchTerm = '';
+          $scope.searchNodes = function (searchTerm) {
+            var selections = [];
+
+            // check if they're searching by order number first
+            var searchNumber = parseInt(searchTerm, 10);
+            if (searchNumber > 0) {
+              var nodeId = Object.keys($scope.nodeData.view).find(function (id) {
+                return $scope.nodeData.view[id].order === searchNumber;
+              });
+
+              if (nodeId) {
+                selections.push(parseInt(nodeId, 10));
+              }
+            } else {
+              // not a number, try searching as a string
+              selections = $scope.nodeData.nodes
+                .filter(function (node) {
+                  return !!node.title.match(new RegExp(searchTerm, 'i'));
+                })
+                .map(function (node) {
+                  return node.id;
+                });
+            }
+
+            return $q.when(selections);
+          };
         }
       ]
     };

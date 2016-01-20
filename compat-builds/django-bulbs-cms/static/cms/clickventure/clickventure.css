@@ -155,6 +155,7 @@ clickventure-edit-node .clickventure-textarea-vertical {
 clickventure-edit {
   display: flex;
   min-height: 800px;
+  padding-bottom: 100px;
   position: relative;
 }
 clickventure-edit .input-with-icon-container label {

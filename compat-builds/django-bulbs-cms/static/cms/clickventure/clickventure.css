@@ -135,9 +135,6 @@ clickventure-edit-node-photo .clickventure-photo-placeholder-preview img {
   max-height: 108px;
   max-width: 108px;
 }
-clickventure-edit-node-photo .clickventure-photo-description-field {
-  resize: vertical;
-}
 
 clickventure-edit-node-settings ul {
   padding-left: 25px;
@@ -150,6 +147,9 @@ clickventure-edit-node {
 }
 clickventure-edit-node .panel .panel-heading {
   padding: 6px 7px 6px 10px;
+}
+clickventure-edit-node .clickventure-textarea-vertical {
+  resize: vertical;
 }
 
 clickventure-edit {

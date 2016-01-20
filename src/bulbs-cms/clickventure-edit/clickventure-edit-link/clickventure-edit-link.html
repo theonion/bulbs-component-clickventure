@@ -9,12 +9,13 @@
 
   <div class="form-group form-group">
     <label for="linkText{{ uuid }}">Link Content</label>
-    <input
+    <textarea
         id="linkText{{ uuid }}"
         type="text"
-        class="form-control"
+        class="clickventure-textarea-vertical form-control"
         ng-model="link.body"
         placeholder="Link Content (displays on site)">
+    </textarea>
   </div>
 
   <div class="row">

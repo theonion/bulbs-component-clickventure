@@ -1,8 +1,31 @@
-<clickventure-edit-node-list-search></clickventure-edit-node-list-search>
+<div class="clickventure-edit-node-list-search">
+  <div class="input-with-icon-container form-control">
+    <label>
+      <i
+          class="fa fa-search"
+          ng-show="searchTerm.length === 0">
+      </i>
+      <i ng-show="searchTerm.length > 0">
+        <button
+            class="fa fa-times"
+            ng-click="searchTerm = ''; searchNodes()">
+        </button>
+      </i>
+      <input
+          type="text"
+          placeholder="Search pages..."
+          ng-model="searchTerm"
+          ng-keyup="searchKeypress($event)">
+      <span class="text-muted">
+        {{ nodeList.length }}/{{ nodeData.nodes.length }}
+      </span>
+    </label>
+  </div>
+</div>
 
 <ol>
   <li
-      ng-repeat="node in nodeData.nodes track by node.id"
+      ng-repeat="node in nodeList track by node.id"
       ng-click="selectNode(node)">
 
     <clickventure-edit-node-list-node
@@ -29,6 +52,13 @@
         <span class="fa fa-chevron-down"></span>
       </button>
     </clickventure-edit-node-list-node>
+  </li>
+  <li
+      ng-show="nodeList.length === 0"
+      class="text-info">
+    <span class="fa fa-info-circle"></span>
+    <span>No results. Try a different search term or clear the search bar to
+    see all pages again.</span>
   </li>
 </ol>
 

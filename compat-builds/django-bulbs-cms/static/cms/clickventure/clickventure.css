@@ -34,15 +34,13 @@ clickventure-edit-node-list-node .clickventure-edit-node-list-node-tools {
   flex-grow: 1;
 }
 
-clickventure-edit-node-list-search {
-  background-color: #c8c8c8;
-  display: block;
-  padding: 0 5px;
-}
-
 clickventure-edit-node-list {
   position: absolute;
   width: 250px;
+}
+clickventure-edit-node-list .clickventure-edit-node-list-search {
+  background-color: #c8c8c8;
+  padding: 0 5px;
 }
 clickventure-edit-node-list ol {
   background-color: #ebebeb;
@@ -167,15 +165,18 @@ clickventure-edit .input-with-icon-container label {
   padding: 0;
   width: 100%;
 }
-clickventure-edit .input-with-icon-container label i {
+clickventure-edit .input-with-icon-container label > i,
+clickventure-edit .input-with-icon-container label > span {
   display: table-cell;
   text-align: center;
   width: 1em;
 }
-clickventure-edit .input-with-icon-container label i + input {
+clickventure-edit .input-with-icon-container label > i + input,
+clickventure-edit .input-with-icon-container label > span + input {
   padding: 0 5px;
 }
-clickventure-edit .input-with-icon-container label i button {
+clickventure-edit .input-with-icon-container label > i button,
+clickventure-edit .input-with-icon-container label > span button {
   background: none;
   border: none;
 }

@@ -13,7 +13,7 @@ angular.module('bulbs.clickventure.edit.nodeList', [
         controller: [
           '$scope', 'ClickventureEdit', 'ClickventureEditValidator',
           function ($scope, ClickventureEdit, ClickventureEditValidator) {
-            $scope.addNode = ClickventureEdit.addNode;
+            $scope.addAndSelectNode = ClickventureEdit.addAndSelectNode;
             $scope.reorderNode = ClickventureEdit.reorderNode;
             $scope.selectNode = ClickventureEdit.selectNode;
 

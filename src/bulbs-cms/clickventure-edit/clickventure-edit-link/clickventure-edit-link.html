@@ -18,9 +18,9 @@
     </textarea>
   </div>
 
-  <div class="row">
+  <div class="row form-group">
     <div
-        class="col-xs-5"
+        class="col-xs-8"
         ng-class="{'has-error': !link.to_node}">
       <label
           class="control-label"
@@ -35,6 +35,17 @@
           search-function="searchNodes">
       </autocomplete-basic>
     </div>
+    <div class="col-xs-4">
+      <button
+          class="btn btn-success form-button"
+          ng-click="openAddPageModal(link)">
+        <span class="fa fa-plus"></span>
+        <span>Link New Page</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="row">
     <div class="col-xs-4">
       <label for="linkStyle{{ uuid }}">Style</label>
       <select

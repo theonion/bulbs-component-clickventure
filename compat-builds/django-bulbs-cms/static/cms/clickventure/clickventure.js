@@ -1,3 +1,4 @@
+
 'use strict';
 
 angular.module('bulbs.clickventure.edit.icon.error', [
@@ -244,7 +245,8 @@ angular.module('bulbs.clickventure.edit.nodeList.node', [
 angular.module('bulbs.clickventure.edit.nodeList', [
   'bulbs.clickventure.edit.nodeList.node',
   'bulbs.clickventure.edit.service',
-  'bulbs.clickventure.edit.validator.service'
+  'bulbs.clickventure.edit.validator.service',
+  'uuid4'
 ])
   .directive('clickventureEditNodeList', [
     function () {
@@ -254,8 +256,10 @@ angular.module('bulbs.clickventure.edit.nodeList', [
         scope: {},
         require: '^clickventureEdit',
         controller: [
-          '$scope', 'ClickventureEdit', 'ClickventureEditValidator',
-          function ($scope, ClickventureEdit, ClickventureEditValidator) {
+          '$scope', 'ClickventureEdit', 'ClickventureEditValidator', 'uuid4',
+          function ($scope, ClickventureEdit, ClickventureEditValidator, uuid4) {
+            $scope.uuid = uuid4.generate();
+
             $scope.addAndSelectNode = ClickventureEdit.addAndSelectNode;
             $scope.reorderNode = ClickventureEdit.reorderNode;
             $scope.selectNode = ClickventureEdit.selectNode;
@@ -1052,7 +1056,7 @@ angular.module('bulbs.clickventure.templates', []).run(['$templateCache', functi
 
 
   $templateCache.put('clickventure-edit-node-list/clickventure-edit-node-list.html',
-    "<div class=clickventure-edit-node-list-search><div class=\"input-with-icon-container form-control\"><label><i class=\"fa fa-search\" ng-show=\"searchTerm.length === 0\"></i> <i ng-show=\"searchTerm.length > 0\"><button class=\"fa fa-times\" ng-click=\"searchTerm = ''; searchNodes()\"></button></i> <input placeholder=\"Search pages...\" ng-model=searchTerm ng-keyup=searchKeypress($event)> <span class=text-muted>{{ nodeList.length }}/{{ nodeData.nodes.length }}</span></label></div></div><ol><li ng-repeat=\"node in nodeList track by node.id\" ng-click=selectNode(node)><clickventure-edit-node-list-node node=node ng-class=\"{'clickventure-edit-node-list-node-active': nodeData.nodeActive === node}\"><input class=clickventure-edit-node-list-node-tools-item ng-model=nodeData.view[node.id].order ng-pattern=\"/^[1-9]{1}[0-9]*$/\" ng-keyup=\"$event.which === 13 && reorderNode($index, nodeData.view[node.id].order - 1)\" ng-blur=\"reorderNode($index, nodeData.view[node.id].order - 1)\"> <button class=\"btn btn-link btn-xs clickventure-edit-node-list-node-tools-item\" ng-click=\"reorderNode($index, $index - 1)\" ng-disabled=$first><span class=\"fa fa-chevron-up\"></span></button> <button class=\"btn btn-link btn-xs clickventure-edit-node-list-node-tools-item\" ng-click=\"reorderNode($index, $index + 1)\" ng-disabled=$last><span class=\"fa fa-chevron-down\"></span></button></clickventure-edit-node-list-node></li><li ng-show=\"nodeList.length === 0\" class=text-info><span class=\"fa fa-info-circle\"></span> <span>No results. Try a different search term or clear the search bar to see all pages again.</span></li></ol><div class=clickventure-edit-node-list-tools><button class=\"btn btn-primary\" ng-click=addAndSelectNode()><span class=\"fa fa-plus\"></span> <span>New Page</span></button> <button class=\"btn btn-default\" ng-click=validateGraph()><span class=\"fa fa-check\"></span> <span>Run Check</span></button></div>"
+    "<div class=clickventure-edit-node-list-search ng-init=\"showFilters = false\"><div class=\"input-with-icon-container form-control\"><label><i class=\"fa fa-search\" ng-show=\"searchTerm.length === 0\"></i> <i ng-show=\"searchTerm.length > 0\"><button class=\"fa fa-times\" ng-click=\"searchTerm = ''; searchNodes()\"></button></i> <input placeholder=\"Search pages...\" ng-model=searchTerm ng-keyup=searchKeypress($event)> <i><button class=\"fa fa-filter\" ng-click=\"showFilters = !showFilters\"></button></i> <span class=text-muted>{{ nodeList.length }}/{{ nodeData.nodes.length }}</span></label></div><div ng-show=showFilters><label for=\"statusFilter{{ uuid }}\">Filter by</label><select id=\"statusFilter{{ uuid }}\"><option value=\"\">No Filter</option><option value=\"\">Complete</option><option value=\"\">Incomplete</option><optgroup label=Photo><option value=\"\">Stauts 1</option></optgroup><optgroup label=Copy><option value=\"\">Stauts 2</option></optgroup></select></div></div><ol><li ng-repeat=\"node in nodeList track by node.id\" ng-click=selectNode(node)><clickventure-edit-node-list-node node=node ng-class=\"{'clickventure-edit-node-list-node-active': nodeData.nodeActive === node}\"><input class=clickventure-edit-node-list-node-tools-item ng-model=nodeData.view[node.id].order ng-pattern=\"/^[1-9]{1}[0-9]*$/\" ng-keyup=\"$event.which === 13 && reorderNode($index, nodeData.view[node.id].order - 1)\" ng-blur=\"reorderNode($index, nodeData.view[node.id].order - 1)\"> <button class=\"btn btn-link btn-xs clickventure-edit-node-list-node-tools-item\" ng-click=\"reorderNode($index, $index - 1)\" ng-disabled=$first><span class=\"fa fa-chevron-up\"></span></button> <button class=\"btn btn-link btn-xs clickventure-edit-node-list-node-tools-item\" ng-click=\"reorderNode($index, $index + 1)\" ng-disabled=$last><span class=\"fa fa-chevron-down\"></span></button></clickventure-edit-node-list-node></li><li ng-show=\"nodeList.length === 0\" class=text-info><span class=\"fa fa-info-circle\"></span> <span>No results. Try a different search term or clear the search bar to see all pages again.</span></li></ol><div class=clickventure-edit-node-list-tools><button class=\"btn btn-primary\" ng-click=addAndSelectNode()><span class=\"fa fa-plus\"></span> <span>New Page</span></button> <button class=\"btn btn-default\" ng-click=validateGraph()><span class=\"fa fa-check\"></span> <span>Run Check</span></button></div>"
   );
 
 

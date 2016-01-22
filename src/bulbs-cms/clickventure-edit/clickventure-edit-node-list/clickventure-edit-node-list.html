@@ -1,4 +1,6 @@
-<div class="clickventure-edit-node-list-search">
+<div
+    class="clickventure-edit-node-list-search"
+    ng-init="showFilters = false">
   <div class="input-with-icon-container form-control">
     <label>
       <i
@@ -16,10 +18,30 @@
           placeholder="Search pages..."
           ng-model="searchTerm"
           ng-keyup="searchKeypress($event)">
+      <i>
+        <button
+            class="fa fa-filter"
+            ng-click="showFilters = !showFilters">
+        </button>
+      </i>
       <span class="text-muted">
         {{ nodeList.length }}/{{ nodeData.nodes.length }}
       </span>
     </label>
+  </div>
+  <div ng-show="showFilters">
+    <label for="statusFilter{{ uuid }}">Filter by</label>
+    <select id="statusFilter{{ uuid }}">
+      <option value="">No Filter</option>
+      <option value="">Complete</option>
+      <option value="">Incomplete</option>
+      <optgroup label="Photo">
+        <option value="">Stauts 1</option>
+      </optgroup>
+      <optgroup label="Copy">
+        <option value="">Stauts 2</option>
+      </optgroup>
+    </select>
   </div>
 </div>
 

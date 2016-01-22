@@ -1,7 +1,8 @@
 angular.module('bulbs.clickventure.edit.nodeList', [
   'bulbs.clickventure.edit.nodeList.node',
   'bulbs.clickventure.edit.service',
-  'bulbs.clickventure.edit.validator.service'
+  'bulbs.clickventure.edit.validator.service',
+  'uuid4'
 ])
   .directive('clickventureEditNodeList', [
     function () {
@@ -11,8 +12,10 @@ angular.module('bulbs.clickventure.edit.nodeList', [
         scope: {},
         require: '^clickventureEdit',
         controller: [
-          '$scope', 'ClickventureEdit', 'ClickventureEditValidator',
-          function ($scope, ClickventureEdit, ClickventureEditValidator) {
+          '$scope', 'ClickventureEdit', 'ClickventureEditValidator', 'uuid4',
+          function ($scope, ClickventureEdit, ClickventureEditValidator, uuid4) {
+            $scope.uuid = uuid4.generate();
+
             $scope.addAndSelectNode = ClickventureEdit.addAndSelectNode;
             $scope.reorderNode = ClickventureEdit.reorderNode;
             $scope.selectNode = ClickventureEdit.selectNode;

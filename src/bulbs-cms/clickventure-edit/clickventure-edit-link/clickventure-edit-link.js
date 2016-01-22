@@ -17,9 +17,9 @@ angular.module('bulbs.clickventure.edit.link', [
         },
         require: '^clickventureNode',
         controller: [
-          '$q', '$scope', 'ClickventureEdit', 'ClickventureEditLinkAddPageModal',
+          '$q', '$scope', '$filter', 'ClickventureEdit', 'ClickventureEditLinkAddPageModal',
             'ConfirmationModal', 'uuid4',
-          function ($q, $scope, ClickventureEdit, ClickventureEditLinkAddPageModal,
+          function ($q, $scope, $filter, ClickventureEdit, ClickventureEditLinkAddPageModal,
               ConfirmationModal, uuid4) {
 
             $scope.uuid = uuid4.generate();
@@ -51,7 +51,7 @@ angular.module('bulbs.clickventure.edit.link', [
 
             $scope.nodeDisplay = function (id) {
               var view = $scope.nodeData.view[id];
-              return '(' + view.order + ') ' + view.node.title;
+              return '(' + view.order + ') ' + $filter('clickventure_node_name')(view.node);
             };
 
             $scope.searchTerm = '';

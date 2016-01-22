@@ -1,3 +1,7 @@
+clickventure-edit-icon-error {
+  margin-left: 0.25em;
+}
+
 clickventure-edit-node-list-node {
   background-color: #ffffff;
   border: 3px #e0e0e0 solid;
@@ -37,6 +41,10 @@ clickventure-edit-node-list-node .clickventure-edit-node-list-node-tools {
 clickventure-edit-node-list {
   position: absolute;
   width: 250px;
+}
+clickventure-edit-node-list .clickventure-edit-node-list-search {
+  background-color: #c8c8c8;
+  padding: 0 5px;
 }
 clickventure-edit-node-list ol {
   background-color: #ebebeb;
@@ -131,9 +139,6 @@ clickventure-edit-node-photo .clickventure-photo-placeholder-preview img {
   max-height: 108px;
   max-width: 108px;
 }
-clickventure-edit-node-photo .clickventure-photo-description-field {
-  resize: vertical;
-}
 
 clickventure-edit-node-settings ul {
   padding-left: 25px;
@@ -147,11 +152,44 @@ clickventure-edit-node {
 clickventure-edit-node .panel .panel-heading {
   padding: 6px 7px 6px 10px;
 }
+clickventure-edit-node .clickventure-textarea-vertical {
+  resize: vertical;
+}
 
 clickventure-edit {
   display: flex;
   min-height: 800px;
+  padding-bottom: 100px;
   position: relative;
+}
+clickventure-edit .input-with-icon-container label {
+  background-color: #fff;
+  display: table;
+  font-weight: normal;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+clickventure-edit .input-with-icon-container label > i,
+clickventure-edit .input-with-icon-container label > span {
+  display: table-cell;
+  text-align: center;
+  width: 1em;
+}
+clickventure-edit .input-with-icon-container label > i + input,
+clickventure-edit .input-with-icon-container label > span + input {
+  padding: 0 5px;
+}
+clickventure-edit .input-with-icon-container label > i button,
+clickventure-edit .input-with-icon-container label > span button {
+  background: none;
+  border: none;
+}
+clickventure-edit .input-with-icon-container label input {
+  border: none;
+  display: table-cell;
+  outline: 0;
+  width: 100%;
 }
 clickventure-edit label {
   padding-right: 5px;

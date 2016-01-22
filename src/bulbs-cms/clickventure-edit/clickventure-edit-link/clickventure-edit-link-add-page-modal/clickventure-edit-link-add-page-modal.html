@@ -1,0 +1,32 @@
+<div class="modal-header">
+  <button
+      type="button"
+      class="close"
+      ng-click="$dismiss()">
+    <span class="fa fa-times"></span>
+  </button>
+  <h4 class="modal-title">Add and Link Page</h4>
+</div>
+<div class="modal-body">
+  <label for="newPageTitle{{ uuid }}">Page Title</label>
+  <input
+      id="newPageTitle{{ uuid }}"
+      type="text"
+      class="form-control"
+      ng-model="pageTitle"
+      ng-keyup="$event.keyCode === 13 && confirm()">
+</div>
+<div class="modal-footer">
+  <button
+      class="btn btn-success"
+      ng-click="confirm()">
+    <i class="fa fa-plus"></i>
+    <span>Add and Link Page</span>
+  </button>
+  <button
+      class="btn btn-danger"
+      ng-click="$dismiss()">
+    <i class="fa fa-times"></i>
+    <span>Cancel</span>
+  </button>
+</div>

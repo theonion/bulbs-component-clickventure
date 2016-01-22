@@ -1,39 +1,47 @@
 <div class="clickventure-link">
-  <div
-      ng-show="!link.to_node"
-      class="alert alert-danger"
-      role="alert">
-    <span class="fa fa-exclamation-circle"></span>
-    <span>This link doesn't link to another page!</span>
-  </div>
-
   <div class="form-group form-group">
     <label for="linkText{{ uuid }}">Link Content</label>
-    <input
+    <textarea
         id="linkText{{ uuid }}"
         type="text"
-        class="form-control"
+        class="clickventure-textarea-vertical form-control"
         ng-model="link.body"
         placeholder="Link Content (displays on site)">
+    </textarea>
   </div>
 
-  <div class="row">
+  <div class="row form-group">
     <div
-        class="col-xs-5"
+        class="col-xs-8"
         ng-class="{'has-error': !link.to_node}">
       <label
           class="control-label"
           for="linkTo{{ uuid }}">
-        Link To
+        <span>Link To</span>
+        <clickventure-edit-icon-error
+            ng-show="!link.to_node"
+            error-text="This link doesn't link to another page!">
+        </clickventure-edit-icon-error>
       </label>
-      <select
-          id="linkTo{{ uuid }}"
+      <autocomplete-basic
           class="form-control"
           ng-model="link.to_node"
-          ng-change="updateInboundLinks(link)"
-          ng-options="node.id as (node | clickventure_node_name) || node.id for node in nodeData.nodes">
-      </select>
+          item-display-formatter="nodeDisplay(item)"
+          input-placeholder="Page number or title"
+          search-function="searchNodes">
+      </autocomplete-basic>
     </div>
+    <div class="col-xs-4">
+      <button
+          class="btn btn-success form-button"
+          ng-click="openAddPageModal(link)">
+        <span class="fa fa-plus"></span>
+        <span>Link New Page</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="row">
     <div class="col-xs-4">
       <label for="linkStyle{{ uuid }}">Style</label>
       <select

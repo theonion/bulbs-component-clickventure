@@ -2,7 +2,7 @@ angular.module('bulbs.clickventure.edit.node.copy', [
   'bulbs.clickventure.edit.link',
   'bulbs.clickventure.edit.node.container',
   'bulbs.clickventure.edit.service',
-  'ui.bootstrap.tooltip'
+  'bulbs.clickventure.edit.icon.error'
 ])
   .directive('clickventureEditNodeCopy', [
     '$window', 'ClickventureEdit',

@@ -93,7 +93,7 @@ angular.module('bulbs.clickventure.edit.service', [
         var newActiveNode = null;
         if (nodes.length < 1) {
           // ensure there's at least one node
-          addNode();
+          addAndSelectNode();
         } else {
           data.nodes.forEach(function (node, i) {
             // some cleanup to ensure old nodes are in a good state
@@ -150,7 +150,11 @@ angular.module('bulbs.clickventure.edit.service', [
         _setNodeViewData(node);
         _reindexNodes();
 
-        return selectNode(node);
+        return node;
+      };
+
+      var addAndSelectNode = function () {
+        return selectNode(addNode());
       };
 
       var reorderNode = function (indexFrom, indexTo) {
@@ -185,7 +189,7 @@ angular.module('bulbs.clickventure.edit.service', [
       };
 
       var cloneNode = function (node) {
-        var clonedNode = addNode();
+        var clonedNode = addAndSelectNode();
 
         clonedNode.title = 'Clone - ' + $filter('clickventure_node_name')(node);
         clonedNode.body = node.body;
@@ -251,7 +255,7 @@ angular.module('bulbs.clickventure.edit.service', [
 
         if (data.nodes.length < 1) {
           // ensure there's at least 1 node
-          addNode();
+          addAndSelectNode();
         }
 
         var nextNodeId = i - 1;
@@ -353,6 +357,7 @@ angular.module('bulbs.clickventure.edit.service', [
         },
         setNodes: setNodes,
         addNode: addNode,
+        addAndSelectNode: addAndSelectNode,
         reorderNode: reorderNode,
         registerSelectNodeHandler: registerSelectNodeHandler,
         selectNode: selectNode,

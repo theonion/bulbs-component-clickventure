@@ -1,6 +1,7 @@
 angular.module('bulbs.clickventure.edit.link', [
   'autocompleteBasic',
   'confirmationModal.factory',
+  'bulbs.clickventure.edit.icon.error',
   'bulbs.clickventure.edit.link.addPageModal.factory',
   'bulbs.clickventure.edit.nodeNameFilter',
   'bulbs.clickventure.edit.service',

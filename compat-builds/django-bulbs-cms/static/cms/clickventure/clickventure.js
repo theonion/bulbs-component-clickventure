@@ -1,5 +1,22 @@
 'use strict';
 
+angular.module('bulbs.clickventure.edit.icon.error', [
+  'ui.bootstrap.tooltip',
+])
+  .directive('clickventureEditIconError', [
+    function () {
+      return {
+        restrict: 'E',
+        template: '<span class="fa fa-exclamation-circle text-danger" tooltip="{{ errorText }}" tooltip-trigger tooltip-animation="false" tooltip-placement="top"></span>',
+        scope: {
+          errorText: '@'
+        }
+      };
+    }
+  ]);
+
+'use strict';
+
 angular.module('bulbs.clickventure.edit.link.addPageModal.factory', [
   'bulbs.clickventure.edit.service',
   'ui.bootstrap.modal',
@@ -40,6 +57,7 @@ angular.module('bulbs.clickventure.edit.link.addPageModal.factory', [
 angular.module('bulbs.clickventure.edit.link', [
   'autocompleteBasic',
   'confirmationModal.factory',
+  'bulbs.clickventure.edit.icon.error',
   'bulbs.clickventure.edit.link.addPageModal.factory',
   'bulbs.clickventure.edit.nodeNameFilter',
   'bulbs.clickventure.edit.service',
@@ -174,7 +192,7 @@ angular.module('bulbs.clickventure.edit.node.copy', [
   'bulbs.clickventure.edit.link',
   'bulbs.clickventure.edit.node.container',
   'bulbs.clickventure.edit.service',
-  'ui.bootstrap.tooltip'
+  'bulbs.clickventure.edit.icon.error'
 ])
   .directive('clickventureEditNodeCopy', [
     '$window', 'ClickventureEdit',
@@ -1014,8 +1032,8 @@ angular.module('bulbs.clickventure.templates', []).run(['$templateCache', functi
 
 
   $templateCache.put('clickventure-edit-link/clickventure-edit-link.html',
-    "<div class=clickventure-link><div ng-show=!link.to_node class=\"alert alert-danger\" role=alert><span class=\"fa fa-exclamation-circle\"></span> <span>This link doesn't link to another page!</span></div><div class=\"form-group form-group\"><label for=\"linkText{{ uuid }}\">Link Content</label><textarea id=\"linkText{{ uuid }}\" type=text class=\"clickventure-textarea-vertical form-control\" ng-model=link.body placeholder=\"Link Content (displays on site)\">\n" +
-    "    </textarea></div><div class=\"row form-group\"><div class=col-xs-8 ng-class=\"{'has-error': !link.to_node}\"><label class=control-label for=\"linkTo{{ uuid }}\">Link To</label><autocomplete-basic class=form-control ng-model=link.to_node item-display-formatter=nodeDisplay(item) input-placeholder=\"Page number or title\" search-function=searchNodes></autocomplete-basic></div><div class=col-xs-4><button class=\"btn btn-success form-button\" ng-click=openAddPageModal(link)><span class=\"fa fa-plus\"></span> <span>Link New Page</span></button></div></div><div class=row><div class=col-xs-4><label for=\"linkStyle{{ uuid }}\">Style</label><select id=\"linkStyle{{ uuid }}\" class=form-control ng-options=\"style.toLowerCase() as style for style in linkStyles\" ng-model=link.link_style></select></div><div class=col-xs-3><button class=\"btn form-button\" ng-class=\"{\n" +
+    "<div class=clickventure-link><div class=\"form-group form-group\"><label for=\"linkText{{ uuid }}\">Link Content</label><textarea id=\"linkText{{ uuid }}\" type=text class=\"clickventure-textarea-vertical form-control\" ng-model=link.body placeholder=\"Link Content (displays on site)\">\n" +
+    "    </textarea></div><div class=\"row form-group\"><div class=col-xs-8 ng-class=\"{'has-error': !link.to_node}\"><label class=control-label for=\"linkTo{{ uuid }}\"><span>Link To</span><clickventure-edit-icon-error ng-show=!link.to_node error-text=\"This link doesn't link to another page!\"></clickventure-edit-icon-error></label><autocomplete-basic class=form-control ng-model=link.to_node item-display-formatter=nodeDisplay(item) input-placeholder=\"Page number or title\" search-function=searchNodes></autocomplete-basic></div><div class=col-xs-4><button class=\"btn btn-success form-button\" ng-click=openAddPageModal(link)><span class=\"fa fa-plus\"></span> <span>Link New Page</span></button></div></div><div class=row><div class=col-xs-4><label for=\"linkStyle{{ uuid }}\">Style</label><select id=\"linkStyle{{ uuid }}\" class=form-control ng-options=\"style.toLowerCase() as style for style in linkStyles\" ng-model=link.link_style></select></div><div class=col-xs-3><button class=\"btn form-button\" ng-class=\"{\n" +
     "            'btn-info': link.float,\n" +
     "            'btn-default': !link.flaot\n" +
     "          }\" ng-click=\"link.float = !link.float\"><span class=fa ng-class=\"{\n" +
@@ -1055,7 +1073,7 @@ angular.module('bulbs.clickventure.templates', []).run(['$templateCache', functi
     "<clickventure-edit-node-container config-page-title=\"{{ configPageTitle }}\" on-config-page-render=onConfigPageActive()><div class=\"row form-group\"><div class=col-xs-12><label for=nodePageName>Page Name (Internal Use)</label><input id=nodePageName class=form-control placeholder=\"Page Name (Internal Use)\" ng-model=node.title></div></div><div class=row><div class=col-xs-12><label>Page Body</label><onion-editor ng-model=node.body role=multiline placeholder=\"Body (displays on site)\"></onion-editor></div></div><div class=row><h4 class=col-xs-12>Links</h4><div class=\"form-group col-xs-4\"><button class=\"btn btn-success\" ng-click=addLink(node)><span class=\"fa fa-plus\"></span> <span>Add Link</span></button></div><div class=\"form-group col-xs-8\"><div class=\"form-inline pull-right\"><label for=nodeDefaultLinkStyle>Default Link Style</label><select id=nodeDefaultLinkStyle class=form-control ng-options=\"style.toLowerCase() as style for style in linkStyles\" ng-model=node.link_style></select></div></div></div><div class=row><ol class=col-xs-12 ng-show=\"node.links.length > 0\"><li ng-repeat=\"link in node.links track by $index\" ng-init=\"linkOpen = true\" class=\"clearfix panel panel-default\"><div class=panel-heading><button class=\"btn btn-link btn-xs panel-title\" ng-click=\"linkOpen = !linkOpen\"><span class=\"fa fa-caret-right\" ng-class=\"{\n" +
     "                  'fa-caret-right': !linkOpen,\n" +
     "                  'fa-caret-down': linkOpen\n" +
-    "                }\"></span> <span><span ng-show=\"link.body.length > 0\"><span>{{ link.body | limitTo:25 }}</span><span ng-show=\"link.body.length > 25\">...</span></span> <span ng-show=\"link.body.length === 0\">Link {{ $index + 1 }}</span></span> <span class=\"fa fa-exclamation-circle text-danger\" ng-show=!link.to_node></span></button><div class=\"btn-group pull-right\"><button class=\"btn btn-link btn-xs\" ng-click=\"reorderLink(node, $index, $index + 1)\" ng-disabled=$last><span class=\"fa fa-chevron-down\"></span></button> <button class=\"btn btn-link btn-xs\" ng-click=\"reorderLink(node, $index, $index - 1)\" ng-disabled=\"$index === 0\"><span class=\"fa fa-chevron-up\"></span></button></div></div><div class=panel-body ng-show=linkOpen><clickventure-edit-link node=node link=link></clickventure-edit-link></div></li></ol><div class=col-xs-12 ng-show=\"node.links.length === 0\">No outbound links yet, click \"Add Link\" to add the first one.</div></div></clickventure-edit-node-container>"
+    "                }\"></span> <span><span ng-show=\"link.body.length > 0\"><span>{{ link.body | limitTo:25 }}</span><span ng-show=\"link.body.length > 25\">...</span></span> <span ng-show=\"link.body.length === 0\">Link {{ $index + 1 }}</span></span><clickventure-edit-icon-error ng-show=!link.to_node error-text=\"This link doesn't link to another page!\"></clickventure-edit-icon-error></button><div class=\"btn-group pull-right\"><button class=\"btn btn-link btn-xs\" ng-click=\"reorderLink(node, $index, $index + 1)\" ng-disabled=$last><span class=\"fa fa-chevron-down\"></span></button> <button class=\"btn btn-link btn-xs\" ng-click=\"reorderLink(node, $index, $index - 1)\" ng-disabled=\"$index === 0\"><span class=\"fa fa-chevron-up\"></span></button></div></div><div class=panel-body ng-show=linkOpen><clickventure-edit-link node=node link=link></clickventure-edit-link></div></li></ol><div class=col-xs-12 ng-show=\"node.links.length === 0\">No outbound links yet, click \"Add Link\" to add the first one.</div></div></clickventure-edit-node-container>"
   );
 
 

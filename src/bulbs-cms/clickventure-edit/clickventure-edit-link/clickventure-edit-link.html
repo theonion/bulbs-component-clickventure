@@ -1,12 +1,4 @@
 <div class="clickventure-link">
-  <div
-      ng-show="!link.to_node"
-      class="alert alert-danger"
-      role="alert">
-    <span class="fa fa-exclamation-circle"></span>
-    <span>This link doesn't link to another page!</span>
-  </div>
-
   <div class="form-group form-group">
     <label for="linkText{{ uuid }}">Link Content</label>
     <textarea
@@ -25,7 +17,11 @@
       <label
           class="control-label"
           for="linkTo{{ uuid }}">
-        Link To
+        <span>Link To</span>
+        <clickventure-edit-icon-error
+            ng-show="!link.to_node"
+            error-text="This link doesn't link to another page!">
+        </clickventure-edit-icon-error>
       </label>
       <autocomplete-basic
           class="form-control"

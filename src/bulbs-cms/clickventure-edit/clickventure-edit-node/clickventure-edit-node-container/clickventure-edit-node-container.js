@@ -11,12 +11,17 @@ angular.module('bulbs.clickventure.edit.node.container', [
         transclude: true,
         scope: {
           configPageTitle: '@',
+          configPageStatuses: '&',
           onConfigPageRender: '&'
         },
         controller: [
           '$scope', 'ClickventureEdit',
           function ($scope, ClickventureEdit) {
             ClickventureEdit.registerConfigPage($scope.configPageTitle);
+            ClickventureEdit.addConfigPageStatuses(
+              $scope.configPageTitle,
+              $scope.configPageStatuses()
+            );
 
             $scope.data = ClickventureEdit.getData();
           }

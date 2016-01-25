@@ -25,20 +25,34 @@ angular.module('bulbs.clickventure.edit.nodeList', [
 
             $scope.searchTerm = '';
 
+            $scope.specialFilters = [
+              'Complete',
+              'Incomplete'
+            ];
+            $scope.selectedFilter = '';
+
             $scope.validateGraph = function () {
               ClickventureEditValidator.validateGraph(ClickventureEdit.getData().nodes);
             };
 
             $scope.searchNodes = function () {
-              if ($scope.searchTerm.length > 0) {
-                var searchTermRE = new RegExp($scope.searchTerm, 'i');
+              if ($scope.searchTerm || $scope.selectedFilter) {
+                var searchTermRE = new RegExp($scope.searchTerm || '.*', 'i');
 
                 $scope.nodeList = $scope.nodeData.nodes.filter(function (node) {
-                  return !!node.title.match(searchTermRE) ||
-                      !!node.body.match(searchTermRE) ||
-                      node.links.filter(function (link) {
-                        return link.body.match(searchTermRE);
-                      }).length > 0;
+                  var textMatch =
+                    $scope.searchTerm.length === 0 ||
+                    !!node.title.match(searchTermRE) ||
+                    !!node.body.match(searchTermRE) ||
+                    node.links.filter(function (link) {
+                      return link.body.match(searchTermRE);
+                    }).length > 0;
+
+                  var statusMatch =
+                    !$scope.selectedFilter ||
+                    node.statuses.indexOf($scope.selectedFilter) >= 0;
+
+                  return textMatch && statusMatch;
                 });
               } else {
                 $scope.nodeList = $scope.nodeData.nodes;

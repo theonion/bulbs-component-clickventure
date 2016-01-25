@@ -75,6 +75,10 @@ angular.module('bulbs.clickventure.edit.service', [
           node.links = [];
         }
 
+        if (!_.isArray(node.statuses)) {
+          node.statuses = [];
+        }
+
         if (!_.isArray(node.sister_pages)) {
           node.sister_pages = [];
         }
@@ -137,6 +141,7 @@ angular.module('bulbs.clickventure.edit.service', [
           shareable: false,
           sister_pages: [],
           start: data.nodes.length === 0,
+          statuses: [],
           title: ''
         };
 
@@ -209,9 +214,7 @@ angular.module('bulbs.clickventure.edit.service', [
           return newLink;
         });
 
-        if (!_.isArray(node.sister_pages)) {
-          node.sister_pages = [];
-        }
+        clonedNode.statuses = _.clone(node.statuses);
 
         // this node gets the current list of siblings (which doesn't include itself)
         clonedNode.sister_pages = _.clone(node.sister_pages);
@@ -328,7 +331,9 @@ angular.module('bulbs.clickventure.edit.service', [
           return configPage.title === title;
         });
 
-        configPage.statuses = configPage.statuses.concat(statuses);
+        if (statuses) {
+          configPage.statuses = configPage.statuses.concat(statuses);
+        }
       };
 
       var registerConfigPageChangeHandler = function (func) {

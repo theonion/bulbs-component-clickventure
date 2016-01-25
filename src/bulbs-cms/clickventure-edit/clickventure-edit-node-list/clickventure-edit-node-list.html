@@ -9,7 +9,7 @@
       </i>
       <i ng-show="searchTerm.length > 0">
         <button
-            class="fa fa-times"
+            class="fa fa-times text-danger"
             ng-click="searchTerm = ''; searchNodes()">
         </button>
       </i>
@@ -21,6 +21,7 @@
       <i>
         <button
             class="fa fa-filter"
+            ng-class="{'text-info': showFilters}"
             ng-click="showFilters = !showFilters">
         </button>
       </i>
@@ -29,19 +30,38 @@
       </span>
     </label>
   </div>
-  <div ng-show="showFilters">
-    <label for="statusFilter{{ uuid }}">Filter by</label>
-    <select id="statusFilter{{ uuid }}">
-      <option value="">No Filter</option>
-      <option value="">Complete</option>
-      <option value="">Incomplete</option>
-      <optgroup label="Photo">
-        <option value="">Status 1</option>
-      </optgroup>
-      <optgroup label="Copy">
-        <option value="">Status 2</option>
-      </optgroup>
-    </select>
+  <div
+      class="clickventure-edit-node-list-search-filters form-horizontal"
+      ng-show="showFilters">
+    <div class="form-group form-group-sm">
+      <label
+          class="control-label col-xs-4"
+          for="statusFilter{{ uuid }}">Filter by</label>
+      <div class="col-xs-8">
+        <select
+            id="statusFilter{{ uuid }}"
+            class="form-control input-sm"
+            ng-model="selectedFilter"
+            ng-change="searchNodes()">
+          <option value="">No Filter</option>
+          <option
+              ng-repeat="status in specialFilters"
+              value="{{ status }}">
+            {{ status }}
+          </option>
+          <optgroup
+              ng-repeat="configPage in nodeData.configPages"
+              ng-if="configPage.statuses.length > 0"
+              label="{{ configPage.title }}">
+            <option
+                ng-repeat="status in configPage.statuses"
+                value="{{ status }}">
+              {{ status }}
+            </option>
+          </optgroup>
+        </select>
+      </div>
+    </div>
   </div>
 </div>
 

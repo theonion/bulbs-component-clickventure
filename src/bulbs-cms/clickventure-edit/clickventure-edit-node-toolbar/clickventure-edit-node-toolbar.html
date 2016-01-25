@@ -3,14 +3,14 @@
 </div>
 <div class="clickventure-edit-node-toolbar-view btn-group">
   <button
-      ng-repeat="(title, configPage) in data.configPages"
-      ng-click="changeConfigPage(title)"
+      ng-repeat="configPage in data.configPages"
+      ng-click="changeConfigPage(configPage.title)"
       ng-class="{
-        'btn-default': data.configPageActive !== title,
-        'btn-primary': data.configPageActive === title
+        'btn-default': data.configPageActive !== configPage.title,
+        'btn-primary': data.configPageActive === configPage.title
       }"
       class="btn">
-    {{ title }}
+    {{ configPage.title }}
   </button>
 </div>
 <div class="clickventure-edit-node-toolbar-preview">

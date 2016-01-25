@@ -449,7 +449,7 @@ angular.module('bulbs.clickventure.edit.service', [
 
       var data = {
         configPageActive: '',
-        configPages: {},
+        configPages: [],
         nodeActive: null,
         nodes: [],
         view: {}
@@ -755,9 +755,10 @@ angular.module('bulbs.clickventure.edit.service', [
       };
 
       var registerConfigPage = function (title) {
-        data.configPages[title] = {
+        data.configPages.push({
+          title: title,
           statuses: []
-        };
+        });
 
         if (data.configPageActive.length === 0) {
           data.configPageActive = title;
@@ -765,7 +766,11 @@ angular.module('bulbs.clickventure.edit.service', [
       };
 
       var addConfigPageStatuses = function (title, statuses) {
-        data.configPages[title].statuses = data.configPages[title].statuses.concat(statuses);
+        var configPage = data.configPages.find(function (configPage) {
+          return configPage.title === title;
+        });
+
+        configPage.statuses = configPage.statuses.concat(statuses);
       };
 
       var registerConfigPageChangeHandler = function (func) {
@@ -1068,10 +1073,10 @@ angular.module('bulbs.clickventure.templates', []).run(['$templateCache', functi
 
 
   $templateCache.put('clickventure-edit-node-toolbar/clickventure-edit-node-toolbar.html',
-    "<div class=clickventure-edit-node-toolbar-title>Edit</div><div class=\"clickventure-edit-node-toolbar-view btn-group\"><button ng-repeat=\"(title, configPage) in data.configPages\" ng-click=changeConfigPage(title) ng-class=\"{\n" +
-    "        'btn-default': data.configPageActive !== title,\n" +
-    "        'btn-primary': data.configPageActive === title\n" +
-    "      }\" class=btn>{{ title }}</button></div><div class=clickventure-edit-node-toolbar-preview><a class=\"btn btn-link text-primary\" target=_blank href=\"/r/{{ article.id }}#{{ data.nodeActive.id }}\"><i class=\"fa fa-share\"></i> <span>Preview Page</span></a></div>"
+    "<div class=clickventure-edit-node-toolbar-title>Edit</div><div class=\"clickventure-edit-node-toolbar-view btn-group\"><button ng-repeat=\"configPage in data.configPages\" ng-click=changeConfigPage(configPage.title) ng-class=\"{\n" +
+    "        'btn-default': data.configPageActive !== configPage.title,\n" +
+    "        'btn-primary': data.configPageActive === configPage.title\n" +
+    "      }\" class=btn>{{ configPage.title }}</button></div><div class=clickventure-edit-node-toolbar-preview><a class=\"btn btn-link text-primary\" target=_blank href=\"/r/{{ article.id }}#{{ data.nodeActive.id }}\"><i class=\"fa fa-share\"></i> <span>Preview Page</span></a></div>"
   );
 
 

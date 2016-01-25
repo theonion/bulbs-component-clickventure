@@ -7,7 +7,7 @@ angular.module('bulbs.clickventure.edit.service', [
 
       var data = {
         configPageActive: '',
-        configPages: [],
+        configPages: {},
         nodeActive: null,
         nodes: [],
         view: {}
@@ -313,11 +313,17 @@ angular.module('bulbs.clickventure.edit.service', [
       };
 
       var registerConfigPage = function (title) {
-        data.configPages.push(title);
+        data.configPages[title] = {
+          statuses: []
+        };
 
         if (data.configPageActive.length === 0) {
           data.configPageActive = title;
         }
+      };
+
+      var addConfigPageStatuses = function (title, statuses) {
+        data.configPages[title].statuses = data.configPages[title].statuses.concat(statuses);
       };
 
       var registerConfigPageChangeHandler = function (func) {
@@ -368,6 +374,7 @@ angular.module('bulbs.clickventure.edit.service', [
         reorderLink: reorderLink,
         deleteLink: deleteLink,
         registerConfigPage: registerConfigPage,
+        addConfigPageStatuses: addConfigPageStatuses,
         registerConfigPageChangeHandler: registerConfigPageChangeHandler,
         changeConfigPage: changeConfigPage
       };

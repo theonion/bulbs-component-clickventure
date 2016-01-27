@@ -1,4 +1,7 @@
+
 (function (global, $) {
+
+  var analyticsManager = require('../../../../../bower_components/bulbs-public-analytics-manager/src/analytics-manager');
 
   // default options to use when constructing Clickventure, can be passed in and overridden
   var defaultOptions = {
@@ -109,6 +112,7 @@
         var $dataContainer = $(this).closest('.clickventure-node-link');
         var targetNode = $dataContainer.data('targetNode');
         var transitionName = $dataContainer.data('transition');
+        analyticsManager.trackPageView(false, transitionName);
         clickventure.gotoNodeId(targetNode, transitionName);
       });
     });

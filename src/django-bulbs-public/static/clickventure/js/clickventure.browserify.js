@@ -1,8 +1,6 @@
 
 (function (global, $) {
 
-  var analyticsManager = require('bulbs-public-analytics-manager/src/analytics-manager');
-
   // default options to use when constructing Clickventure, can be passed in and overridden
   var defaultOptions = {
     // time in ms taken to align with top when user interaction occurs
@@ -102,7 +100,9 @@
   var Clickventure = function (element, options) {
 
     this.element = $(element);
-    this.options = $.extend({}, defaultOptions, options);
+
+    var settings = $.extend({}, defaultOptions, options);
+    this.options = settings;
     this.doAlign = !this.options.preventFirstAlignment;
 
     // set up all node links
@@ -112,8 +112,8 @@
         var $dataContainer = $(this).closest('.clickventure-node-link');
         var targetNode = $dataContainer.data('targetNode');
         var transitionName = $dataContainer.data('transition');
-        analyticsManager.trackPageView(false, transitionName);
         clickventure.gotoNodeId(targetNode, transitionName);
+        settings.analyticsManager.trackPageView(false, transitionName);
       });
     });
 

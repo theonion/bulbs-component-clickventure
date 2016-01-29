@@ -112,10 +112,11 @@ angular.module('bulbs.clickventure.edit.configPages.service', [
           return hasStatus;
         },
         nodeIsComplete: function (node) {
-          return Object.keys(data.configPages).reduce(function (isComplete, configPageKey) {
-            return isComplete &&
-              node.statuses[configPageKey] === _.last(data.configPage[configPageKey].statuses)
-          }, true);
+          return Object.keys(data.configPages)
+            .reduce(function (isComplete, configPageKey) {
+              return isComplete &&
+                node.statuses[configPageKey] === _.last(data.configPages[configPageKey].statuses);
+            }, true);
         },
         getActiveConfigPage: function () {
           return data.configPageActive;

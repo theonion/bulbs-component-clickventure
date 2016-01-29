@@ -15,7 +15,6 @@ angular.module('bulbs.clickventure.edit.node.photo', [
         controller: [
           '$scope', 'uuid4',
           function ($scope, uuid4) {
-            $scope.configPageTitle = 'Photo';
             $scope.uuid = uuid4.generate();
           }
         ],

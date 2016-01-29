@@ -1,48 +1,50 @@
 angular.module('bulbs.clickventure.edit.node.container', [
+  'bulbs.clickventure.edit.configPages.service',
   'bulbs.clickventure.edit.service'
 ])
   .directive('clickventureEditNodeContainer', [
-    '$timeout',
-    function ($timeout) {
+    function () {
       return {
         restrict: 'E',
         templateUrl: 'clickventure-edit-node/clickventure-edit-node-container/clickventure-edit-node-container.html',
         require: '^clickventureEdit',
         transclude: true,
         scope: {
-          configPageTitle: '@',
-          configPageStatuses: '&',
-          onConfigPageRender: '&'
+          configPageKey: '@',
+          onConfigPageRender: '&',
+          node: '='
         },
         controller: [
-          '$scope', 'ClickventureEdit',
-          function ($scope, ClickventureEdit) {
-            ClickventureEdit.registerConfigPage($scope.configPageTitle);
-            ClickventureEdit.addConfigPageStatuses(
-              $scope.configPageTitle,
-              $scope.configPageStatuses()
+          '$scope', '$timeout', 'ClickventureEdit', 'ClickventureEditConfigPages',
+          function ($scope, $timeout, ClickventureEdit, ClickventureEditConfigPages) {
+            $scope.configPage = ClickventureEditConfigPages.getConfigPage($scope.configPageKey);
+
+            $scope.getActiveConfigPage = ClickventureEditConfigPages.getActiveConfigPage;
+
+            ClickventureEditConfigPages.registerConfigPageChangeHandler(
+              $timeout.bind(null, function () {
+                if (ClickventureEditConfigPages.getActiveConfigPage() === $scope.configPage) {
+                  $scope.onConfigPageRender();
+                }
+              })
             );
 
-            $scope.data = ClickventureEdit.getData();
-          }
-        ],
-        link: function (scope, elements) {
-          scope.$watch(
-            'data.configPageActive',
-            $timeout.bind(null, function () {
-              if (scope.data.configPageActive === scope.configPageTitle) {
-                scope.onConfigPageRender();
-              }
-            })
-          );
+            ClickventureEdit.registerSelectNodeHandler(
+              $timeout.bind(null, function () {
+                $scope.onConfigPageRender();
+              })
+            );
 
-          scope.$watch(
-            'data.nodeActive',
-            $timeout.bind(null, function () {
-              scope.onConfigPageRender();
-            })
-          );
-        }
+            $scope.selectedStatus = '';
+            $scope.setActiveNodeStatus = function () {
+              ClickventureEditConfigPages.setNodeStatus(
+                $scope.node,
+                $scope.configPageKey,
+                $scope.selectedStatus
+              )
+            };
+          }
+        ]
       };
     }
   ]);

@@ -1,4 +1,5 @@
 angular.module('bulbs.clickventure.edit.nodeList', [
+  'bulbs.clickventure.edit.configPages.service',
   'bulbs.clickventure.edit.nodeList.node',
   'bulbs.clickventure.edit.service',
   'bulbs.clickventure.edit.validator.service',
@@ -12,8 +13,11 @@ angular.module('bulbs.clickventure.edit.nodeList', [
         scope: {},
         require: '^clickventureEdit',
         controller: [
-          '$scope', 'ClickventureEdit', 'ClickventureEditValidator', 'uuid4',
-          function ($scope, ClickventureEdit, ClickventureEditValidator, uuid4) {
+          '$scope', 'ClickventureEdit', 'ClickventureEditConfigPages',
+            'ClickventureEditValidator', 'uuid4',
+          function ($scope, ClickventureEdit, ClickventureEditConfigPages,
+              ClickventureEditValidator, uuid4) {
+
             $scope.uuid = uuid4.generate();
 
             $scope.addAndSelectNode = ClickventureEdit.addAndSelectNode;
@@ -23,16 +27,16 @@ angular.module('bulbs.clickventure.edit.nodeList', [
             $scope.nodeData = ClickventureEdit.getData();
             $scope.nodeList = $scope.nodeData.nodes;
 
+            $scope.configPages = ClickventureEditConfigPages.getOrderedConfigPages();
+
             $scope.searchTerm = '';
 
-            $scope.specialFilters = [
-              'Complete',
-              'Incomplete'
-            ];
+            $scope.completeFilter = 'Complete';
+            $scope.incompleteFilter = 'Incomplete';
             $scope.selectedFilter = '';
 
             $scope.validateGraph = function () {
-              ClickventureEditValidator.validateGraph(ClickventureEdit.getData().nodes);
+              ClickventureEditValidator.validateGraph($scope.nodeData.nodes);
             };
 
             $scope.searchNodes = function () {
@@ -47,10 +51,19 @@ angular.module('bulbs.clickventure.edit.nodeList', [
                     node.links.filter(function (link) {
                       return link.body.match(searchTermRE);
                     }).length > 0;
-
-                  var statusMatch =
-                    !$scope.selectedFilter ||
-                    node.statuses.indexOf($scope.selectedFilter) >= 0;
+// TODO : fix this
+                  var statusMatch = true;
+                  if ($scope.selectedFilter === $scope.completeFilter) {
+                    statusMatch = ClickventureEditConfigPages.nodeIsComplete(node);
+                  } else if ($scope.selectedFilter === $scope.incompleteFilter) {
+                    statusMatch = !ClickventureEditConfigPages.nodeIsComplete(node);
+                  } else if ($scope.selectedFilter) {
+                    statusMatch = ClickventureEditConfigPages.nodeHasStatus(
+                      node,
+                      $scope.configData.configPageActive,
+                      $scope.selectedFilter
+                    );
+                  }
 
                   return textMatch && statusMatch;
                 });

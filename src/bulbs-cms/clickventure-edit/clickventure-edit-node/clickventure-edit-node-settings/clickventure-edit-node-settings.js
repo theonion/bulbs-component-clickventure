@@ -15,10 +15,8 @@ angular.module('bulbs.clickventure.edit.node.settings', [
       controller: [
         '$scope', 'ClickventureEdit', 'ConfirmationModal',
         function ($scope, ClickventureEdit, ConfirmationModal) {
-          $scope.configPageTitle = 'Settings';
-
           $scope.cloneNode = ClickventureEdit.cloneNode;
-          $scope.data = ClickventureEdit.getData();
+          $scope.nodeData = ClickventureEdit.getData();
           $scope.selectNode = ClickventureEdit.selectNode;
 
           $scope.deleteNode = function (node) {

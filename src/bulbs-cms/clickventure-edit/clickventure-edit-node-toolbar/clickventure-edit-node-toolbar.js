@@ -1,4 +1,5 @@
 angular.module('bulbs.clickventure.edit.nodeToolbar', [
+  'bulbs.clickventure.edit.configPages.service',
   'bulbs.clickventure.edit.service'
 ])
   .directive('clickventureEditNodeToolbar', [
@@ -11,11 +12,14 @@ angular.module('bulbs.clickventure.edit.nodeToolbar', [
         },
         require: '^clickventureEdit',
         controller: [
-          '$scope', 'ClickventureEdit',
-          function ($scope, ClickventureEdit) {
+          '$scope', 'ClickventureEdit', 'ClickventureEditConfigPages',
+          function ($scope, ClickventureEdit, ClickventureEditConfigPages) {
 
-            $scope.data = ClickventureEdit.getData();
-            $scope.changeConfigPage = ClickventureEdit.changeConfigPage;
+            $scope.nodeData = ClickventureEdit.getData();
+            $scope.changeConfigPage = ClickventureEditConfigPages.changeConfigPage;
+
+            $scope.getActiveConfigPage = ClickventureEditConfigPages.getActiveConfigPage;
+            $scope.configPages = ClickventureEditConfigPages.getOrderedConfigPages();
           }
         ],
       };

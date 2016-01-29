@@ -1,5 +1,21 @@
 <div
     class="container-fluid"
-    ng-show="data.configPageActive === '{{ configPageTitle }}'"
-    ng-transclude>
+    ng-show="getActiveConfigPage() === configPage">
+  <div
+      class="form-group"
+      ng-show="configPage.statuses.length > 0">
+    <label for="configPageStatus">{{ configPageKey }} Status</label>
+    <select
+        id="configPageStatus"
+        ng-model="selectedStatus"
+        ng-change="setActiveNodeStatus()"
+        class="form-control">
+      <option
+          ng-repeat="status in configPage.statuses"
+          value="{{ status }}">
+        {{status}}
+      </option>
+    </select>
+  </div>
+  <ng-transclude></ng-transclude>
 </div>

@@ -6,15 +6,12 @@ angular.module('bulbs.clickventure.edit.service', [
     function (_, $filter) {
 
       var data = {
-        configPageActive: '',
-        configPages: [],
         nodeActive: null,
         nodes: [],
         view: {}
       };
 
       var handlers = {
-        configPageChange: [],
         select: []
       };
 
@@ -315,39 +312,6 @@ angular.module('bulbs.clickventure.edit.service', [
         }
       };
 
-      var registerConfigPage = function (title) {
-        data.configPages.push({
-          title: title,
-          statuses: []
-        });
-
-        if (data.configPageActive.length === 0) {
-          data.configPageActive = title;
-        }
-      };
-
-      var addConfigPageStatuses = function (title, statuses) {
-        var configPage = data.configPages.find(function (configPage) {
-          return configPage.title === title;
-        });
-
-        if (statuses) {
-          configPage.statuses = configPage.statuses.concat(statuses);
-        }
-      };
-
-      var registerConfigPageChangeHandler = function (func) {
-        handlers.configPageChange.push(func);
-      };
-
-      var changeConfigPage = function (title) {
-        data.configPageActive = title;
-
-        handlers.configPageChange.forEach(function (func) {
-          func(title);
-        });
-      };
-
       return {
         getData: function () {
           return data;
@@ -382,11 +346,7 @@ angular.module('bulbs.clickventure.edit.service', [
         addLink: addLink,
         updateInboundLinks: updateInboundLinks,
         reorderLink: reorderLink,
-        deleteLink: deleteLink,
-        registerConfigPage: registerConfigPage,
-        addConfigPageStatuses: addConfigPageStatuses,
-        registerConfigPageChangeHandler: registerConfigPageChangeHandler,
-        changeConfigPage: changeConfigPage
+        deleteLink: deleteLink
       };
     }
   ]);

@@ -44,13 +44,10 @@
             ng-model="selectedFilter"
             ng-change="searchNodes()">
           <option value="">No Filter</option>
-          <option
-              ng-repeat="status in specialFilters"
-              value="{{ status }}">
-            {{ status }}
-          </option>
+          <option value="{{ completeFilter }}">{{ completeFilter }}</option>
+          <option value="{{ incompleteFilter }}">{{ incompleteFilter }}</option>
           <optgroup
-              ng-repeat="configPage in nodeData.configPages"
+              ng-repeat="configPage in configPages"
               ng-if="configPage.statuses.length > 0"
               label="{{ configPage.title }}">
             <option

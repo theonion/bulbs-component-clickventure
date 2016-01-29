@@ -1,4 +1,4 @@
-<clickventure-edit-node-container config-page-title="{{ configPageTitle }}">
+<clickventure-edit-node-container config-page-key="settings">
   <div class="row form-group">
     <div class="col-xs-8">
       <label for="nodePageName">Page Name (Internal Use)</label>
@@ -96,15 +96,15 @@
   <div class="row form-group">
     <div class="col-xs-6">
       <label>Inbound Links</label>
-      <ul ng-show="data.view[node.id].inboundLinks.length > 0">
-        <li ng-repeat="nodeId in data.view[node.id].inboundLinks track by nodeId">
+      <ul ng-show="nodeData.view[node.id].inboundLinks.length > 0">
+        <li ng-repeat="nodeId in nodeData.view[node.id].inboundLinks track by nodeId">
           <a
-              ng-bind-html="data.view[nodeId].node | clickventure_node_name"
-              ng-click="selectNode(data.view[nodeId].node)">
+              ng-bind-html="nodeData.view[nodeId].node | clickventure_node_name"
+              ng-click="selectNode(nodeData.view[nodeId].node)">
           </a>
         </li>
       </ul>
-      <div ng-show="data.view[node.id].inboundLinks.length === 0">
+      <div ng-show="nodeData.view[node.id].inboundLinks.length === 0">
         No inbound links yet, link a page to this one to make the first one.
       </div>
     </div>
@@ -114,8 +114,8 @@
       <ul ng-show="node.sister_pages.length > 0">
         <li ng-repeat="nodeId in node.sister_pages track by nodeId">
           <a
-              ng-bind-html="data.view[nodeId].node | clickventure_node_name"
-              ng-click="selectNode(data.view[nodeId].node)">
+              ng-bind-html="nodeData.view[nodeId].node | clickventure_node_name"
+              ng-click="selectNode(nodeData.view[nodeId].node)">
           </a>
         </li>
       </ul>

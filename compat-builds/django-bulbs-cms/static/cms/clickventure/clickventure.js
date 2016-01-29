@@ -1192,7 +1192,7 @@ angular.module('bulbs.clickventure.templates', []).run(['$templateCache', functi
 
 
   $templateCache.put('clickventure-edit-node-toolbar/clickventure-edit-node-toolbar.html',
-    "<div class=clickventure-edit-node-toolbar-title>Edit</div><div class=\"clickventure-edit-node-toolbar-view btn-group\"><button ng-repeat=\"configPage in configPages\" ng-click=changeConfigPage(configPage) ng-class=\"{\n" +
+    "<div class=clickventure-edit-node-toolbar-title>Edit</div><div class=\"clickventure-edit-node-toolbar-view btn-group\"><button ng-repeat=\"configPage in configPages track by configPage.order\" ng-click=changeConfigPage(configPage) ng-class=\"{\n" +
     "        'btn-default': getActiveConfigPage() !== configPage,\n" +
     "        'btn-primary': getActiveConfigPage() === configPage\n" +
     "      }\" class=btn>{{ configPage.title }}</button></div><div class=clickventure-edit-node-toolbar-preview><a class=\"btn btn-link text-primary\" target=_blank href=\"/r/{{ article.id }}#{{ nodeData.nodeActive.id }}\"><i class=\"fa fa-share\"></i> <span>Preview Page</span></a></div>"

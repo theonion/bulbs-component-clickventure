@@ -1,7 +1,7 @@
 <div class="clickventure-edit-node-toolbar-title">Edit</div>
 <div class="clickventure-edit-node-toolbar-view btn-group">
   <button
-      ng-repeat="configPage in configPages"
+      ng-repeat="configPage in configPages track by configPage.order"
       ng-click="changeConfigPage(configPage)"
       ng-class="{
         'btn-default': getActiveConfigPage() !== configPage,

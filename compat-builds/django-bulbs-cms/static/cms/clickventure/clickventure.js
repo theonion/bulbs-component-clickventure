@@ -1209,7 +1209,7 @@ angular.module('bulbs.clickventure.templates', []).run(['$templateCache', functi
 
 
   $templateCache.put('clickventure-edit-node/clickventure-edit-node-container/clickventure-edit-node-container.html',
-    "<div class=container-fluid ng-show=\"getActiveConfigPage() === configPage\"><div class=form-group ng-show=\"configPage.statuses.length > 0\"><label for=configPageStatus>{{ configPage.title }} Status</label><select id=configPageStatus ng-model=selectedStatus ng-change=setActiveNodeStatus() class=form-control><option ng-repeat=\"status in configPage.statuses\" value=\"{{ status }}\">{{ status }}</option></select></div><ng-transclude></ng-transclude></div>"
+    "<div class=container-fluid ng-show=\"getActiveConfigPage() === configPage\"><div class=form-group ng-show=\"configPage.statuses.length > 0\"><label for=configPageStatus>{{ configPage.title }} Status</label><select id=configPageStatus ng-model=selectedStatus ng-change=setActiveNodeStatus() class=form-control><option value=\"\">{{ configPage.statuses[0] }}</option><option ng-repeat=\"status in configPage.statuses\" ng-if=!$first value=\"{{ status }}\">{{ status }}</option></select></div><ng-transclude></ng-transclude></div>"
   );
 
 

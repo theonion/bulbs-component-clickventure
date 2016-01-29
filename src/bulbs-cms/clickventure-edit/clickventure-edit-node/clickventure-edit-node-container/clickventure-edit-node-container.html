@@ -10,8 +10,10 @@
         ng-model="selectedStatus"
         ng-change="setActiveNodeStatus()"
         class="form-control">
+      <option value="">{{ configPage.statuses[0] }}</option>
       <option
           ng-repeat="status in configPage.statuses"
+          ng-if="!$first"
           value="{{ status }}">
         {{ status }}
       </option>

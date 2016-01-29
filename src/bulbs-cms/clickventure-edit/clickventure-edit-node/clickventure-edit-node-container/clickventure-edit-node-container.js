@@ -39,7 +39,6 @@ angular.module('bulbs.clickventure.edit.node.container', [
             $scope.setActiveNodeStatus = function () {
               ClickventureEditConfigPages.setNodeStatus(
                 $scope.nodeData.nodeActive,
-                $scope.configPage,
                 $scope.selectedStatus
               )
             };

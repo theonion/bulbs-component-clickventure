@@ -60,7 +60,6 @@ angular.module('bulbs.clickventure.edit.nodeList', [
                   } else if ($scope.selectedFilter) {
                     statusMatch = ClickventureEditConfigPages.nodeHasStatus(
                       node,
-                      ClickventureEditConfigPages.getActiveConfigPage(),
                       $scope.selectedFilter
                     );
                   }

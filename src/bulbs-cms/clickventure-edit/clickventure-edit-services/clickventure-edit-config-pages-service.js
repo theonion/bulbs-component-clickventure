@@ -24,14 +24,14 @@ angular.module('bulbs.clickventure.edit.configPages.service', [
             ]
           },
           photo: {
-            title: 'Photo',
+            title: 'Image',
             order: 2,
             statuses: [
-              'Photo status not set',
+              'Image status not set',
               'Needs image',
               'Needs photoshop/photoshoot',
               'Needs approval',
-              'Photo ready'
+              'Image ready'
             ]
           }
         }

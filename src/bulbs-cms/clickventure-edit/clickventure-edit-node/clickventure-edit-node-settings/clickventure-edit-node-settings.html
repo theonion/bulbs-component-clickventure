@@ -112,11 +112,20 @@
     <div class="col-xs-6">
       <label>Outbound Links</label>
       <ul ng-show="node.links.length > 0">
-        <li ng-repeat="link in node.links track by link.to_node">
+        <li ng-repeat="link in node.links">
           <a
+              ng-if="link.to_node"
               ng-bind-html="nodeData.view[link.to_node].node | clickventure_node_name"
               ng-click="selectNode(nodeData.view[link.to_node].node)">
           </a>
+          <span
+              ng-if="!link.to_node"
+              class="text-danger">
+            <span>An unset link</span>
+            <clickventure-edit-icon-error
+                error-text="This link doesn't link to another page!">
+            </clickventure-edit-icon-error>
+          </span>
         </li>
       </ul>
       <div ng-show="node.links.length === 0">

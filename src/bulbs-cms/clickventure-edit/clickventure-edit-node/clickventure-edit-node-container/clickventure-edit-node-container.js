@@ -12,12 +12,12 @@ angular.module('bulbs.clickventure.edit.node.container', [
         scope: {
           configPageKey: '@',
           onConfigPageRender: '&',
-          node: '='
         },
         controller: [
           '$scope', '$timeout', 'ClickventureEdit', 'ClickventureEditConfigPages',
           function ($scope, $timeout, ClickventureEdit, ClickventureEditConfigPages) {
             $scope.configPage = ClickventureEditConfigPages.getConfigPage($scope.configPageKey);
+            $scope.nodeData = ClickventureEdit.getData();
 
             $scope.getActiveConfigPage = ClickventureEditConfigPages.getActiveConfigPage;
 
@@ -38,8 +38,8 @@ angular.module('bulbs.clickventure.edit.node.container', [
             $scope.selectedStatus = '';
             $scope.setActiveNodeStatus = function () {
               ClickventureEditConfigPages.setNodeStatus(
-                $scope.node,
-                $scope.configPageKey,
+                $scope.nodeData.nodeActive,
+                $scope.configPage,
                 $scope.selectedStatus
               )
             };

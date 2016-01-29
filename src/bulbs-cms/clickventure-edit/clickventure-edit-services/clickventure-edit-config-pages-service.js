@@ -41,6 +41,15 @@ angular.module('bulbs.clickventure.edit.configPages.service', [
         configPageChange: []
       };
 
+      var _getVerifiedConfigPageKey = function (configPage, status) {
+        return Object.keys(data.configPages)
+          .find(function (key) {
+            var page = data.configPages[key];
+            return page === configPage &&
+              page.statuses.indexOf(status) >= 0;
+          });
+      };
+
       var getConfigPage = function (configPage) {
         var type = typeof configPage;
 
@@ -78,35 +87,35 @@ angular.module('bulbs.clickventure.edit.configPages.service', [
               return data.configPages[key];
             });
         },
-        setNodeStatus: function (node, configPageKey, status) {
-          var configPage = Object.keys(data.configPages)
-            .find(function (key) {
-              var configPage = data.configPages[key];
-              return configPage.title === configPageKey;
-            });
-
-          if (configPage.statuses.indexOf(status) >= 0) {
-            // allow only one of a config page statuses on a node
-            node.statuses = _.difference(node.statuses, configPage.statuses);
-            node.statuses.push(status);
+        setNodeStatus: function (node, configPage, status) {
+          var configPageKey = _getVerifiedConfigPageKey(configPage, status);
+          if (configPageKey) {
+            node.statuses[configPageKey] = status;
           }
 
           return node;
         },
-        nodeHasStatus: function (node, status) {
-          return node.statuses.indexOf(status) >= 0 ||
-            data.configPages.find(function (configPage) {
-              return configPage.statuses.indexOf(status) === 0;
-            });
+        nodeHasStatus: function (node, configPage, status) {
+          var hasStatus = false;
+          var configPageKey = _getVerifiedConfigPageKey(configPage, status);
+
+          if (configPageKey) {
+            var configPage = data.configPages[configPageKey];
+            var statusIndex = configPage.statuses.indexOf(status);
+            var nodeStatus = node.statuses[configPageKey];
+
+            hasStatus =
+              (statusIndex === 0 && typeof nodeStatus === 'undefined') ||
+              nodeStatus === status;
+          }
+
+          return hasStatus;
         },
         nodeIsComplete: function (node) {
-          return data.configPages
-            .reduce(function (isComplete, configPage) {
-              var statuses = configPage.statuses;
-              return isComplete &&
-                (statuses.length === 0 ||
-                node.statuses.indexOf(statuses[statuses.length - 1]) >= 0);
-            }, true);
+          return Object.keys(data.configPages).reduce(function (isComplete, configPageKey) {
+            return isComplete &&
+              node.statuses[configPageKey] === _.last(data.configPage[configPageKey].statuses)
+          }, true);
         },
         getActiveConfigPage: function () {
           return data.configPageActive;

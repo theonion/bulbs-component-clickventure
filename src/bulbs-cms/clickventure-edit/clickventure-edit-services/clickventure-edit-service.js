@@ -72,8 +72,8 @@ angular.module('bulbs.clickventure.edit.service', [
           node.links = [];
         }
 
-        if (!_.isArray(node.statuses)) {
-          node.statuses = [];
+        if (!_.isObject(node.statuses)) {
+          node.statuses = {};
         }
 
         if (!_.isArray(node.sister_pages)) {
@@ -138,7 +138,7 @@ angular.module('bulbs.clickventure.edit.service', [
           shareable: false,
           sister_pages: [],
           start: data.nodes.length === 0,
-          statuses: [],
+          statuses: {},
           title: ''
         };
 

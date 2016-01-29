@@ -51,7 +51,7 @@ angular.module('bulbs.clickventure.edit.nodeList', [
                     node.links.filter(function (link) {
                       return link.body.match(searchTermRE);
                     }).length > 0;
-// TODO : fix this
+
                   var statusMatch = true;
                   if ($scope.selectedFilter === $scope.completeFilter) {
                     statusMatch = ClickventureEditConfigPages.nodeIsComplete(node);
@@ -60,7 +60,7 @@ angular.module('bulbs.clickventure.edit.nodeList', [
                   } else if ($scope.selectedFilter) {
                     statusMatch = ClickventureEditConfigPages.nodeHasStatus(
                       node,
-                      $scope.configData.configPageActive,
+                      ClickventureEditConfigPages.getActiveConfigPage(),
                       $scope.selectedFilter
                     );
                   }

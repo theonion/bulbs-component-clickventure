@@ -491,6 +491,7 @@ angular.module('bulbs.clickventure.edit.nodeNameFilter', [])
 
 angular.module('bulbs.clickventure.edit.node.photo', [
   'bettyEditable',
+  'bulbs.clickventure.edit.icon.error',
   'bulbs.clickventure.edit.node.container',
   'uuid4'
 ])
@@ -799,13 +800,18 @@ angular.module('bulbs.clickventure.edit.service', [
       var cloneNode = function (node) {
         var clonedNode = addAndSelectNode();
 
+        _.assign(
+          clonedNode,
+          _.omit(node, [
+            'id',
+            'links',
+            'statuses',
+            'sister_pages',
+            'title'
+          ])
+        );
+
         clonedNode.title = 'Clone - ' + $filter('clickventure_node_name')(node);
-        clonedNode.body = node.body;
-        clonedNode.link_style = node.link_style;
-        clonedNode.start = false;
-        clonedNode.finish = node.finish;
-        clonedNode.shareable = true;
-        clonedNode.share_text = node.share_text;
 
         // so we don't modify the original page's links
         clonedNode.links = node.links.map(function (link) {
@@ -1223,8 +1229,8 @@ angular.module('bulbs.clickventure.templates', []).run(['$templateCache', functi
 
 
   $templateCache.put('clickventure-edit-node/clickventure-edit-node-photo/clickventure-edit-node-photo.html',
-    "<clickventure-edit-node-container config-page-key=photo on-config-page-render=onConfigPageActive()><div class=\"row form-group\"><div class=col-xs-12><label for=nodePageName>Page Name (Internal Use)</label><input id=nodePageName class=form-control placeholder=\"Page Name (Internal Use)\" ng-model=node.title></div></div><div class=row><label class=\"form-group col-xs-12\"><span>Image</span><betty-editable image=node.photo_final ratio=16x9 add-styles=\"fa fa-picture-o add-image-box clickventure-photo-box\"></betty-editable></label></div><div class=\"row form-group\"><div class=col-xs-8><div class=form-group><label for=\"photoPlaceholderUrl{{ uuid }}\">Stock/Placeholder Image URL</label><input id=\"photoPlaceholderUrl{{ uuid }}\" type=url class=form-control ng-model=node.photo_placeholder_url></div><div class=form-group><label for=\"photoPlaceholderPageUrl{{ uuid }}\">Stock/Placeholder Image Page URL</label><input id=\"photoPlaceholderPageUrl{{ uuid }}\" type=url class=form-control ng-model=node.photo_placeholder_page_url></div></div><div class=\"col-xs-4 form-group\"><label>Preview</label><div class=clickventure-photo-placeholder-preview><span class=\"fa fa-picture-o\" ng-if=!node.photo_placeholder_url></span> <img ng-if=node.photo_placeholder_url ng-src=\"{{ node.photo_placeholder_url }}\"></div></div></div><div class=row><div class=\"col-xs-12 form-group\"><label for=\"photoDescription{{ uuid }}\">Description</label><textarea id=\"photoDescription{{ uuid }}\" class=\"form-control clickventure-textarea-vertical\" ng-model=node.photo_description>\n" +
-    "      </textarea></div></div><div class=row><div class=\"col-xs-12 form-group\"><label for=\"photoNote{{ uuid }}\">Image Note</label><input id=\"photoNote{{ uuid }}\" class=form-control ng-model=node.photo_note></div></div></clickventure-edit-node-container>"
+    "<clickventure-edit-node-container config-page-key=photo on-config-page-render=onConfigPageActive()><form name=formNodePhoto><div class=\"row form-group\"><div class=col-xs-12><label for=nodePageName>Page Name (Internal Use)</label><input id=nodePageName class=form-control placeholder=\"Page Name (Internal Use)\" ng-model=node.title></div></div><div class=row><label class=\"form-group col-xs-12\"><span>Image</span><betty-editable image=node.photo_final ratio=16x9 add-styles=\"fa fa-picture-o add-image-box clickventure-photo-box\"></betty-editable></label></div><div class=\"row form-group\"><div class=col-xs-8><div class=form-group ng-class=\"{'has-error': !formNodePhoto.photoPlaceholderUrl.$valid}\"><label class=control-label for=\"photoPlaceholderUrl{{ uuid }}\"><span>Stock/Placeholder Image URL</span><clickventure-edit-icon-error ng-show=!formNodePhoto.photoPlaceholderUrl.$valid error-text=\"Invalid URL! Valid URLs start with http:// or https://\"></clickventure-edit-icon-error></label><input id=\"photoPlaceholderUrl{{ uuid }}\" type=url class=form-control name=photoPlaceholderUrl ng-model=node.photo_placeholder_url></div><div class=form-group ng-class=\"{'has-error': !formNodePhoto.photoPlaceholderPageUrl.$valid}\"><label class=control-label for=\"photoPlaceholderPageUrl{{ uuid }}\"><span>Stock/Placeholder Image Page URL</span><clickventure-edit-icon-error ng-show=!formNodePhoto.photoPlaceholderPageUrl.$valid error-text=\"Invalid URL! Valid URLs start with http:// or https://\"></clickventure-edit-icon-error></label><input id=\"photoPlaceholderPageUrl{{ uuid }}\" type=url class=form-control name=photoPlaceholderPageUrl ng-model=node.photo_placeholder_page_url></div></div><div class=\"col-xs-4 form-group\"><label>Preview</label><div class=clickventure-photo-placeholder-preview><span class=\"fa fa-picture-o\" ng-if=!node.photo_placeholder_url></span> <img ng-if=node.photo_placeholder_url ng-src=\"{{ node.photo_placeholder_url }}\"></div></div></div><div class=row><div class=\"col-xs-12 form-group\"><label for=\"photoDescription{{ uuid }}\">Description</label><textarea id=\"photoDescription{{ uuid }}\" class=\"form-control clickventure-textarea-vertical\" ng-model=node.photo_description>\n" +
+    "        </textarea></div></div><div class=row><div class=\"col-xs-12 form-group\"><label for=\"photoNote{{ uuid }}\">Image Note</label><input id=\"photoNote{{ uuid }}\" class=form-control ng-model=node.photo_note></div></div></form></clickventure-edit-node-container>"
   );
 
 

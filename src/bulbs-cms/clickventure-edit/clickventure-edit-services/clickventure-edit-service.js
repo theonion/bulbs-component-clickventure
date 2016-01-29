@@ -193,13 +193,18 @@ angular.module('bulbs.clickventure.edit.service', [
       var cloneNode = function (node) {
         var clonedNode = addAndSelectNode();
 
+        _.assign(
+          clonedNode,
+          _.omit(node, [
+            'id',
+            'links',
+            'statuses',
+            'sister_pages',
+            'title'
+          ])
+        );
+
         clonedNode.title = 'Clone - ' + $filter('clickventure_node_name')(node);
-        clonedNode.body = node.body;
-        clonedNode.link_style = node.link_style;
-        clonedNode.start = false;
-        clonedNode.finish = node.finish;
-        clonedNode.shareable = true;
-        clonedNode.share_text = node.share_text;
 
         // so we don't modify the original page's links
         clonedNode.links = node.links.map(function (link) {

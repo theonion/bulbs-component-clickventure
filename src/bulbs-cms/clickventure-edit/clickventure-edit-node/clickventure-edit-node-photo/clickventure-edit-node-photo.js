@@ -1,5 +1,6 @@
 angular.module('bulbs.clickventure.edit.node.photo', [
   'bettyEditable',
+  'bulbs.clickventure.edit.icon.error',
   'bulbs.clickventure.edit.node.container',
   'uuid4'
 ])

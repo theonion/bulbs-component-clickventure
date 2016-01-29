@@ -1,9 +1,10 @@
 angular.module('bulbs.clickventure.edit.service', [
+  'bulbs.clickventure.edit.link.service',
   'lodash'
 ])
   .service('ClickventureEdit', [
-    '_', '$filter',
-    function (_, $filter) {
+    '_', '$filter', 'ClickventureEditLink',
+    function (_, $filter, ClickventureEditLink) {
 
       var data = {
         nodeActive: null,
@@ -112,7 +113,7 @@ angular.module('bulbs.clickventure.edit.service', [
           // setup inboundLinks
           data.nodes.forEach(function (node) {
             node.links.forEach(function (link) {
-              updateInboundLinks(link);
+              ClickventureEditLink.updateInboundLinks(link);
             });
           });
 
@@ -211,7 +212,7 @@ angular.module('bulbs.clickventure.edit.service', [
           var newLink = _.clone(link);
 
           newLink.from_node = clonedNode.id;
-          updateInboundLinks(newLink);
+          ClickventureEditLink.updateInboundLinks(newLink);
 
           return newLink;
         });
@@ -273,72 +274,9 @@ angular.module('bulbs.clickventure.edit.service', [
         return _reindexNodes();
       };
 
-      var addLink = function (node) {
-        var link = {
-          body: '',
-          from_node: node.id,
-          to_node: null,
-          transition: '',
-          link_style: node.link_style,
-          float: false
-        };
-
-        node.links.push(link);
-
-        return link;
-      };
-
-      var updateInboundLinks = function (link) {
-        if (typeof link.to_node === 'number') {
-          var links = data.view[link.to_node].inboundLinks;
-
-          if (links.indexOf(link.from_node) < 0) {
-            links.push(link.from_node);
-          }
-        }
-      };
-
-      var reorderLink = function (node, indexFrom, indexTo) {
-        if (indexFrom >= 0 && indexTo >= 0 && indexTo < node.links.length) {
-          var link = node.links[indexFrom];
-          node.links.splice(indexFrom, 1);
-          node.links.splice(indexTo, 0, link);
-        }
-      };
-
-      var deleteLink = function (node, rmLink) {
-        var indexLinks = node.links.indexOf(rmLink);
-        node.links.splice(indexLinks, 1);
-
-        if (typeof rmLink.to_node !== 'number') {
-          var linksInbound = data.view[rmLink.to_node].inboundLinks;
-          var indexInbound = linksInbound.indexOf(rmLink.from_node);
-          linksInbound.splice(indexInbound, 1);
-        }
-      };
-
       return {
         getData: function () {
           return data;
-        },
-        getValidLinkStyles: function () {
-          return [
-            '',
-            'Action',
-            'Dialogue',
-            'Music',
-            'Quiz'
-          ];
-        },
-        getValidNodeTransitions: function () {
-          return [
-            'default',
-            'slideLeft',
-            'slideRight',
-            'slideUp',
-            'slideDown',
-            'flipLeft'
-          ];
         },
         setNodes: setNodes,
         addNode: addNode,
@@ -347,11 +285,7 @@ angular.module('bulbs.clickventure.edit.service', [
         registerSelectNodeHandler: registerSelectNodeHandler,
         selectNode: selectNode,
         cloneNode: cloneNode,
-        deleteNode: deleteNode,
-        addLink: addLink,
-        updateInboundLinks: updateInboundLinks,
-        reorderLink: reorderLink,
-        deleteLink: deleteLink
+        deleteNode: deleteNode
       };
     }
   ]);

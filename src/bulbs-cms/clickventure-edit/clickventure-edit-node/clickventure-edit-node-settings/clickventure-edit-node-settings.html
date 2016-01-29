@@ -110,6 +110,23 @@
     </div>
 
     <div class="col-xs-6">
+      <label>Outbound Links</label>
+      <ul ng-show="node.links.length > 0">
+        <li ng-repeat="link in node.links track by link.to_node">
+          <a
+              ng-bind-html="nodeData.view[link.to_node].node | clickventure_node_name"
+              ng-click="selectNode(nodeData.view[link.to_node].node)">
+          </a>
+        </li>
+      </ul>
+      <div ng-show="node.links.length === 0">
+        No outbound links yet, add a link in copy settings to make the first one.
+      </div>
+    </div>
+  </div>
+
+  <div class="row form-group">
+    <div class="col-xs-6">
       <label>Sister Pages</label>
       <ul ng-show="node.sister_pages.length > 0">
         <li ng-repeat="nodeId in node.sister_pages track by nodeId">

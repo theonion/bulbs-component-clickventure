@@ -1,12 +1,15 @@
 describe('ClickventureEditConfigPages', function () {
 
   var ClickventureEditConfigPages;
+  var ClickventureEditNode;
 
   beforeEach(function () {
     module('bulbs.clickventure.edit.services.configPage');
+    module('bulbs.clickventure.edit.services.node.factory');
 
-    inject(function (_ClickventureEditConfigPages_) {
+    inject(function (_ClickventureEditConfigPages_, _ClickventureEditNode_) {
       ClickventureEditConfigPages = _ClickventureEditConfigPages_;
+      ClickventureEditNode = _ClickventureEditNode_;
     });
   });
 
@@ -51,10 +54,26 @@ describe('ClickventureEditConfigPages', function () {
       expect(pages[2]).to.deep.equal(ClickventureEditConfigPages.getConfigPage('photo'));
     });
 
-    it('should have a method to set the status of a node', function () {
+    describe('should have a method to set the status of a node that', function () {
 
-      // TODO : add test code here
-      throw new Error('Not implemented yet.');
+      it('should work for a valid status', function () {
+        var node = new ClickventureEditNode();
+        var copy = ClickventureEditConfigPages.getConfigPage('copy');
+        var status = copy.statuses[0];
+
+        ClickventureEditConfigPages.setNodeStatus(node, status);
+
+        expect(node.statuses.copy).to.equal(status);
+      });
+
+      it('should not work for an invalid status', function () {
+        var node = new ClickventureEditNode();
+        var status = 'Not a real status';
+
+        ClickventureEditConfigPages.setNodeStatus(node, status);
+
+        expect(node.statuses.copy).to.be.undefined;
+      });
     });
 
     it('should have a method to check if a node has a particular status', function () {

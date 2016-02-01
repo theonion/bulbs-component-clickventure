@@ -1,9 +1,10 @@
 angular.module('bulbs.clickventure.edit.services.node', [
   'bulbs.clickventure.edit.services.link',
+  'bulbs.clickventure.edit.services.node.factory',
   'lodash'
 ])
   .service('ClickventureEdit', [
-    '_', '$filter', 'ClickventureEditLink',
+    '_', '$filter', 'ClickventureEditNode', 'ClickventureEditLink',
     function (_, $filter, ClickventureEditLink) {
 
       var data = {
@@ -124,24 +125,10 @@ angular.module('bulbs.clickventure.edit.services.node', [
       };
 
       var addNode = function () {
-        var node = {
+        var node = new ClickventureEditNode({
           id: _getNextNodeId(),
-          body: '',
-          finish: false,
-          link_style: 'action',
-          links: [],
-          photo_description: '',
-          photo_final: null,
-          photo_note: null,
-          photo_placeholder_page_url: '',
-          photo_placeholder_url: '',
-          share_text: '',
-          shareable: false,
-          sister_pages: [],
-          start: data.nodes.length === 0,
-          statuses: {},
-          title: ''
-        };
+          start: data.nodes.length === 0
+        });
 
         var activeNodeIndex = data.nodes.indexOf(data.nodeActive);
         if (activeNodeIndex >= 0) {

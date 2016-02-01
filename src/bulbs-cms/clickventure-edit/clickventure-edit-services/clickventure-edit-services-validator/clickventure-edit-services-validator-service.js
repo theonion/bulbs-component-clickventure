@@ -1,4 +1,4 @@
-angular.module('bulbs.clickventure.edit.validator.service', [
+angular.module('bulbs.clickventure.edit.services.validator', [
   'bulbs.clickventure.edit.services.node',
 ])
   .service('ClickventureEditValidator', [

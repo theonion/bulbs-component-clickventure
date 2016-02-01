@@ -379,7 +379,7 @@ angular.module('bulbs.clickventure.edit.nodeList', [
   'bulbs.clickventure.edit.configPages.service',
   'bulbs.clickventure.edit.nodeList.node',
   'bulbs.clickventure.edit.services.node',
-  'bulbs.clickventure.edit.validator.service',
+  'bulbs.clickventure.edit.services.validator',
   'uuid4'
 ])
   .directive('clickventureEditNodeList', [
@@ -991,7 +991,7 @@ angular.module('bulbs.clickventure.edit.toolFixture', [
     }
   ]);
 
-angular.module('bulbs.clickventure.edit.validator.service', [
+angular.module('bulbs.clickventure.edit.services.validator', [
   'bulbs.clickventure.edit.services.node',
 ])
   .service('ClickventureEditValidator', [

@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# Prepare your environment for development by installing dependencies and running
+#   an initial build.
+
+npm install && bower install
+./node_modules/.bin/grunt build_bulbs_cms_for_django

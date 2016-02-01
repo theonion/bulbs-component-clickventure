@@ -11,6 +11,6 @@ module.exports = function (config) {
     files: [
       path.join('./src', 'bulbs-cms', '**', '*.spec.js')
     ],
-    browsers: ['Chrome']
+    browsers: ['PhantomJS']
   });
 };

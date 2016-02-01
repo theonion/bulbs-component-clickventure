@@ -1,6 +1,6 @@
 angular.module('bulbs.clickventure.edit.node.container', [
-  'bulbs.clickventure.edit.configPages.service',
-  'bulbs.clickventure.edit.service'
+  'bulbs.clickventure.edit.service',
+  'bulbs.clickventure.edit.services.configPage'
 ])
   .directive('clickventureEditNodeContainer', [
     function () {

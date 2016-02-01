@@ -3,7 +3,7 @@ describe('ClickventureEditConfigPages', function () {
   var ClickventureEditConfigPages;
 
   beforeEach(function () {
-    module('bulbs.clickventure.edit.configPages.service');
+    module('bulbs.clickventure.edit.services.configPage');
 
     inject(function (_ClickventureEditConfigPages_) {
       ClickventureEditConfigPages = _ClickventureEditConfigPages_;

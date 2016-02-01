@@ -1,7 +1,7 @@
 angular.module('bulbs.clickventure.edit.nodeList', [
-  'bulbs.clickventure.edit.configPages.service',
   'bulbs.clickventure.edit.nodeList.node',
   'bulbs.clickventure.edit.service',
+  'bulbs.clickventure.edit.services.configPage',
   'bulbs.clickventure.edit.validator.service',
   'uuid4'
 ])

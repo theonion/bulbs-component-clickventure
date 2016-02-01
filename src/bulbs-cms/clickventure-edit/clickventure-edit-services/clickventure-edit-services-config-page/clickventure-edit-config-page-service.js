@@ -1,5 +1,5 @@
-angular.module('bulbs.clickventure.edit.configPages.service', [
-  'bulbs.clickventure.edit.configPages.factory',
+angular.module('bulbs.clickventure.edit.services.configPage', [
+  'bulbs.clickventure.edit.services.configPage.factory',
   'lodash'
 ])
   .service('ClickventureEditConfigPages', [

@@ -9,7 +9,7 @@ module.exports = function (config) {
       'sinon'
     ],
     files: [
-      path.join('./src', 'bulbs-cms', '**', '*.spec.js')
+      path.join('src', 'bulbs-cms', '**', '*.spec.js')
     ],
     browsers: ['PhantomJS']
   });

@@ -3,7 +3,7 @@ angular.module('bulbs.clickventure.edit.link', [
   'confirmationModal.factory',
   'bulbs.clickventure.edit.icon.error',
   'bulbs.clickventure.edit.link.addPageModal.factory',
-  'bulbs.clickventure.edit.link.service',
+  'bulbs.clickventure.edit.services.link',
   'bulbs.clickventure.edit.nodeNameFilter',
   'bulbs.clickventure.edit.services.node',
   'uuid4'

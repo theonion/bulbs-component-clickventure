@@ -1,5 +1,5 @@
 angular.module('bulbs.clickventure.edit.services.node', [
-  'bulbs.clickventure.edit.link.service',
+  'bulbs.clickventure.edit.services.link',
   'lodash'
 ])
   .service('ClickventureEdit', [

@@ -1,39 +1,34 @@
 angular.module('bulbs.clickventure.edit.configPages.service', [
+  'bulbs.clickventure.edit.configPages.factory',
   'lodash'
 ])
   .service('ClickventureEditConfigPages', [
-    '_',
-    function (_) {
+    '_', 'ClickventureEditConfigPage',
+    function (_, ClickventureEditConfigPage) {
+
+      var settings = new ClickventureEditConfigPage('Settings');
+
+      var copy = new ClickventureEditConfigPage('Copy');
+      copy
+        .addStatus('Copy status not set')
+        .addStatus('Needs first pass')
+        .addStatus('Needs copy edit')
+        .addStatus('Copy ready');
+
+      var photo = new ClickventureEditConfigPage('Image');
+      photo
+        .addStatus('Image status not set')
+        .addStatus('Needs image')
+        .addStatus('Needs photoshop/photoshoot')
+        .addStatus('Needs approval')
+        .addStatus('Image ready')
 
       var data = {
         configPageActive: null,
         configPages: {
-          settings: {
-            title: 'Settings',
-            order: 0,
-            statuses: []
-          },
-          copy: {
-            title: 'Copy',
-            order: 1,
-            statuses: [
-              'Copy status not set',
-              'Needs first pass',
-              'Needs copy edit',
-              'Copy ready'
-            ]
-          },
-          photo: {
-            title: 'Image',
-            order: 2,
-            statuses: [
-              'Image status not set',
-              'Needs image',
-              'Needs photoshop/photoshoot',
-              'Needs approval',
-              'Image ready'
-            ]
-          }
+          settings: settings,
+          copy: copy,
+          photo: photo
         }
       };
 

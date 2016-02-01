@@ -4,4 +4,4 @@ node_js:
 script: npm test -- --single-run
 before_script:
   - npm install
-  - bower install
+  - ./node_modules/.bin/bower install

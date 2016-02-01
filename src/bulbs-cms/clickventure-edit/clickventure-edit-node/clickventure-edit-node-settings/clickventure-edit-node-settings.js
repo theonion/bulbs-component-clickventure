@@ -2,7 +2,7 @@ angular.module('bulbs.clickventure.edit.node.settings', [
   'confirmationModal.factory',
   'bulbs.clickventure.edit.node.container',
   'bulbs.clickventure.edit.nodeNameFilter',
-  'bulbs.clickventure.edit.service'
+  'bulbs.clickventure.edit.services.node'
 ])
   .directive('clickventureEditNodeSettings', function () {
     return {

@@ -5,7 +5,7 @@ angular.module('bulbs.clickventure.edit.link', [
   'bulbs.clickventure.edit.link.addPageModal.factory',
   'bulbs.clickventure.edit.link.service',
   'bulbs.clickventure.edit.nodeNameFilter',
-  'bulbs.clickventure.edit.service',
+  'bulbs.clickventure.edit.services.node',
   'uuid4'
 ])
   .directive('clickventureEditLink', [

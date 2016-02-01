@@ -149,7 +149,7 @@ angular.module('bulbs.clickventure.edit.icon.error', [
 'use strict';
 
 angular.module('bulbs.clickventure.edit.link.addPageModal.factory', [
-  'bulbs.clickventure.edit.service',
+  'bulbs.clickventure.edit.services.node',
   'ui.bootstrap.modal',
   'uuid4'
 ])
@@ -191,7 +191,7 @@ angular.module('bulbs.clickventure.edit.link', [
   'bulbs.clickventure.edit.icon.error',
   'bulbs.clickventure.edit.link.addPageModal.factory',
   'bulbs.clickventure.edit.nodeNameFilter',
-  'bulbs.clickventure.edit.service',
+  'bulbs.clickventure.edit.services.node',
   'uuid4'
 ])
   .directive('clickventureEditLink', [
@@ -277,7 +277,7 @@ angular.module('bulbs.clickventure.edit.link', [
 
 angular.module('bulbs.clickventure.edit.node.container', [
   'bulbs.clickventure.edit.configPages.service',
-  'bulbs.clickventure.edit.service'
+  'bulbs.clickventure.edit.services.node'
 ])
   .directive('clickventureEditNodeContainer', [
     function () {
@@ -328,7 +328,7 @@ angular.module('bulbs.clickventure.edit.node.container', [
 angular.module('bulbs.clickventure.edit.node.copy', [
   'bulbs.clickventure.edit.link',
   'bulbs.clickventure.edit.node.container',
-  'bulbs.clickventure.edit.service',
+  'bulbs.clickventure.edit.services.node',
   'bulbs.clickventure.edit.icon.error'
 ])
   .directive('clickventureEditNodeCopy', [
@@ -378,7 +378,7 @@ angular.module('bulbs.clickventure.edit.nodeList.node', [
 angular.module('bulbs.clickventure.edit.nodeList', [
   'bulbs.clickventure.edit.configPages.service',
   'bulbs.clickventure.edit.nodeList.node',
-  'bulbs.clickventure.edit.service',
+  'bulbs.clickventure.edit.services.node',
   'bulbs.clickventure.edit.validator.service',
   'uuid4'
 ])
@@ -521,7 +521,7 @@ angular.module('bulbs.clickventure.edit.node.settings', [
   'confirmationModal.factory',
   'bulbs.clickventure.edit.node.container',
   'bulbs.clickventure.edit.nodeNameFilter',
-  'bulbs.clickventure.edit.service'
+  'bulbs.clickventure.edit.services.node'
 ])
   .directive('clickventureEditNodeSettings', function () {
     return {
@@ -557,7 +557,7 @@ angular.module('bulbs.clickventure.edit.node.settings', [
 
 angular.module('bulbs.clickventure.edit.nodeToolbar', [
   'bulbs.clickventure.edit.configPages.service',
-  'bulbs.clickventure.edit.service'
+  'bulbs.clickventure.edit.services.node'
 ])
   .directive('clickventureEditNodeToolbar', [
     function () {
@@ -601,7 +601,7 @@ angular.module('bulbs.clickventure.edit.node', [
     }
   ]);
 
-angular.module('bulbs.clickventure.edit.service', [
+angular.module('bulbs.clickventure.edit.services.node', [
   'lodash'
 ])
   .service('ClickventureEdit', [
@@ -992,7 +992,7 @@ angular.module('bulbs.clickventure.edit.toolFixture', [
   ]);
 
 angular.module('bulbs.clickventure.edit.validator.service', [
-  'bulbs.clickventure.edit.service',
+  'bulbs.clickventure.edit.services.node',
 ])
   .service('ClickventureEditValidator', [
     '$filter', 'ClickventureEdit',
@@ -1138,7 +1138,7 @@ angular.module('bulbs.clickventure.edit', [
   'bulbs.clickventure.edit.node',
   'bulbs.clickventure.edit.nodeList',
   'bulbs.clickventure.edit.nodeToolbar',
-  'bulbs.clickventure.edit.service',
+  'bulbs.clickventure.edit.services.node',
   'bulbs.clickventure.edit.toolFixture'
 ])
   .directive('clickventureEdit', [

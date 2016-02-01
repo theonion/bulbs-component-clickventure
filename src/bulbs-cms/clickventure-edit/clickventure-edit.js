@@ -2,7 +2,7 @@ angular.module('bulbs.clickventure.edit', [
   'bulbs.clickventure.edit.node',
   'bulbs.clickventure.edit.nodeList',
   'bulbs.clickventure.edit.nodeToolbar',
-  'bulbs.clickventure.edit.service',
+  'bulbs.clickventure.edit.services.node',
   'bulbs.clickventure.edit.toolFixture'
 ])
   .directive('clickventureEdit', [

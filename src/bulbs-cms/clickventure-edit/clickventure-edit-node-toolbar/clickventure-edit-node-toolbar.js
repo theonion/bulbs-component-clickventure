@@ -1,5 +1,5 @@
 angular.module('bulbs.clickventure.edit.nodeToolbar', [
-  'bulbs.clickventure.edit.service',
+  'bulbs.clickventure.edit.services.node',
   'bulbs.clickventure.edit.services.configPage'
 ])
   .directive('clickventureEditNodeToolbar', [

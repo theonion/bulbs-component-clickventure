@@ -14,8 +14,8 @@ angular.module('bulbs.clickventure.edit.node.container', [
           onConfigPageRender: '&',
         },
         controller: [
-          '$scope', '$timeout', 'ClickventureEdit', 'ClickventureEditConfigPages',
-          function ($scope, $timeout, ClickventureEdit, ClickventureEditConfigPages) {
+          '$rootScope', '$scope', '$timeout', 'ClickventureEdit', 'ClickventureEditConfigPages',
+          function ($rootScope, $scope, $timeout, ClickventureEdit, ClickventureEditConfigPages) {
             $scope.configPage = ClickventureEditConfigPages.getConfigPage($scope.configPageKey);
             $scope.nodeData = ClickventureEdit.getData();
 
@@ -41,6 +41,7 @@ angular.module('bulbs.clickventure.edit.node.container', [
                 $scope.nodeData.nodeActive,
                 $scope.selectedStatus
               )
+              $rootScope.$emit('bulbs.clickventure.edit.nodeList.searchNodes');
             };
           }
         ]

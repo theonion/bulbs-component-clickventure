@@ -5,5 +5,5 @@
 if [ "$1" == "--single-run" ] || [ "$1" == '-s' ]; then
   ./node_modules/.bin/grunt build_bulbs_cms_for_django
 else
-  ./node_modules/.bin/grunt watch
+  ./node_modules/.bin/grunt watch:dev
 fi

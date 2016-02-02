@@ -6,6 +6,15 @@ module.exports = {
   options: {
     atBegin: true,
   },
-  files: ['src/bulbs-cms/**/*'],
-  tasks: ['build_bulbs_cms_for_django']
+  dev: {
+    files: ['src/bulbs-cms/**/*'],
+    tasks: ['build_bulbs_cms_for_django']
+  },
+  test: {
+    files: ['src/bulbs-cms/**/*'],
+    tasks: [
+      'build_bulbs_cms_for_django',
+      'karma:unit:run'
+    ]
+  }
 };

@@ -1,4 +1,4 @@
-var path = require('path');
+const path = require('path');
 
 module.exports = function (config) {
   config.set({
@@ -14,6 +14,9 @@ module.exports = function (config) {
       path.join('bower_components', 'jquery', 'dist', 'jquery.js'),
       path.join('bower_components', 'lodash', 'lodash.js'),
       path.join('resources', 'js', 'testing', 'test-helper.js'),
+
+      path.join('.tmp', 'django-bulbs-cms-pre-1', 'templates.js'),
+
       path.join('src', 'bulbs-cms', '**', '*.js')
     ],
     browsers: ['PhantomJS']

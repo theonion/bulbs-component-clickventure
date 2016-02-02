@@ -21,9 +21,8 @@ module.exports = function (grunt) {
     }
   );
 
-  grunt.registerTask(
-    'build_bulbs_cms_for_django',
-    'Convert bulbs-cms project to pre-cms-separation django app.',
+  grunt.task.registerTask(
+    'bulbs_cms_pre_dist',
     [
       // clean out old files
       'clean:tmp',
@@ -32,7 +31,15 @@ module.exports = function (grunt) {
       'copy:bulbs_cms_to_django_app_pre_1_scripts',
       'copy:bulbs_cms_to_django_app_pre_1_styles',
       // put html into template file
-      'ngtemplates',
+      'ngtemplates'
+    ]
+  );
+
+  grunt.registerTask(
+    'build_bulbs_cms_for_django',
+    'Convert bulbs-cms project to pre-cms-separation django app.',
+    [
+      'bulbs_cms_pre_dist',
       // concat/compile files
       'concat:bulbs_cms_to_django_app_pre_2_scripts',
       'less:bulbs_cms_to_django_app_pre_2_styles',

@@ -13,7 +13,7 @@ module.exports = {
   test: {
     files: ['src/bulbs-cms/**/*'],
     tasks: [
-      'build_bulbs_cms_for_django',
+      'bulbs_cms_pre_dist',
       'karma:unit:run'
     ]
   }

@@ -65,11 +65,12 @@ angular.module('bulbs.clickventure.edit.services.configPage', [
 
       var changeConfigPage = function (configPage) {
         var activeConfigPage = getConfigPage(configPage);
-
-        data.configPageActive = activeConfigPage;
-        handlers.configPageChange.forEach(function (func) {
-          func(activeConfigPage);
-        });
+        if (activeConfigPage) {
+          data.configPageActive = activeConfigPage;
+          handlers.configPageChange.forEach(function (func) {
+            func(activeConfigPage);
+          });
+        };
       };
 
       changeConfigPage(data.configPages.settings);

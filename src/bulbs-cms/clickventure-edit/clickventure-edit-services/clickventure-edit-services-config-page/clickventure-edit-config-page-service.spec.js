@@ -46,6 +46,14 @@ describe('ClickventureEditConfigPages', function () {
       expect(configPage.statuses[configPage.statuses.length - 1])
         .to.equal('Image ready');
     });
+
+    it('should set the active config page to \'Settings\'', function () {
+      var settings = ClickventureEditConfigPages.getConfigPage('settings');
+
+      var activeConfigPage = ClickventureEditConfigPages.getActiveConfigPage();
+
+      expect(activeConfigPage).to.equal(settings);
+    });
   });
 
   describe('public interface', function () {
@@ -185,22 +193,46 @@ describe('ClickventureEditConfigPages', function () {
       });
     });
 
-    it('should have a method to get the currently active config page', function () {
+    describe('should have a method to change the active config page that', function () {
 
-      // TODO : add test code here
-      throw new Error('Not implemented yet.');
-    });
+      it('should change the active config page', function () {
+        var settings = ClickventureEditConfigPages.getConfigPage('settings');
+        var copy = ClickventureEditConfigPages.getConfigPage('copy');
 
-    it('should have a method to register a config page change handler', function () {
+        ClickventureEditConfigPages.changeConfigPage(settings);
 
-      // TODO : add test code here
-      throw new Error('Not implemented yet.');
-    });
+        expect(ClickventureEditConfigPages.getActiveConfigPage()).to.equal(settings);
 
-    it('should have a method to change the active config page', function () {
+        ClickventureEditConfigPages.changeConfigPage(copy);
 
-      // TODO : add test code here
-      throw new Error('Not implemented yet.');
+        expect(ClickventureEditConfigPages.getActiveConfigPage()).to.equal(copy);
+      });
+
+      it('should fire registered config page change handlers', function () {
+        var copy = ClickventureEditConfigPages.getConfigPage('copy');
+        var handlerPassedConfigPage = null;
+
+        ClickventureEditConfigPages.registerConfigPageChangeHandler(function (activeConfigPage) {
+          handlerPassedConfigPage = activeConfigPage;
+        });
+        ClickventureEditConfigPages.changeConfigPage(copy);
+
+        expect(handlerPassedConfigPage).to.equal(copy);
+      });
+
+      it('should do nothing when an invalid config page is given', function () {
+        var settings = ClickventureEditConfigPages.getConfigPage('settings');
+        var handlerRan = false;
+
+        ClickventureEditConfigPages.changeConfigPage(settings);
+        ClickventureEditConfigPages.registerConfigPageChangeHandler(function () {
+          handlerRan = true;
+        });
+        ClickventureEditConfigPages.changeConfigPage({});
+
+        expect(ClickventureEditConfigPages.getActiveConfigPage()).to.equal(settings);
+        expect(handlerRan).to.be.false;
+      });
     });
   });
 });

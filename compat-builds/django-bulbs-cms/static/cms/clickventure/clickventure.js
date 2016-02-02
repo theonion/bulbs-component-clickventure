@@ -181,7 +181,6 @@ angular.module('bulbs.clickventure.edit.services.configPage', [
     }
   ]);
 
-
 'use strict';
 
 angular.module('bulbs.clickventure.edit.icon.error', [

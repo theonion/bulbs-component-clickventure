@@ -1,39 +1,34 @@
-angular.module('bulbs.clickventure.edit.configPages.service', [
+angular.module('bulbs.clickventure.edit.services.configPage', [
+  'bulbs.clickventure.edit.services.configPage.factory',
   'lodash'
 ])
   .service('ClickventureEditConfigPages', [
-    '_',
-    function (_) {
+    '_', 'ClickventureEditConfigPage',
+    function (_, ClickventureEditConfigPage) {
+
+      var settings = new ClickventureEditConfigPage('Settings');
+
+      var copy = new ClickventureEditConfigPage('Copy');
+      copy
+        .addStatus('Copy status not set')
+        .addStatus('Needs first pass')
+        .addStatus('Needs copy edit')
+        .addStatus('Copy ready');
+
+      var photo = new ClickventureEditConfigPage('Image');
+      photo
+        .addStatus('Image status not set')
+        .addStatus('Needs image')
+        .addStatus('Needs photoshop/photoshoot')
+        .addStatus('Needs approval')
+        .addStatus('Image ready')
 
       var data = {
         configPageActive: null,
         configPages: {
-          settings: {
-            title: 'Settings',
-            order: 0,
-            statuses: []
-          },
-          copy: {
-            title: 'Copy',
-            order: 1,
-            statuses: [
-              'Copy status not set',
-              'Needs first pass',
-              'Needs copy edit',
-              'Copy ready'
-            ]
-          },
-          photo: {
-            title: 'Image',
-            order: 2,
-            statuses: [
-              'Image status not set',
-              'Needs image',
-              'Needs photoshop/photoshoot',
-              'Needs approval',
-              'Image ready'
-            ]
-          }
+          settings: settings,
+          copy: copy,
+          photo: photo
         }
       };
 
@@ -42,10 +37,14 @@ angular.module('bulbs.clickventure.edit.configPages.service', [
       };
 
       var _getVerifiedConfigPageKey = function (status) {
-        return Object.keys(data.configPages)
+        return getConfigPageKeys()
           .find(function (key) {
             return data.configPages[key].statuses.indexOf(status) >= 0;
           });
+      };
+
+      var getConfigPageKeys = function () {
+        return Object.keys(data.configPages);
       };
 
       var getConfigPage = function (configPage) {
@@ -53,7 +52,7 @@ angular.module('bulbs.clickventure.edit.configPages.service', [
 
         var key;
         if (type === 'object') {
-          key = Object.keys(data.configPages)
+          key = getConfigPageKeys()
             .find(function (key) {
               return data.configPages[key] === configPage;
             });
@@ -66,18 +65,22 @@ angular.module('bulbs.clickventure.edit.configPages.service', [
 
       var changeConfigPage = function (configPage) {
         var activeConfigPage = getConfigPage(configPage);
-
-        data.configPageActive = activeConfigPage;
-        handlers.configPageChange.forEach(function (func) {
-          func(activeConfigPage);
-        });
+        if (activeConfigPage) {
+          data.configPageActive = activeConfigPage;
+          handlers.configPageChange.forEach(function (func) {
+            func(activeConfigPage);
+          });
+        };
       };
 
       changeConfigPage(data.configPages.settings);
 
       return {
+        getConfigPageKeys: getConfigPageKeys,
+        getConfigPage: getConfigPage,
+        changeConfigPage: changeConfigPage,
         getOrderedConfigPages: function () {
-          return Object.keys(data.configPages)
+          return getConfigPageKeys()
             .sort(function (a, b) {
               return data.configPages[a].order - data.configPages[b].order;
             })
@@ -88,7 +91,8 @@ angular.module('bulbs.clickventure.edit.configPages.service', [
         setNodeStatus: function (node, status) {
           var configPageKey = _getVerifiedConfigPageKey(status);
           if (configPageKey) {
-            node.statuses[configPageKey] = status;
+            node.statuses[configPageKey] =
+              status === data.configPages[configPageKey].getUnsetStatus() ? '' : status;
           }
 
           return node;
@@ -113,17 +117,15 @@ angular.module('bulbs.clickventure.edit.configPages.service', [
           return Object.keys(data.configPages)
             .reduce(function (isComplete, configPageKey) {
               return isComplete &&
-                node.statuses[configPageKey] === _.last(data.configPages[configPageKey].statuses);
+                node.statuses[configPageKey] === data.configPages[configPageKey].getCompleteStatus();
             }, true);
         },
         getActiveConfigPage: function () {
           return data.configPageActive;
         },
-        getConfigPage: getConfigPage,
         registerConfigPageChangeHandler: function (func) {
           handlers.configPageChange.push(func);
-        },
-        changeConfigPage: changeConfigPage
+        }
       };
     }
   ]);

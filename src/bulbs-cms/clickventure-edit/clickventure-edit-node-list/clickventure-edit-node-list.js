@@ -1,8 +1,8 @@
 angular.module('bulbs.clickventure.edit.nodeList', [
-  'bulbs.clickventure.edit.configPages.service',
   'bulbs.clickventure.edit.nodeList.node',
-  'bulbs.clickventure.edit.service',
-  'bulbs.clickventure.edit.validator.service',
+  'bulbs.clickventure.edit.services.node',
+  'bulbs.clickventure.edit.services.configPage',
+  'bulbs.clickventure.edit.services.validator',
   'uuid4'
 ])
   .directive('clickventureEditNodeList', [
@@ -13,9 +13,9 @@ angular.module('bulbs.clickventure.edit.nodeList', [
         scope: {},
         require: '^clickventureEdit',
         controller: [
-          '$scope', 'ClickventureEdit', 'ClickventureEditConfigPages',
+          '$rootScope', '$scope', 'ClickventureEdit', 'ClickventureEditConfigPages',
             'ClickventureEditValidator', 'uuid4',
-          function ($scope, ClickventureEdit, ClickventureEditConfigPages,
+          function ($rootScope, $scope, ClickventureEdit, ClickventureEditConfigPages,
               ClickventureEditValidator, uuid4) {
 
             $scope.uuid = uuid4.generate();
@@ -70,6 +70,8 @@ angular.module('bulbs.clickventure.edit.nodeList', [
                 $scope.nodeList = $scope.nodeData.nodes;
               }
             };
+
+            $rootScope.$on('bulbs.clickventure.edit.nodeList.searchNodes', $scope.searchNodes);
 
             $scope.searchKeypress = function  (e) {
               if (e.keyCode === 27) {

@@ -1,7 +1,8 @@
 angular.module('bulbs.clickventure.edit.node.copy', [
   'bulbs.clickventure.edit.link',
+  'bulbs.clickventure.edit.services.node',
   'bulbs.clickventure.edit.node.container',
-  'bulbs.clickventure.edit.service',
+  'bulbs.clickventure.edit.node.title',
   'bulbs.clickventure.edit.icon.error'
 ])
   .directive('clickventureEditNodeCopy', [

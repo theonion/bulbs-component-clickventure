@@ -4,7 +4,7 @@ angular.module('bulbs.clickventure.edit.link', [
   'bulbs.clickventure.edit.icon.error',
   'bulbs.clickventure.edit.link.addPageModal.factory',
   'bulbs.clickventure.edit.nodeNameFilter',
-  'bulbs.clickventure.edit.service',
+  'bulbs.clickventure.edit.services.node',
   'uuid4'
 ])
   .directive('clickventureEditLink', [
@@ -18,10 +18,10 @@ angular.module('bulbs.clickventure.edit.link', [
         },
         require: '^clickventureNode',
         controller: [
-          '$q', '$scope', '$filter', 'ClickventureEdit', 'ClickventureEditLinkAddPageModal',
-            'ConfirmationModal', 'uuid4',
-          function ($q, $scope, $filter, ClickventureEdit, ClickventureEditLinkAddPageModal,
-              ConfirmationModal, uuid4) {
+          '$q', '$scope', '$filter', 'ClickventureEdit',
+            'ClickventureEditLinkAddPageModal', 'ConfirmationModal', 'uuid4',
+          function ($q, $scope, $filter, ClickventureEdit,
+              ClickventureEditLinkAddPageModal, ConfirmationModal, uuid4) {
 
             $scope.uuid = uuid4.generate();
 

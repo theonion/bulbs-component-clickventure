@@ -1,13 +1,13 @@
 'use strict';
 
 angular.module('bulbs.clickventure.edit.link.addPageModal.factory', [
-  'bulbs.clickventure.edit.service',
+  'bulbs.clickventure.edit.services.node',
   'ui.bootstrap.modal',
   'uuid4'
 ])
   .factory('ClickventureEditLinkAddPageModal', [
-    '$modal', 'uuid4',
-    function ($modal, uuid4) {
+    '$modal', 'uuid4', 'ClickventureEdit',
+    function ($modal, uuid4, ClickventureEdit) {
       var AddPageModal = function (scope) {
         var modal = $modal
           .open({

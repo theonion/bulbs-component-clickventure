@@ -1,39 +1,85 @@
-angular.module('bulbs.clickventure.edit.configPages.service', [
+angular.module('bulbs.clickventure.edit.services.configPage.factory', [
+  'lodash'
+])
+  .factory('ClickventureEditConfigPageError', [
+    function () {
+      function ClickventureEditConfigPageError (message) {
+        this.name = 'Error (ClickventureEditConfigPage)';
+        this.message = message || 'Something went wrong.';
+      };
+      ClickventureEditConfigPageError.prototype = Object.create(Error.prototype);
+
+      return ClickventureEditConfigPageError;
+    }
+  ])
+  .factory('ClickventureEditConfigPage', [
+    '_', 'ClickventureEditConfigPageError',
+    function (_, ClickventureEditConfigPageError) {
+
+      var _order = 0;
+
+      var _nextOrder = function () {
+        return _order++;
+      };
+
+      function ClickventureEditConfigPage (title) {
+        if (!_.isString(title)) {
+          throw new ClickventureEditConfigPageError('Must provide a config page title as a string');
+        }
+
+        this.title = title;
+        this.order = _nextOrder();
+        this.statuses = [];
+      };
+
+      ClickventureEditConfigPage.prototype.addStatus = function (title) {
+        this.statuses.push(title);
+        return this;
+      };
+
+      ClickventureEditConfigPage.prototype.getUnsetStatus = function () {
+        return this.statuses[0];
+      };
+
+      ClickventureEditConfigPage.prototype.getCompleteStatus = function () {
+        return this.statuses[this.statuses.length - 1];
+      };
+
+      return ClickventureEditConfigPage;
+    }
+  ]);
+
+angular.module('bulbs.clickventure.edit.services.configPage', [
+  'bulbs.clickventure.edit.services.configPage.factory',
   'lodash'
 ])
   .service('ClickventureEditConfigPages', [
-    '_',
-    function (_) {
+    '_', 'ClickventureEditConfigPage',
+    function (_, ClickventureEditConfigPage) {
+
+      var settings = new ClickventureEditConfigPage('Settings');
+
+      var copy = new ClickventureEditConfigPage('Copy');
+      copy
+        .addStatus('Copy status not set')
+        .addStatus('Needs first pass')
+        .addStatus('Needs copy edit')
+        .addStatus('Copy ready');
+
+      var photo = new ClickventureEditConfigPage('Image');
+      photo
+        .addStatus('Image status not set')
+        .addStatus('Needs image')
+        .addStatus('Needs photoshop/photoshoot')
+        .addStatus('Needs approval')
+        .addStatus('Image ready')
 
       var data = {
         configPageActive: null,
         configPages: {
-          settings: {
-            title: 'Settings',
-            order: 0,
-            statuses: []
-          },
-          copy: {
-            title: 'Copy',
-            order: 1,
-            statuses: [
-              'Copy status not set',
-              'Needs first pass',
-              'Needs copy edit',
-              'Copy ready'
-            ]
-          },
-          photo: {
-            title: 'Image',
-            order: 2,
-            statuses: [
-              'Image status not set',
-              'Needs image',
-              'Needs photoshop/photoshoot',
-              'Needs approval',
-              'Image ready'
-            ]
-          }
+          settings: settings,
+          copy: copy,
+          photo: photo
         }
       };
 
@@ -42,10 +88,14 @@ angular.module('bulbs.clickventure.edit.configPages.service', [
       };
 
       var _getVerifiedConfigPageKey = function (status) {
-        return Object.keys(data.configPages)
+        return getConfigPageKeys()
           .find(function (key) {
             return data.configPages[key].statuses.indexOf(status) >= 0;
           });
+      };
+
+      var getConfigPageKeys = function () {
+        return Object.keys(data.configPages);
       };
 
       var getConfigPage = function (configPage) {
@@ -53,7 +103,7 @@ angular.module('bulbs.clickventure.edit.configPages.service', [
 
         var key;
         if (type === 'object') {
-          key = Object.keys(data.configPages)
+          key = getConfigPageKeys()
             .find(function (key) {
               return data.configPages[key] === configPage;
             });
@@ -66,18 +116,22 @@ angular.module('bulbs.clickventure.edit.configPages.service', [
 
       var changeConfigPage = function (configPage) {
         var activeConfigPage = getConfigPage(configPage);
-
-        data.configPageActive = activeConfigPage;
-        handlers.configPageChange.forEach(function (func) {
-          func(activeConfigPage);
-        });
+        if (activeConfigPage) {
+          data.configPageActive = activeConfigPage;
+          handlers.configPageChange.forEach(function (func) {
+            func(activeConfigPage);
+          });
+        };
       };
 
       changeConfigPage(data.configPages.settings);
 
       return {
+        getConfigPageKeys: getConfigPageKeys,
+        getConfigPage: getConfigPage,
+        changeConfigPage: changeConfigPage,
         getOrderedConfigPages: function () {
-          return Object.keys(data.configPages)
+          return getConfigPageKeys()
             .sort(function (a, b) {
               return data.configPages[a].order - data.configPages[b].order;
             })
@@ -88,7 +142,8 @@ angular.module('bulbs.clickventure.edit.configPages.service', [
         setNodeStatus: function (node, status) {
           var configPageKey = _getVerifiedConfigPageKey(status);
           if (configPageKey) {
-            node.statuses[configPageKey] = status;
+            node.statuses[configPageKey] =
+              status === data.configPages[configPageKey].getUnsetStatus() ? '' : status;
           }
 
           return node;
@@ -113,17 +168,15 @@ angular.module('bulbs.clickventure.edit.configPages.service', [
           return Object.keys(data.configPages)
             .reduce(function (isComplete, configPageKey) {
               return isComplete &&
-                node.statuses[configPageKey] === _.last(data.configPages[configPageKey].statuses);
+                node.statuses[configPageKey] === data.configPages[configPageKey].getCompleteStatus();
             }, true);
         },
         getActiveConfigPage: function () {
           return data.configPageActive;
         },
-        getConfigPage: getConfigPage,
         registerConfigPageChangeHandler: function (func) {
           handlers.configPageChange.push(func);
-        },
-        changeConfigPage: changeConfigPage
+        }
       };
     }
   ]);
@@ -149,13 +202,13 @@ angular.module('bulbs.clickventure.edit.icon.error', [
 'use strict';
 
 angular.module('bulbs.clickventure.edit.link.addPageModal.factory', [
-  'bulbs.clickventure.edit.service',
+  'bulbs.clickventure.edit.services.node',
   'ui.bootstrap.modal',
   'uuid4'
 ])
   .factory('ClickventureEditLinkAddPageModal', [
-    '$modal', 'uuid4',
-    function ($modal, uuid4) {
+    '$modal', 'uuid4', 'ClickventureEdit',
+    function ($modal, uuid4, ClickventureEdit) {
       var AddPageModal = function (scope) {
         var modal = $modal
           .open({
@@ -191,7 +244,7 @@ angular.module('bulbs.clickventure.edit.link', [
   'bulbs.clickventure.edit.icon.error',
   'bulbs.clickventure.edit.link.addPageModal.factory',
   'bulbs.clickventure.edit.nodeNameFilter',
-  'bulbs.clickventure.edit.service',
+  'bulbs.clickventure.edit.services.node',
   'uuid4'
 ])
   .directive('clickventureEditLink', [
@@ -205,10 +258,10 @@ angular.module('bulbs.clickventure.edit.link', [
         },
         require: '^clickventureNode',
         controller: [
-          '$q', '$scope', '$filter', 'ClickventureEdit', 'ClickventureEditLinkAddPageModal',
-            'ConfirmationModal', 'uuid4',
-          function ($q, $scope, $filter, ClickventureEdit, ClickventureEditLinkAddPageModal,
-              ConfirmationModal, uuid4) {
+          '$q', '$scope', '$filter', 'ClickventureEdit',
+            'ClickventureEditLinkAddPageModal', 'ConfirmationModal', 'uuid4',
+          function ($q, $scope, $filter, ClickventureEdit,
+              ClickventureEditLinkAddPageModal, ConfirmationModal, uuid4) {
 
             $scope.uuid = uuid4.generate();
 
@@ -276,8 +329,8 @@ angular.module('bulbs.clickventure.edit.link', [
   );
 
 angular.module('bulbs.clickventure.edit.node.container', [
-  'bulbs.clickventure.edit.configPages.service',
-  'bulbs.clickventure.edit.service'
+  'bulbs.clickventure.edit.services.node',
+  'bulbs.clickventure.edit.services.configPage'
 ])
   .directive('clickventureEditNodeContainer', [
     function () {
@@ -291,33 +344,39 @@ angular.module('bulbs.clickventure.edit.node.container', [
           onConfigPageRender: '&',
         },
         controller: [
-          '$scope', '$timeout', 'ClickventureEdit', 'ClickventureEditConfigPages',
-          function ($scope, $timeout, ClickventureEdit, ClickventureEditConfigPages) {
+          '$rootScope', '$scope', '$timeout', 'ClickventureEdit', 'ClickventureEditConfigPages',
+          function ($rootScope, $scope, $timeout, ClickventureEdit, ClickventureEditConfigPages) {
             $scope.configPage = ClickventureEditConfigPages.getConfigPage($scope.configPageKey);
             $scope.nodeData = ClickventureEdit.getData();
+            $scope.selectedStatus = '';
 
             $scope.getActiveConfigPage = ClickventureEditConfigPages.getActiveConfigPage;
+
+            var configPageRender = function () {
+              $scope.selectedStatus = $scope.nodeData.nodeActive.statuses[$scope.configPageKey];
+              $scope.onConfigPageRender();
+            };
 
             ClickventureEditConfigPages.registerConfigPageChangeHandler(
               $timeout.bind(null, function () {
                 if (ClickventureEditConfigPages.getActiveConfigPage() === $scope.configPage) {
-                  $scope.onConfigPageRender();
+                  configPageRender();
                 }
               })
             );
 
             ClickventureEdit.registerSelectNodeHandler(
-              $timeout.bind(null, function () {
-                $scope.onConfigPageRender();
-              })
+              $timeout.bind(null, configPageRender)
             );
 
-            $scope.selectedStatus = '';
+            $scope.selectedStatus = $scope.nodeData.nodeActive &&
+              $scope.nodeData.nodeActive.statuses[$scope.configPageKey];
             $scope.setActiveNodeStatus = function () {
               ClickventureEditConfigPages.setNodeStatus(
                 $scope.nodeData.nodeActive,
-                $scope.selectedStatus
+                $scope.selectedStatus || $scope.getActiveConfigPage().statuses[0]
               )
+              $rootScope.$emit('bulbs.clickventure.edit.nodeList.searchNodes');
             };
           }
         ]
@@ -327,8 +386,9 @@ angular.module('bulbs.clickventure.edit.node.container', [
 
 angular.module('bulbs.clickventure.edit.node.copy', [
   'bulbs.clickventure.edit.link',
+  'bulbs.clickventure.edit.services.node',
   'bulbs.clickventure.edit.node.container',
-  'bulbs.clickventure.edit.service',
+  'bulbs.clickventure.edit.node.title',
   'bulbs.clickventure.edit.icon.error'
 ])
   .directive('clickventureEditNodeCopy', [
@@ -376,10 +436,10 @@ angular.module('bulbs.clickventure.edit.nodeList.node', [
   ]);
 
 angular.module('bulbs.clickventure.edit.nodeList', [
-  'bulbs.clickventure.edit.configPages.service',
   'bulbs.clickventure.edit.nodeList.node',
-  'bulbs.clickventure.edit.service',
-  'bulbs.clickventure.edit.validator.service',
+  'bulbs.clickventure.edit.services.node',
+  'bulbs.clickventure.edit.services.configPage',
+  'bulbs.clickventure.edit.services.validator',
   'uuid4'
 ])
   .directive('clickventureEditNodeList', [
@@ -390,9 +450,9 @@ angular.module('bulbs.clickventure.edit.nodeList', [
         scope: {},
         require: '^clickventureEdit',
         controller: [
-          '$scope', 'ClickventureEdit', 'ClickventureEditConfigPages',
+          '$rootScope', '$scope', 'ClickventureEdit', 'ClickventureEditConfigPages',
             'ClickventureEditValidator', 'uuid4',
-          function ($scope, ClickventureEdit, ClickventureEditConfigPages,
+          function ($rootScope, $scope, ClickventureEdit, ClickventureEditConfigPages,
               ClickventureEditValidator, uuid4) {
 
             $scope.uuid = uuid4.generate();
@@ -448,6 +508,8 @@ angular.module('bulbs.clickventure.edit.nodeList', [
               }
             };
 
+            $rootScope.$on('bulbs.clickventure.edit.nodeList.searchNodes', $scope.searchNodes);
+
             $scope.searchKeypress = function  (e) {
               if (e.keyCode === 27) {
                 // esc, clear
@@ -489,6 +551,7 @@ angular.module('bulbs.clickventure.edit.node.photo', [
   'bettyEditable',
   'bulbs.clickventure.edit.icon.error',
   'bulbs.clickventure.edit.node.container',
+  'bulbs.clickventure.edit.node.title',
   'uuid4'
 ])
   .directive('clickventureEditNodePhoto', [
@@ -520,8 +583,9 @@ angular.module('bulbs.clickventure.edit.node.photo', [
 angular.module('bulbs.clickventure.edit.node.settings', [
   'confirmationModal.factory',
   'bulbs.clickventure.edit.node.container',
+  'bulbs.clickventure.edit.node.title',
   'bulbs.clickventure.edit.nodeNameFilter',
-  'bulbs.clickventure.edit.service'
+  'bulbs.clickventure.edit.services.node'
 ])
   .directive('clickventureEditNodeSettings', function () {
     return {
@@ -555,9 +619,31 @@ angular.module('bulbs.clickventure.edit.node.settings', [
     };
   });
 
+angular.module('bulbs.clickventure.edit.node.title', [])
+  .directive('clickventureEditNodeTitle', [
+    function () {
+      return {
+        restrict: 'E',
+        templateUrl: 'clickventure-edit-node-title/clickventure-edit-node-title.html',
+        require: '^clickventureEdit',
+        scope: {
+          node: '='
+        },
+        controller: [
+          '$rootScope', '$scope',
+          function ($rootScope, $scope) {
+            $scope.nodeTitleChanged = function () {
+              $rootScope.$emit('bulbs.clickventure.edit.nodeList.searchNodes');
+            };
+          }
+        ]
+      };
+    }
+  ]);
+
 angular.module('bulbs.clickventure.edit.nodeToolbar', [
-  'bulbs.clickventure.edit.configPages.service',
-  'bulbs.clickventure.edit.service'
+  'bulbs.clickventure.edit.services.node',
+  'bulbs.clickventure.edit.services.configPage'
 ])
   .directive('clickventureEditNodeToolbar', [
     function () {
@@ -601,12 +687,45 @@ angular.module('bulbs.clickventure.edit.node', [
     }
   ]);
 
-angular.module('bulbs.clickventure.edit.service', [
+angular.module('bulbs.clickventure.edit.services.node.factory', [
+  'lodash'
+])
+  .factory('ClickventureEditNode', [
+    '_',
+    function (_) {
+
+      function ClickventureEditNode (props) {
+        _.assign(this, {
+          id: null,
+          body: '',
+          finish: false,
+          link_style: 'action',
+          links: [],
+          photo_description: '',
+          photo_final: null,
+          photo_note: '',
+          photo_placeholder_page_url: '',
+          photo_placeholder_url: '',
+          share_text: '',
+          shareable: false,
+          sister_pages: [],
+          start: false,
+          statuses: {},
+          title: ''
+        }, props);
+      };
+
+      return ClickventureEditNode;
+    }
+  ]);
+
+angular.module('bulbs.clickventure.edit.services.node', [
+  'bulbs.clickventure.edit.services.node.factory',
   'lodash'
 ])
   .service('ClickventureEdit', [
-    '_', '$filter',
-    function (_, $filter) {
+    '_', '$filter', 'ClickventureEditNode',
+    function (_, $filter, ClickventureEditNode) {
 
       var data = {
         nodeActive: null,
@@ -686,6 +805,16 @@ angular.module('bulbs.clickventure.edit.service', [
         return node;
       };
 
+      var updateInboundLinks = function (link) {
+        if (typeof link.to_node === 'number') {
+          var links = data.view[link.to_node].inboundLinks;
+
+          if (links.indexOf(link.from_node) < 0) {
+            links.push(link.from_node);
+          }
+        }
+      };
+
       var setNodes = function (nodes) {
         if (!_.isArray(nodes)) {
           nodes = [];
@@ -726,24 +855,10 @@ angular.module('bulbs.clickventure.edit.service', [
       };
 
       var addNode = function () {
-        var node = {
+        var node = new ClickventureEditNode({
           id: _getNextNodeId(),
-          body: '',
-          finish: false,
-          link_style: 'action',
-          links: [],
-          photo_description: '',
-          photo_final: null,
-          photo_note: null,
-          photo_placeholder_page_url: '',
-          photo_placeholder_url: '',
-          share_text: '',
-          shareable: false,
-          sister_pages: [],
-          start: data.nodes.length === 0,
-          statuses: {},
-          title: ''
-        };
+          start: data.nodes.length === 0
+        });
 
         var activeNodeIndex = data.nodes.indexOf(data.nodeActive);
         if (activeNodeIndex >= 0) {
@@ -876,54 +991,18 @@ angular.module('bulbs.clickventure.edit.service', [
         return _reindexNodes();
       };
 
-      var addLink = function (node) {
-        var link = {
-          body: '',
-          from_node: node.id,
-          to_node: null,
-          transition: '',
-          link_style: node.link_style,
-          float: false
-        };
-
-        node.links.push(link);
-
-        return link;
-      };
-
-      var updateInboundLinks = function (link) {
-        if (typeof link.to_node === 'number') {
-          var links = data.view[link.to_node].inboundLinks;
-
-          if (links.indexOf(link.from_node) < 0) {
-            links.push(link.from_node);
-          }
-        }
-      };
-
-      var reorderLink = function (node, indexFrom, indexTo) {
-        if (indexFrom >= 0 && indexTo >= 0 && indexTo < node.links.length) {
-          var link = node.links[indexFrom];
-          node.links.splice(indexFrom, 1);
-          node.links.splice(indexTo, 0, link);
-        }
-      };
-
-      var deleteLink = function (node, rmLink) {
-        var indexLinks = node.links.indexOf(rmLink);
-        node.links.splice(indexLinks, 1);
-
-        if (typeof rmLink.to_node !== 'number') {
-          var linksInbound = data.view[rmLink.to_node].inboundLinks;
-          var indexInbound = linksInbound.indexOf(rmLink.from_node);
-          linksInbound.splice(indexInbound, 1);
-        }
-      };
-
       return {
         getData: function () {
           return data;
         },
+        setNodes: setNodes,
+        addNode: addNode,
+        addAndSelectNode: addAndSelectNode,
+        reorderNode: reorderNode,
+        registerSelectNodeHandler: registerSelectNodeHandler,
+        selectNode: selectNode,
+        cloneNode: cloneNode,
+        deleteNode: deleteNode,
         getValidLinkStyles: function () {
           return [
             '',
@@ -943,56 +1022,44 @@ angular.module('bulbs.clickventure.edit.service', [
             'flipLeft'
           ];
         },
-        setNodes: setNodes,
-        addNode: addNode,
-        addAndSelectNode: addAndSelectNode,
-        reorderNode: reorderNode,
-        registerSelectNodeHandler: registerSelectNodeHandler,
-        selectNode: selectNode,
-        cloneNode: cloneNode,
-        deleteNode: deleteNode,
-        addLink: addLink,
+        addLink: function (node) {
+          var link = {
+            body: '',
+            from_node: node.id,
+            to_node: null,
+            transition: '',
+            link_style: node.link_style,
+            float: false
+          };
+
+          node.links.push(link);
+
+          return link;
+        },
         updateInboundLinks: updateInboundLinks,
-        reorderLink: reorderLink,
-        deleteLink: deleteLink
-      };
-    }
-  ]);
+        reorderLink: function (node, indexFrom, indexTo) {
+          if (indexFrom >= 0 && indexTo >= 0 && indexTo < node.links.length) {
+            var link = node.links[indexFrom];
+            node.links.splice(indexFrom, 1);
+            node.links.splice(indexTo, 0, link);
+          }
+        },
+        deleteLink: function (node, rmLink) {
+          var indexLinks = node.links.indexOf(rmLink);
+          node.links.splice(indexLinks, 1);
 
-angular.module('bulbs.clickventure.edit.toolFixture', [
-  'jquery'
-])
-  .directive('clickventureEditToolFixture', [
-    '$',
-    function ($) {
-      return {
-        restrict: 'A',
-        scope: false,
-        link: function (scope, elements) {
-          var $nav = $('nav-bar nav');
-
-          $(window).on('scroll resize', requestAnimationFrame.bind(null, function () {
-            var container = elements.parent();
-
-            if (container[0].getBoundingClientRect().top - $nav.height() <= 0) {
-              var padding = $nav.height();
-
-              elements.css('position', 'fixed');
-              elements.css('top', padding + 'px');
-              elements.css('z-index', 1000);
-            } else {
-              elements.css('position', '');
-              elements.css('top', '');
-              elements.css('z-index', '');
-            }
-          }));
+          if (typeof rmLink.to_node !== 'number') {
+            var linksInbound = data.view[rmLink.to_node].inboundLinks;
+            var indexInbound = linksInbound.indexOf(rmLink.from_node);
+            linksInbound.splice(indexInbound, 1);
+          }
         }
       };
     }
   ]);
 
-angular.module('bulbs.clickventure.edit.validator.service', [
-  'bulbs.clickventure.edit.service',
+angular.module('bulbs.clickventure.edit.services.validator', [
+  'bulbs.clickventure.edit.services.node',
 ])
   .service('ClickventureEditValidator', [
     '$filter', 'ClickventureEdit',
@@ -1134,11 +1201,43 @@ angular.module('bulbs.clickventure.edit.validator.service', [
     }
   ]);
 
+angular.module('bulbs.clickventure.edit.toolFixture', [
+  'jquery'
+])
+  .directive('clickventureEditToolFixture', [
+    '$',
+    function ($) {
+      return {
+        restrict: 'A',
+        scope: false,
+        link: function (scope, elements) {
+          var $nav = $('nav-bar nav');
+
+          $(window).on('scroll resize', requestAnimationFrame.bind(null, function () {
+            var container = elements.parent();
+
+            if (container[0].getBoundingClientRect().top - $nav.height() <= 0) {
+              var padding = $nav.height();
+
+              elements.css('position', 'fixed');
+              elements.css('top', padding + 'px');
+              elements.css('z-index', 1000);
+            } else {
+              elements.css('position', '');
+              elements.css('top', '');
+              elements.css('z-index', '');
+            }
+          }));
+        }
+      };
+    }
+  ]);
+
 angular.module('bulbs.clickventure.edit', [
   'bulbs.clickventure.edit.node',
   'bulbs.clickventure.edit.nodeList',
   'bulbs.clickventure.edit.nodeToolbar',
-  'bulbs.clickventure.edit.service',
+  'bulbs.clickventure.edit.services.node',
   'bulbs.clickventure.edit.toolFixture'
 ])
   .directive('clickventureEdit', [
@@ -1199,7 +1298,12 @@ angular.module('bulbs.clickventure.templates', []).run(['$templateCache', functi
 
 
   $templateCache.put('clickventure-edit-node-list/clickventure-edit-node-list.html',
-    "<div class=clickventure-edit-node-list-search ng-init=\"showFilters = false\"><div class=\"input-with-icon-container form-control\"><label><i class=\"fa fa-search\" ng-show=\"searchTerm.length === 0\"></i> <i ng-show=\"searchTerm.length > 0\"><button class=\"fa fa-times text-danger\" ng-click=\"searchTerm = ''; searchNodes()\"></button></i> <input placeholder=\"Search pages...\" ng-model=searchTerm ng-keyup=searchKeypress($event)> <i><button class=\"fa fa-filter\" ng-class=\"{'text-info': showFilters}\" ng-click=\"showFilters = !showFilters\"></button></i> <span class=text-muted>{{ nodeList.length }}/{{ nodeData.nodes.length }}</span></label></div><div class=\"clickventure-edit-node-list-search-filters form-horizontal\" ng-show=showFilters><div class=\"form-group form-group-sm\"><label class=\"control-label col-xs-4\" for=\"statusFilter{{ uuid }}\">Filter by</label><div class=col-xs-8><select id=\"statusFilter{{ uuid }}\" class=\"form-control input-sm\" ng-model=selectedFilter ng-change=searchNodes()><option value=\"\">No Filter</option><option value=\"{{ completeFilter }}\">{{ completeFilter }}</option><option value=\"{{ incompleteFilter }}\">{{ incompleteFilter }}</option><optgroup ng-repeat=\"configPage in configPages\" ng-if=\"configPage.statuses.length > 0\" label=\"{{ configPage.title }}\"><option ng-repeat=\"status in configPage.statuses\" value=\"{{ status }}\">{{ status }}</option></optgroup></select></div></div></div></div><ol><li ng-repeat=\"node in nodeList track by node.id\" ng-click=selectNode(node)><clickventure-edit-node-list-node node=node ng-class=\"{'clickventure-edit-node-list-node-active': nodeData.nodeActive === node}\"><input class=clickventure-edit-node-list-node-tools-item ng-model=nodeData.view[node.id].order ng-pattern=\"/^[1-9]{1}[0-9]*$/\" ng-keyup=\"$event.which === 13 && reorderNode($index, nodeData.view[node.id].order - 1)\" ng-blur=\"reorderNode($index, nodeData.view[node.id].order - 1)\"> <button class=\"btn btn-link btn-xs clickventure-edit-node-list-node-tools-item\" ng-click=\"reorderNode($index, $index - 1)\" ng-disabled=$first><span class=\"fa fa-chevron-up\"></span></button> <button class=\"btn btn-link btn-xs clickventure-edit-node-list-node-tools-item\" ng-click=\"reorderNode($index, $index + 1)\" ng-disabled=$last><span class=\"fa fa-chevron-down\"></span></button></clickventure-edit-node-list-node></li><li ng-show=\"nodeList.length === 0\" class=text-info><span class=\"fa fa-info-circle\"></span> <span>No results. Try a different search term or clear the search bar to see all pages again.</span></li></ol><div class=clickventure-edit-node-list-tools><button class=\"btn btn-primary\" ng-click=addAndSelectNode()><span class=\"fa fa-plus\"></span> <span>New Page</span></button> <button class=\"btn btn-default\" ng-click=validateGraph()><span class=\"fa fa-check\"></span> <span>Run Check</span></button></div>"
+    "<div class=clickventure-edit-node-list-search ng-init=\"showFilters = false\"><div class=\"input-with-icon-container form-control\"><label><i class=\"fa fa-search\" ng-show=\"searchTerm.length === 0\"></i> <i ng-show=\"searchTerm.length > 0\"><button class=\"fa fa-times text-danger\" ng-click=\"searchTerm = ''; searchNodes()\"></button></i> <input placeholder=\"Search pages...\" ng-model=searchTerm ng-keyup=searchKeypress($event)> <i><button class=\"fa fa-filter\" ng-class=\"{'text-info': showFilters}\" ng-click=\"showFilters = !showFilters\"></button></i> <span class=text-muted>{{ nodeList.length }}/{{ nodeData.nodes.length }}</span></label></div><div class=\"clickventure-edit-node-list-search-filters form-horizontal\" ng-show=showFilters><div class=\"form-group form-group-sm\"><label class=\"control-label col-xs-4\" for=\"statusFilter{{ uuid }}\">Filter by</label><div class=col-xs-8><select id=\"statusFilter{{ uuid }}\" class=\"form-control input-sm\" ng-model=selectedFilter ng-change=searchNodes()><option value=\"\">No Filter</option><option value=\"{{ completeFilter }}\">{{ completeFilter }}</option><option value=\"{{ incompleteFilter }}\">{{ incompleteFilter }}</option><optgroup ng-repeat=\"configPage in configPages\" ng-if=\"configPage.statuses.length > 0\" label=\"{{ configPage.title }}\"><option ng-repeat=\"status in configPage.statuses\" value=\"{{ status }}\">{{ status }}</option></optgroup></select></div></div></div></div><ol><li ng-repeat=\"node in nodeList track by node.id\" ng-click=selectNode(node)><clickventure-edit-node-list-node node=node ng-class=\"{'clickventure-edit-node-list-node-active': nodeData.nodeActive === node}\"><input class=clickventure-edit-node-list-node-tools-item ng-model=nodeData.view[node.id].order ng-pattern=\"/^[1-9]{1}[0-9]*$/\" ng-keyup=\"$event.which === 13 && reorderNode($index, nodeData.view[node.id].order - 1)\" ng-blur=\"reorderNode($index, nodeData.view[node.id].order - 1)\"> <button class=\"btn btn-link btn-xs clickventure-edit-node-list-node-tools-item\" ng-click=\"reorderNode($index, $index - 1)\" ng-disabled=$first><span class=\"fa fa-chevron-up\"></span></button> <button class=\"btn btn-link btn-xs clickventure-edit-node-list-node-tools-item\" ng-click=\"reorderNode($index, $index + 1)\" ng-disabled=$last><span class=\"fa fa-chevron-down\"></span></button></clickventure-edit-node-list-node></li><li ng-show=\"nodeList.length === 0\" class=text-info><span class=\"fa fa-info-circle\"></span> <span>No results. Try a different search term and filter or clear the search bar and clear all filters to see all pages again.</span></li></ol><div class=clickventure-edit-node-list-tools><button class=\"btn btn-primary\" ng-click=addAndSelectNode()><span class=\"fa fa-plus\"></span> <span>New Page</span></button> <button class=\"btn btn-default\" ng-click=validateGraph()><span class=\"fa fa-check\"></span> <span>Run Check</span></button></div>"
+  );
+
+
+  $templateCache.put('clickventure-edit-node-title/clickventure-edit-node-title.html',
+    "<label for=nodePageName>Page Name (Internal Use)</label><input id=nodePageName class=form-control placeholder=\"Page Name (Internal Use)\" ng-model=node.title ng-change=nodeTitleChanged()>"
   );
 
 
@@ -1217,7 +1321,7 @@ angular.module('bulbs.clickventure.templates', []).run(['$templateCache', functi
 
 
   $templateCache.put('clickventure-edit-node/clickventure-edit-node-copy/clickventure-edit-node-copy.html',
-    "<clickventure-edit-node-container config-page-key=copy on-config-page-render=onConfigPageActive()><div class=\"row form-group\"><div class=col-xs-12><label for=nodePageName>Page Name (Internal Use)</label><input id=nodePageName class=form-control placeholder=\"Page Name (Internal Use)\" ng-model=node.title></div></div><div class=row><div class=col-xs-12><label>Page Body</label><onion-editor ng-model=node.body role=multiline placeholder=\"Body (displays on site)\"></onion-editor></div></div><div class=row><h4 class=col-xs-12>Links</h4><div class=\"form-group col-xs-4\"><button class=\"btn btn-success\" ng-click=addLink(node)><span class=\"fa fa-plus\"></span> <span>Add Link</span></button></div><div class=\"form-group col-xs-8\"><div class=\"form-inline pull-right\"><label for=nodeDefaultLinkStyle>Default Link Style</label><select id=nodeDefaultLinkStyle class=form-control ng-options=\"style.toLowerCase() as style for style in linkStyles\" ng-model=node.link_style></select></div></div></div><div class=row><ol class=col-xs-12 ng-show=\"node.links.length > 0\"><li ng-repeat=\"link in node.links track by $index\" ng-init=\"linkOpen = true\" class=\"clearfix panel panel-default\"><div class=panel-heading><button class=\"btn btn-link btn-xs panel-title\" ng-click=\"linkOpen = !linkOpen\"><span class=\"fa fa-caret-right\" ng-class=\"{\n" +
+    "<clickventure-edit-node-container config-page-key=copy on-config-page-render=onConfigPageActive()><div class=\"row form-group\"><div class=col-xs-12><clickventure-edit-node-title node=node></clickventure-edit-node-title></div></div><div class=row><div class=col-xs-12><label>Page Body</label><onion-editor ng-model=node.body role=multiline placeholder=\"Body (displays on site)\"></onion-editor></div></div><div class=row><h4 class=col-xs-12>Links</h4><div class=\"form-group col-xs-4\"><button class=\"btn btn-success\" ng-click=addLink(node)><span class=\"fa fa-plus\"></span> <span>Add Link</span></button></div><div class=\"form-group col-xs-8\"><div class=\"form-inline pull-right\"><label for=nodeDefaultLinkStyle>Default Link Style</label><select id=nodeDefaultLinkStyle class=form-control ng-options=\"style.toLowerCase() as style for style in linkStyles\" ng-model=node.link_style></select></div></div></div><div class=row><ol class=col-xs-12 ng-show=\"node.links.length > 0\"><li ng-repeat=\"link in node.links track by $index\" ng-init=\"linkOpen = true\" class=\"clearfix panel panel-default\"><div class=panel-heading><button class=\"btn btn-link btn-xs panel-title\" ng-click=\"linkOpen = !linkOpen\"><span class=\"fa fa-caret-right\" ng-class=\"{\n" +
     "                  'fa-caret-right': !linkOpen,\n" +
     "                  'fa-caret-down': linkOpen\n" +
     "                }\"></span> <span><span ng-show=\"link.body.length > 0\"><span>{{ link.body | limitTo:25 }}</span><span ng-show=\"link.body.length > 25\">...</span></span> <span ng-show=\"link.body.length === 0\">Link {{ $index + 1 }}</span></span><clickventure-edit-icon-error ng-show=!link.to_node error-text=\"This link doesn't link to another page!\"></clickventure-edit-icon-error></button><div class=\"btn-group pull-right\"><button class=\"btn btn-link btn-xs\" ng-click=\"reorderLink(node, $index, $index + 1)\" ng-disabled=$last><span class=\"fa fa-chevron-down\"></span></button> <button class=\"btn btn-link btn-xs\" ng-click=\"reorderLink(node, $index, $index - 1)\" ng-disabled=\"$index === 0\"><span class=\"fa fa-chevron-up\"></span></button></div></div><div class=panel-body ng-show=linkOpen><clickventure-edit-link node=node link=link></clickventure-edit-link></div></li></ol><div class=col-xs-12 ng-show=\"node.links.length === 0\">No outbound links yet, click \"Add Link\" to add the first one.</div></div></clickventure-edit-node-container>"
@@ -1225,13 +1329,13 @@ angular.module('bulbs.clickventure.templates', []).run(['$templateCache', functi
 
 
   $templateCache.put('clickventure-edit-node/clickventure-edit-node-photo/clickventure-edit-node-photo.html',
-    "<clickventure-edit-node-container config-page-key=photo on-config-page-render=onConfigPageActive()><form name=formNodePhoto><div class=\"row form-group\"><div class=col-xs-12><label for=nodePageName>Page Name (Internal Use)</label><input id=nodePageName class=form-control placeholder=\"Page Name (Internal Use)\" ng-model=node.title></div></div><div class=row><label class=\"form-group col-xs-12\"><span>Image</span><betty-editable image=node.photo_final ratio=16x9 add-styles=\"fa fa-picture-o add-image-box clickventure-photo-box\"></betty-editable></label></div><div class=\"row form-group\"><div class=col-xs-8><div class=form-group ng-class=\"{'has-error': !formNodePhoto.photoPlaceholderUrl.$valid}\"><label class=control-label for=\"photoPlaceholderUrl{{ uuid }}\"><span>Stock/Placeholder Image URL</span><clickventure-edit-icon-error ng-show=!formNodePhoto.photoPlaceholderUrl.$valid error-text=\"Invalid URL! Valid URLs start with http:// or https://\"></clickventure-edit-icon-error></label><input id=\"photoPlaceholderUrl{{ uuid }}\" type=url class=form-control name=photoPlaceholderUrl ng-model=node.photo_placeholder_url></div><div class=form-group ng-class=\"{'has-error': !formNodePhoto.photoPlaceholderPageUrl.$valid}\"><label class=control-label for=\"photoPlaceholderPageUrl{{ uuid }}\"><span>Stock/Placeholder Image Page URL</span><clickventure-edit-icon-error ng-show=!formNodePhoto.photoPlaceholderPageUrl.$valid error-text=\"Invalid URL! Valid URLs start with http:// or https://\"></clickventure-edit-icon-error></label><input id=\"photoPlaceholderPageUrl{{ uuid }}\" type=url class=form-control name=photoPlaceholderPageUrl ng-model=node.photo_placeholder_page_url></div></div><div class=\"col-xs-4 form-group\"><label>Preview</label><div class=clickventure-photo-placeholder-preview><span class=\"fa fa-picture-o\" ng-if=!node.photo_placeholder_url></span> <img ng-if=node.photo_placeholder_url ng-src=\"{{ node.photo_placeholder_url }}\"></div></div></div><div class=row><div class=\"col-xs-12 form-group\"><label for=\"photoDescription{{ uuid }}\">Description</label><textarea id=\"photoDescription{{ uuid }}\" class=\"form-control clickventure-textarea-vertical\" ng-model=node.photo_description>\n" +
+    "<clickventure-edit-node-container config-page-key=photo on-config-page-render=onConfigPageActive()><form name=formNodePhoto><div class=\"row form-group\"><div class=col-xs-12><clickventure-edit-node-title node=node></clickventure-edit-node-title></div></div><div class=row><label class=\"form-group col-xs-12\"><span>Image</span><betty-editable image=node.photo_final ratio=16x9 add-styles=\"fa fa-picture-o add-image-box clickventure-photo-box\"></betty-editable></label></div><div class=\"row form-group\"><div class=col-xs-8><div class=form-group ng-class=\"{'has-error': !formNodePhoto.photoPlaceholderUrl.$valid}\"><label class=control-label for=\"photoPlaceholderUrl{{ uuid }}\"><span>Stock/Placeholder Image URL</span><clickventure-edit-icon-error ng-show=!formNodePhoto.photoPlaceholderUrl.$valid error-text=\"Invalid URL! Valid URLs start with http:// or https://\"></clickventure-edit-icon-error></label><input id=\"photoPlaceholderUrl{{ uuid }}\" type=url class=form-control name=photoPlaceholderUrl ng-model=node.photo_placeholder_url></div><div class=form-group ng-class=\"{'has-error': !formNodePhoto.photoPlaceholderPageUrl.$valid}\"><label class=control-label for=\"photoPlaceholderPageUrl{{ uuid }}\"><span>Stock/Placeholder Image Page URL</span><clickventure-edit-icon-error ng-show=!formNodePhoto.photoPlaceholderPageUrl.$valid error-text=\"Invalid URL! Valid URLs start with http:// or https://\"></clickventure-edit-icon-error></label><input id=\"photoPlaceholderPageUrl{{ uuid }}\" type=url class=form-control name=photoPlaceholderPageUrl ng-model=node.photo_placeholder_page_url></div></div><div class=\"col-xs-4 form-group\"><label>Preview</label><div class=clickventure-photo-placeholder-preview><span class=\"fa fa-picture-o\" ng-if=!node.photo_placeholder_url></span> <img ng-if=node.photo_placeholder_url ng-src=\"{{ node.photo_placeholder_url }}\"></div></div></div><div class=row><div class=\"col-xs-12 form-group\"><label for=\"photoDescription{{ uuid }}\">Description</label><textarea id=\"photoDescription{{ uuid }}\" class=\"form-control clickventure-textarea-vertical\" ng-model=node.photo_description>\n" +
     "        </textarea></div></div><div class=row><div class=\"col-xs-12 form-group\"><label for=\"photoNote{{ uuid }}\">Image Note</label><input id=\"photoNote{{ uuid }}\" class=form-control ng-model=node.photo_note></div></div></form></clickventure-edit-node-container>"
   );
 
 
   $templateCache.put('clickventure-edit-node/clickventure-edit-node-settings/clickventure-edit-node-settings.html',
-    "<clickventure-edit-node-container config-page-key=settings><div class=\"row form-group\"><div class=col-xs-8><label for=nodePageName>Page Name (Internal Use)</label><input id=nodePageName class=form-control placeholder=\"Page Name (Internal Use)\" ng-model=node.title></div><div class=col-xs-4><button class=\"btn btn-primary form-button\" ng-click=cloneNode(node)><i class=\"fa fa-copy\"></i> <span>Clone Page</span></button></div></div><div class=\"row form-group\"><div class=col-xs-12><label>Select Page Type</label></div><div class=\"clearfix form-group\"><div class=\"btn-group col-xs-4\"><button class=btn ng-class=\"{\n" +
+    "<clickventure-edit-node-container config-page-key=settings><div class=\"row form-group\"><div class=col-xs-8><clickventure-edit-node-title node=node></clickventure-edit-node-title></div><div class=col-xs-4><button class=\"btn btn-primary form-button\" ng-click=cloneNode(node)><i class=\"fa fa-copy\"></i> <span>Clone Page</span></button></div></div><div class=\"row form-group\"><div class=col-xs-12><label>Select Page Type</label></div><div class=\"clearfix form-group\"><div class=\"btn-group col-xs-4\"><button class=btn ng-class=\"{\n" +
     "              'btn-info': node.start,\n" +
     "              'btn-default': !node.start\n" +
     "            }\" ng-click=\"node.start = !node.start; node.finish = false\"><span class=fa ng-class=\"{\n" +

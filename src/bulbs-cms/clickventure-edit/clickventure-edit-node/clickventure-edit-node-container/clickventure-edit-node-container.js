@@ -1,6 +1,6 @@
 angular.module('bulbs.clickventure.edit.node.container', [
-  'bulbs.clickventure.edit.configPages.service',
-  'bulbs.clickventure.edit.service'
+  'bulbs.clickventure.edit.services.node',
+  'bulbs.clickventure.edit.services.configPage'
 ])
   .directive('clickventureEditNodeContainer', [
     function () {
@@ -14,33 +14,39 @@ angular.module('bulbs.clickventure.edit.node.container', [
           onConfigPageRender: '&',
         },
         controller: [
-          '$scope', '$timeout', 'ClickventureEdit', 'ClickventureEditConfigPages',
-          function ($scope, $timeout, ClickventureEdit, ClickventureEditConfigPages) {
+          '$rootScope', '$scope', '$timeout', 'ClickventureEdit', 'ClickventureEditConfigPages',
+          function ($rootScope, $scope, $timeout, ClickventureEdit, ClickventureEditConfigPages) {
             $scope.configPage = ClickventureEditConfigPages.getConfigPage($scope.configPageKey);
             $scope.nodeData = ClickventureEdit.getData();
+            $scope.selectedStatus = '';
 
             $scope.getActiveConfigPage = ClickventureEditConfigPages.getActiveConfigPage;
+
+            var configPageRender = function () {
+              $scope.selectedStatus = $scope.nodeData.nodeActive.statuses[$scope.configPageKey];
+              $scope.onConfigPageRender();
+            };
 
             ClickventureEditConfigPages.registerConfigPageChangeHandler(
               $timeout.bind(null, function () {
                 if (ClickventureEditConfigPages.getActiveConfigPage() === $scope.configPage) {
-                  $scope.onConfigPageRender();
+                  configPageRender();
                 }
               })
             );
 
             ClickventureEdit.registerSelectNodeHandler(
-              $timeout.bind(null, function () {
-                $scope.onConfigPageRender();
-              })
+              $timeout.bind(null, configPageRender)
             );
 
-            $scope.selectedStatus = '';
+            $scope.selectedStatus = $scope.nodeData.nodeActive &&
+              $scope.nodeData.nodeActive.statuses[$scope.configPageKey];
             $scope.setActiveNodeStatus = function () {
               ClickventureEditConfigPages.setNodeStatus(
                 $scope.nodeData.nodeActive,
-                $scope.selectedStatus
+                $scope.selectedStatus || $scope.getActiveConfigPage().statuses[0]
               )
+              $rootScope.$emit('bulbs.clickventure.edit.nodeList.searchNodes');
             };
           }
         ]

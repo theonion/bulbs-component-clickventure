@@ -37,6 +37,14 @@ angular.module('bulbs.clickventure.edit.services.configPage.factory', [
         return this;
       };
 
+      ClickventureEditConfigPage.prototype.getUnsetStatus = function () {
+        return this.statuses[0];
+      };
+
+      ClickventureEditConfigPage.prototype.getCompleteStatus = function () {
+        return this.statuses[this.statuses.length - 1];
+      };
+
       return ClickventureEditConfigPage;
     }
   ]);

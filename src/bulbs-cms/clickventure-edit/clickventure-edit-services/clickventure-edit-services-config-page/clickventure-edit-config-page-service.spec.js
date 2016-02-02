@@ -83,7 +83,7 @@ describe('ClickventureEditConfigPages', function () {
 
       it('should work for a valid status', function () {
         var copy = ClickventureEditConfigPages.getConfigPage('copy');
-        var status = copy.statuses[0];
+        var status = copy.statuses[1];
 
         ClickventureEditConfigPages.setNodeStatus(node, status);
 
@@ -96,6 +96,15 @@ describe('ClickventureEditConfigPages', function () {
         ClickventureEditConfigPages.setNodeStatus(node, status);
 
         expect(node.statuses.copy).to.be.undefined;
+      });
+
+      it('should empty out the status for a config page on a node if set to the unset status', function () {
+        var copy = ClickventureEditConfigPages.getConfigPage('copy');
+        var status = copy.getUnsetStatus();
+
+        ClickventureEditConfigPages.setNodeStatus(node, status);
+
+        expect(node.statuses.copy).to.equal('');
       });
     });
 

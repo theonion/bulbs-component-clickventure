@@ -37,6 +37,14 @@ angular.module('bulbs.clickventure.edit.services.configPage.factory', [
         return this;
       };
 
+      ClickventureEditConfigPage.prototype.getUnsetStatus = function () {
+        return this.statuses[0];
+      };
+
+      ClickventureEditConfigPage.prototype.getCompleteStatus = function () {
+        return this.statuses[this.statuses.length - 1];
+      };
+
       return ClickventureEditConfigPage;
     }
   ]);
@@ -134,7 +142,8 @@ angular.module('bulbs.clickventure.edit.services.configPage', [
         setNodeStatus: function (node, status) {
           var configPageKey = _getVerifiedConfigPageKey(status);
           if (configPageKey) {
-            node.statuses[configPageKey] = status;
+            node.statuses[configPageKey] =
+              status === data.configPages[configPageKey].getUnsetStatus() ? '' : status;
           }
 
           return node;
@@ -159,7 +168,7 @@ angular.module('bulbs.clickventure.edit.services.configPage', [
           return Object.keys(data.configPages)
             .reduce(function (isComplete, configPageKey) {
               return isComplete &&
-                node.statuses[configPageKey] === _.last(data.configPages[configPageKey].statuses);
+                node.statuses[configPageKey] === data.configPages[configPageKey].getCompleteStatus();
             }, true);
         },
         getActiveConfigPage: function () {

@@ -1,5 +1,3 @@
-'use strict';
-
 angular.module('bulbs.clickventure.edit.icon.error', [
   'ui.bootstrap.tooltip',
 ])

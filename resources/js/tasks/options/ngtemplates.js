@@ -2,7 +2,6 @@
 /**
  * Creates a cachable templates js file for quick template access.
  */
-'use strict';
 
 module.exports = {
   templates: {

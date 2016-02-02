@@ -1,7 +1,6 @@
 /**
  * Copy files into necessary locations.
  */
-'use strict';
 
 module.exports = {
   bulbs_cms_to_django_app_pre_1_scripts: {

@@ -181,8 +181,6 @@ angular.module('bulbs.clickventure.edit.services.configPage', [
     }
   ]);
 
-'use strict';
-
 angular.module('bulbs.clickventure.edit.icon.error', [
   'ui.bootstrap.tooltip',
 ])
@@ -197,8 +195,6 @@ angular.module('bulbs.clickventure.edit.icon.error', [
       };
     }
   ]);
-
-'use strict';
 
 angular.module('bulbs.clickventure.edit.link.addPageModal.factory', [
   'bulbs.clickventure.edit.services.node',

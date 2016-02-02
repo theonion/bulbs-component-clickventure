@@ -1,7 +1,6 @@
 /**
  * Compile less to css.
  */
-'use strict';
 
 module.exports = {
   bulbs_cms_to_django_app_pre_2_styles: {

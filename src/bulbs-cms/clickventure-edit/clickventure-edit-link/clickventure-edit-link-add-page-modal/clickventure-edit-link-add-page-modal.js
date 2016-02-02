@@ -1,5 +1,3 @@
-'use strict';
-
 angular.module('bulbs.clickventure.edit.link.addPageModal.factory', [
   'bulbs.clickventure.edit.services.node',
   'ui.bootstrap.modal',

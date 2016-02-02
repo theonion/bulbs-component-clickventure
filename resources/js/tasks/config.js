@@ -1,7 +1,6 @@
 /**
  * Custom configuration variables to use in tasks and other grunt files.
  */
-'use strict';
 
 var grunt = require('grunt');
 

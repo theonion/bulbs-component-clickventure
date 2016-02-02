@@ -1,7 +1,6 @@
 /**
  * Watch files for changes and rebuild.
  */
-'use strict';
 
 module.exports = {
   options: {

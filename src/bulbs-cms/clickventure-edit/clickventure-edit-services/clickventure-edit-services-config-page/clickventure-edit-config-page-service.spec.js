@@ -1,5 +1,6 @@
 describe('ClickventureEditConfigPages', function () {
 
+  var ClickventureEditConfigPage;
   var ClickventureEditConfigPages;
   var ClickventureEditNode;
 
@@ -7,7 +8,10 @@ describe('ClickventureEditConfigPages', function () {
     module('bulbs.clickventure.edit.services.configPage');
     module('bulbs.clickventure.edit.services.node.factory');
 
-    inject(function (_ClickventureEditConfigPages_, _ClickventureEditNode_) {
+    inject(function (_ClickventureEditConfigPage_, _ClickventureEditConfigPages_,
+        _ClickventureEditNode_) {
+
+      ClickventureEditConfigPage = _ClickventureEditConfigPage_;
       ClickventureEditConfigPages = _ClickventureEditConfigPages_;
       ClickventureEditNode = _ClickventureEditNode_;
     });
@@ -52,6 +56,14 @@ describe('ClickventureEditConfigPages', function () {
       expect(pages[0]).to.deep.equal(ClickventureEditConfigPages.getConfigPage('settings'));
       expect(pages[1]).to.deep.equal(ClickventureEditConfigPages.getConfigPage('copy'));
       expect(pages[2]).to.deep.equal(ClickventureEditConfigPages.getConfigPage('photo'));
+    });
+
+    it('should have a method to get a single config page by key', function () {
+
+      var copy = ClickventureEditConfigPages.getConfigPage('copy');
+
+      expect(copy).not.to.be.undefined;
+      expect(copy instanceof ClickventureEditConfigPage);
     });
 
     describe('should have a method to set the status of a node that', function () {
@@ -174,12 +186,6 @@ describe('ClickventureEditConfigPages', function () {
     });
 
     it('should have a method to get the currently active config page', function () {
-
-      // TODO : add test code here
-      throw new Error('Not implemented yet.');
-    });
-
-    it('should have a method to get a single config page by key', function () {
 
       // TODO : add test code here
       throw new Error('Not implemented yet.');

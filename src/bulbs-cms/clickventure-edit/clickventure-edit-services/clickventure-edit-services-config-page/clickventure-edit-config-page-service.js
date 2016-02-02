@@ -76,6 +76,8 @@ angular.module('bulbs.clickventure.edit.services.configPage', [
 
       return {
         getConfigPageKeys: getConfigPageKeys,
+        getConfigPage: getConfigPage,
+        changeConfigPage: changeConfigPage,
         getOrderedConfigPages: function () {
           return getConfigPageKeys()
             .sort(function (a, b) {
@@ -119,11 +121,9 @@ angular.module('bulbs.clickventure.edit.services.configPage', [
         getActiveConfigPage: function () {
           return data.configPageActive;
         },
-        getConfigPage: getConfigPage,
         registerConfigPageChangeHandler: function (func) {
           handlers.configPageChange.push(func);
-        },
-        changeConfigPage: changeConfigPage
+        }
       };
     }
   ]);

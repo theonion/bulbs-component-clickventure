@@ -55,9 +55,13 @@ describe('ClickventureEditConfigPages', function () {
     });
 
     describe('should have a method to set the status of a node that', function () {
+      var node;
+
+      beforeEach(function () {
+        node = new ClickventureEditNode();
+      });
 
       it('should work for a valid status', function () {
-        var node = new ClickventureEditNode();
         var copy = ClickventureEditConfigPages.getConfigPage('copy');
         var status = copy.statuses[0];
 
@@ -67,7 +71,6 @@ describe('ClickventureEditConfigPages', function () {
       });
 
       it('should not work for an invalid status', function () {
-        var node = new ClickventureEditNode();
         var status = 'Not a real status';
 
         ClickventureEditConfigPages.setNodeStatus(node, status);
@@ -76,10 +79,58 @@ describe('ClickventureEditConfigPages', function () {
       });
     });
 
-    it('should have a method to check if a node has a particular status', function () {
+    describe('should have a method to check if a node has specific status that', function () {
+      var node;
 
-      // TODO : add test code here
-      throw new Error('Not implemented yet.');
+      beforeEach(function () {
+        node = new ClickventureEditNode();
+      });
+
+      it('should be true if it doesn\'t have the status, but the status being tested for is the first in the list of statuses for a config page', function () {
+        var copy = ClickventureEditConfigPages.getConfigPage('copy');
+        var status = copy.statuses[0];
+
+        var hasStatus = ClickventureEditConfigPages.nodeHasStatus(node, status);
+
+        expect(hasStatus).to.be.true;
+      });
+
+      it('should be true if it does have the first status in the list of statuses for a config page', function () {
+        var copy = ClickventureEditConfigPages.getConfigPage('copy');
+        var status = copy.statuses[0];
+
+        node.statuses.copy = status;
+        var hasStatus = ClickventureEditConfigPages.nodeHasStatus(node, status);
+
+        expect(hasStatus).to.be.true;
+      });
+
+      it('should be true if the node has that status', function () {
+        var copy = ClickventureEditConfigPages.getConfigPage('copy');
+        var status = copy.statuses[1];
+
+        node.statuses.copy = status;
+        var hasStatus = ClickventureEditConfigPages.nodeHasStatus(node, status);
+
+        expect(hasStatus).to.be.true;
+      });
+
+      it('should be false if the node does not have that status', function () {
+        var copy = ClickventureEditConfigPages.getConfigPage('copy');
+        var status = copy.statuses[1];
+
+        var hasStatus = ClickventureEditConfigPages.nodeHasStatus(node, status);
+
+        expect(hasStatus).to.be.false;
+      });
+
+      it('should be false if an invalid status is given', function () {
+        var status = 'Not a real status';
+
+        var hasStatus = ClickventureEditConfigPages.nodeHasStatus(node, status);
+
+        expect(hasStatus).to.be.false;
+      });
     });
 
     it('should have a method to determine if a node is "complete"', function () {

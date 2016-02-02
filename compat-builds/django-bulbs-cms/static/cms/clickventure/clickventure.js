@@ -1,39 +1,77 @@
-angular.module('bulbs.clickventure.edit.configPages.service', [
+angular.module('bulbs.clickventure.edit.services.configPage.factory', [
+  'lodash'
+])
+  .factory('ClickventureEditConfigPageError', [
+    function () {
+      function ClickventureEditConfigPageError (message) {
+        this.name = 'Error (ClickventureEditConfigPage)';
+        this.message = message || 'Something went wrong.';
+      };
+      ClickventureEditConfigPageError.prototype = Object.create(Error.prototype);
+
+      return ClickventureEditConfigPageError;
+    }
+  ])
+  .factory('ClickventureEditConfigPage', [
+    '_', 'ClickventureEditConfigPageError',
+    function (_, ClickventureEditConfigPageError) {
+
+      var _order = 0;
+
+      var _nextOrder = function () {
+        return _order++;
+      };
+
+      function ClickventureEditConfigPage (title) {
+        if (!_.isString(title)) {
+          throw new ClickventureEditConfigPageError('Must provide a config page title as a string');
+        }
+
+        this.title = title;
+        this.order = _nextOrder();
+        this.statuses = [];
+      };
+
+      ClickventureEditConfigPage.prototype.addStatus = function (title) {
+        this.statuses.push(title);
+        return this;
+      };
+
+      return ClickventureEditConfigPage;
+    }
+  ]);
+
+angular.module('bulbs.clickventure.edit.services.configPage', [
+  'bulbs.clickventure.edit.services.configPage.factory',
   'lodash'
 ])
   .service('ClickventureEditConfigPages', [
-    '_',
-    function (_) {
+    '_', 'ClickventureEditConfigPage',
+    function (_, ClickventureEditConfigPage) {
+
+      var settings = new ClickventureEditConfigPage('Settings');
+
+      var copy = new ClickventureEditConfigPage('Copy');
+      copy
+        .addStatus('Copy status not set')
+        .addStatus('Needs first pass')
+        .addStatus('Needs copy edit')
+        .addStatus('Copy ready');
+
+      var photo = new ClickventureEditConfigPage('Image');
+      photo
+        .addStatus('Image status not set')
+        .addStatus('Needs image')
+        .addStatus('Needs photoshop/photoshoot')
+        .addStatus('Needs approval')
+        .addStatus('Image ready')
 
       var data = {
         configPageActive: null,
         configPages: {
-          settings: {
-            title: 'Settings',
-            order: 0,
-            statuses: []
-          },
-          copy: {
-            title: 'Copy',
-            order: 1,
-            statuses: [
-              'Copy status not set',
-              'Needs first pass',
-              'Needs copy edit',
-              'Copy ready'
-            ]
-          },
-          photo: {
-            title: 'Image',
-            order: 2,
-            statuses: [
-              'Image status not set',
-              'Needs image',
-              'Needs photoshop/photoshoot',
-              'Needs approval',
-              'Image ready'
-            ]
-          }
+          settings: settings,
+          copy: copy,
+          photo: photo
         }
       };
 
@@ -42,10 +80,14 @@ angular.module('bulbs.clickventure.edit.configPages.service', [
       };
 
       var _getVerifiedConfigPageKey = function (status) {
-        return Object.keys(data.configPages)
+        return getConfigPageKeys()
           .find(function (key) {
             return data.configPages[key].statuses.indexOf(status) >= 0;
           });
+      };
+
+      var getConfigPageKeys = function () {
+        return Object.keys(data.configPages);
       };
 
       var getConfigPage = function (configPage) {
@@ -53,7 +95,7 @@ angular.module('bulbs.clickventure.edit.configPages.service', [
 
         var key;
         if (type === 'object') {
-          key = Object.keys(data.configPages)
+          key = getConfigPageKeys()
             .find(function (key) {
               return data.configPages[key] === configPage;
             });
@@ -66,18 +108,22 @@ angular.module('bulbs.clickventure.edit.configPages.service', [
 
       var changeConfigPage = function (configPage) {
         var activeConfigPage = getConfigPage(configPage);
-
-        data.configPageActive = activeConfigPage;
-        handlers.configPageChange.forEach(function (func) {
-          func(activeConfigPage);
-        });
+        if (activeConfigPage) {
+          data.configPageActive = activeConfigPage;
+          handlers.configPageChange.forEach(function (func) {
+            func(activeConfigPage);
+          });
+        };
       };
 
       changeConfigPage(data.configPages.settings);
 
       return {
+        getConfigPageKeys: getConfigPageKeys,
+        getConfigPage: getConfigPage,
+        changeConfigPage: changeConfigPage,
         getOrderedConfigPages: function () {
-          return Object.keys(data.configPages)
+          return getConfigPageKeys()
             .sort(function (a, b) {
               return data.configPages[a].order - data.configPages[b].order;
             })
@@ -119,14 +165,251 @@ angular.module('bulbs.clickventure.edit.configPages.service', [
         getActiveConfigPage: function () {
           return data.configPageActive;
         },
-        getConfigPage: getConfigPage,
         registerConfigPageChangeHandler: function (func) {
           handlers.configPageChange.push(func);
-        },
-        changeConfigPage: changeConfigPage
+        }
       };
     }
   ]);
+
+describe('ClickventureEditConfigPages', function () {
+
+  var ClickventureEditConfigPage;
+  var ClickventureEditConfigPages;
+  var ClickventureEditNode;
+
+  beforeEach(function () {
+    module('bulbs.clickventure.edit.services.configPage');
+    module('bulbs.clickventure.edit.services.node.factory');
+
+    inject(function (_ClickventureEditConfigPage_, _ClickventureEditConfigPages_,
+        _ClickventureEditNode_) {
+
+      ClickventureEditConfigPage = _ClickventureEditConfigPage_;
+      ClickventureEditConfigPages = _ClickventureEditConfigPages_;
+      ClickventureEditNode = _ClickventureEditNode_;
+    });
+  });
+
+  describe('initialization', function () {
+
+    it('should add a \'Settings\' page', function () {
+      var configPage = ClickventureEditConfigPages.getConfigPage('settings');
+
+      expect(configPage.title).to.equal('Settings');
+      expect(configPage.order).to.equal(0);
+      expect(configPage.statuses.length).to.equal(0);
+    });
+
+    it('should add a \'Copy\' page', function () {
+      var configPage = ClickventureEditConfigPages.getConfigPage('copy');
+
+      expect(configPage.title).to.equal('Copy');
+      expect(configPage.order).to.equal(1);
+      expect(configPage.statuses[0]).to.equal('Copy status not set');
+      expect(configPage.statuses[configPage.statuses.length - 1])
+        .to.equal('Copy ready');
+    });
+
+    it('should add a \'Image\' page', function () {
+      var configPage = ClickventureEditConfigPages.getConfigPage('photo');
+
+      expect(configPage.title).to.equal('Image');
+      expect(configPage.order).to.equal(2);
+      expect(configPage.statuses[0]).to.equal('Image status not set');
+      expect(configPage.statuses[configPage.statuses.length - 1])
+        .to.equal('Image ready');
+    });
+
+    it('should set the active config page to \'Settings\'', function () {
+      var settings = ClickventureEditConfigPages.getConfigPage('settings');
+
+      var activeConfigPage = ClickventureEditConfigPages.getActiveConfigPage();
+
+      expect(activeConfigPage).to.equal(settings);
+    });
+  });
+
+  describe('public interface', function () {
+
+    it('should have a method to get an ordered list of config pages', function () {
+      var pages = ClickventureEditConfigPages.getOrderedConfigPages();
+
+      expect(pages[0]).to.deep.equal(ClickventureEditConfigPages.getConfigPage('settings'));
+      expect(pages[1]).to.deep.equal(ClickventureEditConfigPages.getConfigPage('copy'));
+      expect(pages[2]).to.deep.equal(ClickventureEditConfigPages.getConfigPage('photo'));
+    });
+
+    it('should have a method to get a single config page by key', function () {
+
+      var copy = ClickventureEditConfigPages.getConfigPage('copy');
+
+      expect(copy).not.to.be.undefined;
+      expect(copy instanceof ClickventureEditConfigPage);
+    });
+
+    describe('should have a method to set the status of a node that', function () {
+      var node;
+
+      beforeEach(function () {
+        node = new ClickventureEditNode();
+      });
+
+      it('should work for a valid status', function () {
+        var copy = ClickventureEditConfigPages.getConfigPage('copy');
+        var status = copy.statuses[0];
+
+        ClickventureEditConfigPages.setNodeStatus(node, status);
+
+        expect(node.statuses.copy).to.equal(status);
+      });
+
+      it('should not work for an invalid status', function () {
+        var status = 'Not a real status';
+
+        ClickventureEditConfigPages.setNodeStatus(node, status);
+
+        expect(node.statuses.copy).to.be.undefined;
+      });
+    });
+
+    describe('should have a method to check if a node has specific status that', function () {
+      var node;
+
+      beforeEach(function () {
+        node = new ClickventureEditNode();
+      });
+
+      it('should be true if it doesn\'t have the status, but the status being tested for is the first in the list of statuses for a config page', function () {
+        var copy = ClickventureEditConfigPages.getConfigPage('copy');
+        var status = copy.statuses[0];
+
+        var hasStatus = ClickventureEditConfigPages.nodeHasStatus(node, status);
+
+        expect(hasStatus).to.be.true;
+      });
+
+      it('should be true if it does have the first status in the list of statuses for a config page', function () {
+        var copy = ClickventureEditConfigPages.getConfigPage('copy');
+        var status = copy.statuses[0];
+
+        node.statuses.copy = status;
+        var hasStatus = ClickventureEditConfigPages.nodeHasStatus(node, status);
+
+        expect(hasStatus).to.be.true;
+      });
+
+      it('should be true if the node has that status', function () {
+        var copy = ClickventureEditConfigPages.getConfigPage('copy');
+        var status = copy.statuses[1];
+
+        node.statuses.copy = status;
+        var hasStatus = ClickventureEditConfigPages.nodeHasStatus(node, status);
+
+        expect(hasStatus).to.be.true;
+      });
+
+      it('should be false if the node does not have that status', function () {
+        var copy = ClickventureEditConfigPages.getConfigPage('copy');
+        var status = copy.statuses[1];
+
+        var hasStatus = ClickventureEditConfigPages.nodeHasStatus(node, status);
+
+        expect(hasStatus).to.be.false;
+      });
+
+      it('should be false if an invalid status is given', function () {
+        var status = 'Not a real status';
+
+        var hasStatus = ClickventureEditConfigPages.nodeHasStatus(node, status);
+
+        expect(hasStatus).to.be.false;
+      });
+    });
+
+    describe('should have a method to determine if a node is "complete" that', function () {
+      var node;
+
+      beforeEach(function () {
+        node = new ClickventureEditNode();
+      });
+
+      it('should be true if a node has all of the last statuses of all config pages', function () {
+        var completeStatuses = ClickventureEditConfigPages
+          .getConfigPageKeys()
+          .forEach(function (key) {
+            var statuses = ClickventureEditConfigPages.getConfigPage(key).statuses;
+            node.statuses[key] = statuses[statuses.length - 1];
+          });
+
+        var isComplete = ClickventureEditConfigPages.nodeIsComplete(node);
+
+        expect(isComplete).to.be.true;
+      });
+
+      it('should be false if a node only has some of the last statuses of all config pages', function () {
+        var configPageKey = 'copy';
+        var statuses = ClickventureEditConfigPages.getConfigPage(configPageKey).statuses;
+        var status = statuses[statuses.length - 1];
+
+        node.statuses[configPageKey] = status;
+        var isComplete = ClickventureEditConfigPages.nodeIsComplete(node);
+
+        expect(isComplete).to.be.false;
+      });
+
+      it('should be false if a node has none of the last statuses of all config pages', function () {
+
+        node.statuses = {};
+        var isComplete = ClickventureEditConfigPages.nodeIsComplete(node);
+
+        expect(isComplete).to.be.false;
+      });
+    });
+
+    describe('should have a method to change the active config page that', function () {
+
+      it('should change the active config page', function () {
+        var settings = ClickventureEditConfigPages.getConfigPage('settings');
+        var copy = ClickventureEditConfigPages.getConfigPage('copy');
+
+        ClickventureEditConfigPages.changeConfigPage(settings);
+
+        expect(ClickventureEditConfigPages.getActiveConfigPage()).to.equal(settings);
+
+        ClickventureEditConfigPages.changeConfigPage(copy);
+
+        expect(ClickventureEditConfigPages.getActiveConfigPage()).to.equal(copy);
+      });
+
+      it('should fire registered config page change handlers', function () {
+        var copy = ClickventureEditConfigPages.getConfigPage('copy');
+        var handlerPassedConfigPage = null;
+
+        ClickventureEditConfigPages.registerConfigPageChangeHandler(function (activeConfigPage) {
+          handlerPassedConfigPage = activeConfigPage;
+        });
+        ClickventureEditConfigPages.changeConfigPage(copy);
+
+        expect(handlerPassedConfigPage).to.equal(copy);
+      });
+
+      it('should do nothing when an invalid config page is given', function () {
+        var settings = ClickventureEditConfigPages.getConfigPage('settings');
+        var handlerRan = false;
+
+        ClickventureEditConfigPages.changeConfigPage(settings);
+        ClickventureEditConfigPages.registerConfigPageChangeHandler(function () {
+          handlerRan = true;
+        });
+        ClickventureEditConfigPages.changeConfigPage({});
+
+        expect(ClickventureEditConfigPages.getActiveConfigPage()).to.equal(settings);
+        expect(handlerRan).to.be.false;
+      });
+    });
+  });
+});
 
 
 'use strict';
@@ -149,13 +432,14 @@ angular.module('bulbs.clickventure.edit.icon.error', [
 'use strict';
 
 angular.module('bulbs.clickventure.edit.link.addPageModal.factory', [
+  'bulbs.clickventure.edit.services.link',
   'bulbs.clickventure.edit.services.node',
   'ui.bootstrap.modal',
   'uuid4'
 ])
   .factory('ClickventureEditLinkAddPageModal', [
-    '$modal', 'uuid4',
-    function ($modal, uuid4) {
+    '$modal', 'uuid4', 'ClickventureEditLink',
+    function ($modal, uuid4, ClickventureEditLink) {
       var AddPageModal = function (scope) {
         var modal = $modal
           .open({
@@ -172,7 +456,7 @@ angular.module('bulbs.clickventure.edit.link.addPageModal.factory', [
                   newNode.title = $scope.pageTitle;
 
                   $scope.link.to_node = newNode.id;
-                  ClickventureEdit.updateInboundLinks($scope.link);
+                  ClickventureEditLink.updateInboundLinks($scope.link);
                 };
               }
             ],
@@ -190,6 +474,7 @@ angular.module('bulbs.clickventure.edit.link', [
   'confirmationModal.factory',
   'bulbs.clickventure.edit.icon.error',
   'bulbs.clickventure.edit.link.addPageModal.factory',
+  'bulbs.clickventure.edit.services.link',
   'bulbs.clickventure.edit.nodeNameFilter',
   'bulbs.clickventure.edit.services.node',
   'uuid4'
@@ -205,22 +490,22 @@ angular.module('bulbs.clickventure.edit.link', [
         },
         require: '^clickventureNode',
         controller: [
-          '$q', '$scope', '$filter', 'ClickventureEdit', 'ClickventureEditLinkAddPageModal',
-            'ConfirmationModal', 'uuid4',
-          function ($q, $scope, $filter, ClickventureEdit, ClickventureEditLinkAddPageModal,
-              ConfirmationModal, uuid4) {
+          '$q', '$scope', '$filter', 'ClickventureEdit', 'ClickventureEditLink',
+            'ClickventureEditLinkAddPageModal', 'ConfirmationModal', 'uuid4',
+          function ($q, $scope, $filter, ClickventureEdit, ClickventureEditLink,
+              ClickventureEditLinkAddPageModal, ConfirmationModal, uuid4) {
 
             $scope.uuid = uuid4.generate();
 
-            $scope.deleteLink = ClickventureEdit.deleteLink;
-            $scope.updateInboundLinks = ClickventureEdit.updateInboundLinks;
-            $scope.linkStyles = ClickventureEdit.getValidLinkStyles();
+            $scope.deleteLink = ClickventureEditLink.deleteLink;
+            $scope.updateInboundLinks = ClickventureEditLink.updateInboundLinks;
+            $scope.linkStyles = ClickventureEditLink.getValidLinkStyles();
             $scope.nodeData = ClickventureEdit.getData();
 
             $scope.deleteLink = function (node, link) {
               var modalScope = $scope.$new();
 
-              modalScope.modalOnOk = ClickventureEdit.deleteLink.bind(ClickventureEdit, node, link);
+              modalScope.modalOnOk = ClickventureEditLink.deleteLink.bind(ClickventureEdit, node, link);
               modalScope.modalOnCancel = function () {};
               modalScope.modalTitle = 'Confirm Link Delete';
               modalScope.modalBody = 'Are you sure you wish to delete this link? This action cannot be undone!';
@@ -276,8 +561,8 @@ angular.module('bulbs.clickventure.edit.link', [
   );
 
 angular.module('bulbs.clickventure.edit.node.container', [
-  'bulbs.clickventure.edit.configPages.service',
-  'bulbs.clickventure.edit.services.node'
+  'bulbs.clickventure.edit.services.node',
+  'bulbs.clickventure.edit.services.configPage'
 ])
   .directive('clickventureEditNodeContainer', [
     function () {
@@ -327,8 +612,8 @@ angular.module('bulbs.clickventure.edit.node.container', [
 
 angular.module('bulbs.clickventure.edit.node.copy', [
   'bulbs.clickventure.edit.link',
+  'bulbs.clickventure.edit.services.link',
   'bulbs.clickventure.edit.node.container',
-  'bulbs.clickventure.edit.services.node',
   'bulbs.clickventure.edit.icon.error'
 ])
   .directive('clickventureEditNodeCopy', [
@@ -342,11 +627,11 @@ angular.module('bulbs.clickventure.edit.node.copy', [
           node: '='
         },
         controller: [
-          '$scope', 'ClickventureEdit',
-          function ($scope, ClickventureEdit) {
-            $scope.addLink = ClickventureEdit.addLink;
-            $scope.linkStyles = ClickventureEdit.getValidLinkStyles();
-            $scope.reorderLink = ClickventureEdit.reorderLink;
+          '$scope', 'ClickventureEditLink',
+          function ($scope, ClickventureEditLink) {
+            $scope.addLink = ClickventureEditLink.addLink;
+            $scope.linkStyles = ClickventureEditLink.getValidLinkStyles();
+            $scope.reorderLink = ClickventureEditLink.reorderLink;
           }
         ],
         link: function (scope, elements) {
@@ -376,9 +661,9 @@ angular.module('bulbs.clickventure.edit.nodeList.node', [
   ]);
 
 angular.module('bulbs.clickventure.edit.nodeList', [
-  'bulbs.clickventure.edit.configPages.service',
   'bulbs.clickventure.edit.nodeList.node',
   'bulbs.clickventure.edit.services.node',
+  'bulbs.clickventure.edit.services.configPage',
   'bulbs.clickventure.edit.services.validator',
   'uuid4'
 ])
@@ -556,8 +841,8 @@ angular.module('bulbs.clickventure.edit.node.settings', [
   });
 
 angular.module('bulbs.clickventure.edit.nodeToolbar', [
-  'bulbs.clickventure.edit.configPages.service',
-  'bulbs.clickventure.edit.services.node'
+  'bulbs.clickventure.edit.services.node',
+  'bulbs.clickventure.edit.services.configPage'
 ])
   .directive('clickventureEditNodeToolbar', [
     function () {
@@ -601,12 +886,117 @@ angular.module('bulbs.clickventure.edit.node', [
     }
   ]);
 
+angular.module('bulbs.clickventure.edit.services.link', [
+  'lodash'
+])
+  .service('ClickventureEditLink', [
+    '_', '$filter',
+    function (_, $filter) {
+
+      return {
+        getValidLinkStyles: function () {
+          return [
+            '',
+            'Action',
+            'Dialogue',
+            'Music',
+            'Quiz'
+          ];
+        },
+        getValidNodeTransitions: function () {
+          return [
+            'default',
+            'slideLeft',
+            'slideRight',
+            'slideUp',
+            'slideDown',
+            'flipLeft'
+          ];
+        },
+        addLink: function (node) {
+          var link = {
+            body: '',
+            from_node: node.id,
+            to_node: null,
+            transition: '',
+            link_style: node.link_style,
+            float: false
+          };
+
+          node.links.push(link);
+
+          return link;
+        },
+        updateInboundLinks: function (link) {
+          if (typeof link.to_node === 'number') {
+            var links = data.view[link.to_node].inboundLinks;
+
+            if (links.indexOf(link.from_node) < 0) {
+              links.push(link.from_node);
+            }
+          }
+        },
+        reorderLink: function (node, indexFrom, indexTo) {
+          if (indexFrom >= 0 && indexTo >= 0 && indexTo < node.links.length) {
+            var link = node.links[indexFrom];
+            node.links.splice(indexFrom, 1);
+            node.links.splice(indexTo, 0, link);
+          }
+        },
+        deleteLink: function (node, rmLink) {
+          var indexLinks = node.links.indexOf(rmLink);
+          node.links.splice(indexLinks, 1);
+
+          if (typeof rmLink.to_node !== 'number') {
+            var linksInbound = data.view[rmLink.to_node].inboundLinks;
+            var indexInbound = linksInbound.indexOf(rmLink.from_node);
+            linksInbound.splice(indexInbound, 1);
+          }
+        }
+      };
+    }
+  ]);
+
+angular.module('bulbs.clickventure.edit.services.node.factory', [
+  'lodash'
+])
+  .factory('ClickventureEditNode', [
+    '_',
+    function (_) {
+
+      function ClickventureEditNode (props) {
+        _.assign(this, {
+          id: null,
+          body: '',
+          finish: false,
+          link_style: 'action',
+          links: [],
+          photo_description: '',
+          photo_final: null,
+          photo_note: '',
+          photo_placeholder_page_url: '',
+          photo_placeholder_url: '',
+          share_text: '',
+          shareable: false,
+          sister_pages: [],
+          start: false,
+          statuses: {},
+          title: ''
+        }, props);
+      };
+
+      return ClickventureEditNode;
+    }
+  ]);
+
 angular.module('bulbs.clickventure.edit.services.node', [
+  'bulbs.clickventure.edit.services.link',
+  'bulbs.clickventure.edit.services.node.factory',
   'lodash'
 ])
   .service('ClickventureEdit', [
-    '_', '$filter',
-    function (_, $filter) {
+    '_', '$filter', 'ClickventureEditNode', 'ClickventureEditLink',
+    function (_, $filter, ClickventureEditLink) {
 
       var data = {
         nodeActive: null,
@@ -715,7 +1105,7 @@ angular.module('bulbs.clickventure.edit.services.node', [
           // setup inboundLinks
           data.nodes.forEach(function (node) {
             node.links.forEach(function (link) {
-              updateInboundLinks(link);
+              ClickventureEditLink.updateInboundLinks(link);
             });
           });
 
@@ -726,24 +1116,10 @@ angular.module('bulbs.clickventure.edit.services.node', [
       };
 
       var addNode = function () {
-        var node = {
+        var node = new ClickventureEditNode({
           id: _getNextNodeId(),
-          body: '',
-          finish: false,
-          link_style: 'action',
-          links: [],
-          photo_description: '',
-          photo_final: null,
-          photo_note: null,
-          photo_placeholder_page_url: '',
-          photo_placeholder_url: '',
-          share_text: '',
-          shareable: false,
-          sister_pages: [],
-          start: data.nodes.length === 0,
-          statuses: {},
-          title: ''
-        };
+          start: data.nodes.length === 0
+        });
 
         var activeNodeIndex = data.nodes.indexOf(data.nodeActive);
         if (activeNodeIndex >= 0) {
@@ -814,7 +1190,7 @@ angular.module('bulbs.clickventure.edit.services.node', [
           var newLink = _.clone(link);
 
           newLink.from_node = clonedNode.id;
-          updateInboundLinks(newLink);
+          ClickventureEditLink.updateInboundLinks(newLink);
 
           return newLink;
         });
@@ -876,72 +1252,9 @@ angular.module('bulbs.clickventure.edit.services.node', [
         return _reindexNodes();
       };
 
-      var addLink = function (node) {
-        var link = {
-          body: '',
-          from_node: node.id,
-          to_node: null,
-          transition: '',
-          link_style: node.link_style,
-          float: false
-        };
-
-        node.links.push(link);
-
-        return link;
-      };
-
-      var updateInboundLinks = function (link) {
-        if (typeof link.to_node === 'number') {
-          var links = data.view[link.to_node].inboundLinks;
-
-          if (links.indexOf(link.from_node) < 0) {
-            links.push(link.from_node);
-          }
-        }
-      };
-
-      var reorderLink = function (node, indexFrom, indexTo) {
-        if (indexFrom >= 0 && indexTo >= 0 && indexTo < node.links.length) {
-          var link = node.links[indexFrom];
-          node.links.splice(indexFrom, 1);
-          node.links.splice(indexTo, 0, link);
-        }
-      };
-
-      var deleteLink = function (node, rmLink) {
-        var indexLinks = node.links.indexOf(rmLink);
-        node.links.splice(indexLinks, 1);
-
-        if (typeof rmLink.to_node !== 'number') {
-          var linksInbound = data.view[rmLink.to_node].inboundLinks;
-          var indexInbound = linksInbound.indexOf(rmLink.from_node);
-          linksInbound.splice(indexInbound, 1);
-        }
-      };
-
       return {
         getData: function () {
           return data;
-        },
-        getValidLinkStyles: function () {
-          return [
-            '',
-            'Action',
-            'Dialogue',
-            'Music',
-            'Quiz'
-          ];
-        },
-        getValidNodeTransitions: function () {
-          return [
-            'default',
-            'slideLeft',
-            'slideRight',
-            'slideUp',
-            'slideDown',
-            'flipLeft'
-          ];
         },
         setNodes: setNodes,
         addNode: addNode,
@@ -950,43 +1263,7 @@ angular.module('bulbs.clickventure.edit.services.node', [
         registerSelectNodeHandler: registerSelectNodeHandler,
         selectNode: selectNode,
         cloneNode: cloneNode,
-        deleteNode: deleteNode,
-        addLink: addLink,
-        updateInboundLinks: updateInboundLinks,
-        reorderLink: reorderLink,
-        deleteLink: deleteLink
-      };
-    }
-  ]);
-
-angular.module('bulbs.clickventure.edit.toolFixture', [
-  'jquery'
-])
-  .directive('clickventureEditToolFixture', [
-    '$',
-    function ($) {
-      return {
-        restrict: 'A',
-        scope: false,
-        link: function (scope, elements) {
-          var $nav = $('nav-bar nav');
-
-          $(window).on('scroll resize', requestAnimationFrame.bind(null, function () {
-            var container = elements.parent();
-
-            if (container[0].getBoundingClientRect().top - $nav.height() <= 0) {
-              var padding = $nav.height();
-
-              elements.css('position', 'fixed');
-              elements.css('top', padding + 'px');
-              elements.css('z-index', 1000);
-            } else {
-              elements.css('position', '');
-              elements.css('top', '');
-              elements.css('z-index', '');
-            }
-          }));
-        }
+        deleteNode: deleteNode
       };
     }
   ]);
@@ -1129,6 +1406,38 @@ angular.module('bulbs.clickventure.edit.services.validator', [
               validateAllCanFinish(nodes)) {
              alert('Looks great! The pages are fully linked.');
           }
+        }
+      };
+    }
+  ]);
+
+angular.module('bulbs.clickventure.edit.toolFixture', [
+  'jquery'
+])
+  .directive('clickventureEditToolFixture', [
+    '$',
+    function ($) {
+      return {
+        restrict: 'A',
+        scope: false,
+        link: function (scope, elements) {
+          var $nav = $('nav-bar nav');
+
+          $(window).on('scroll resize', requestAnimationFrame.bind(null, function () {
+            var container = elements.parent();
+
+            if (container[0].getBoundingClientRect().top - $nav.height() <= 0) {
+              var padding = $nav.height();
+
+              elements.css('position', 'fixed');
+              elements.css('top', padding + 'px');
+              elements.css('z-index', 1000);
+            } else {
+              elements.css('position', '');
+              elements.css('top', '');
+              elements.css('z-index', '');
+            }
+          }));
         }
       };
     }

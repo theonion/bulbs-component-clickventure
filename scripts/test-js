@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# Run javascript tests.
+
+if [ "$1" == "--single-run" ] || [ "$1" == '-s' ]; then
+  npm test -- --single-run
+else
+  npm test
+fi

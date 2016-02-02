@@ -78,19 +78,23 @@ To prep your environment for development:
 $ ./scripts/dev-setup
 ```
 
-### Testing
+### Testing javascript
 To run a continuous test:
 ```bash
-$ npm test
+$ ./scripts/test-js
 ```
 To do a single test run:
 ```bash
-$ npm test -- --single-run
+$ ./scripts/test-js --single-run
 ```
 
 ### Building
-To create a build for release:
+For continuous builds while you develop:
 ```bash
-$ grunt build_bulbs_cms_for_django
+./scripts/dev-start
+```
+or to run a single build, as in creating a build for release:
+```bash
+$ ./scripts/dev-start --single-run
 ```
 See [django-bulbs-cms Package](#django-bulbs-cms-package) section for more info.

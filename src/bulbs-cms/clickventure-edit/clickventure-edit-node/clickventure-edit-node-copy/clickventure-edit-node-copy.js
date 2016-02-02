@@ -1,6 +1,6 @@
 angular.module('bulbs.clickventure.edit.node.copy', [
   'bulbs.clickventure.edit.link',
-  'bulbs.clickventure.edit.services.link',
+  'bulbs.clickventure.edit.services.node',
   'bulbs.clickventure.edit.node.container',
   'bulbs.clickventure.edit.icon.error'
 ])
@@ -15,11 +15,11 @@ angular.module('bulbs.clickventure.edit.node.copy', [
           node: '='
         },
         controller: [
-          '$scope', 'ClickventureEditLink',
-          function ($scope, ClickventureEditLink) {
-            $scope.addLink = ClickventureEditLink.addLink;
-            $scope.linkStyles = ClickventureEditLink.getValidLinkStyles();
-            $scope.reorderLink = ClickventureEditLink.reorderLink;
+          '$scope', 'ClickventureEdit',
+          function ($scope, ClickventureEdit) {
+            $scope.addLink = ClickventureEdit.addLink;
+            $scope.linkStyles = ClickventureEdit.getValidLinkStyles();
+            $scope.reorderLink = ClickventureEdit.reorderLink;
           }
         ],
         link: function (scope, elements) {

@@ -1,14 +1,13 @@
 'use strict';
 
 angular.module('bulbs.clickventure.edit.link.addPageModal.factory', [
-  'bulbs.clickventure.edit.services.link',
   'bulbs.clickventure.edit.services.node',
   'ui.bootstrap.modal',
   'uuid4'
 ])
   .factory('ClickventureEditLinkAddPageModal', [
-    '$modal', 'uuid4', 'ClickventureEditLink',
-    function ($modal, uuid4, ClickventureEditLink) {
+    '$modal', 'uuid4', 'ClickventureEdit',
+    function ($modal, uuid4, ClickventureEdit) {
       var AddPageModal = function (scope) {
         var modal = $modal
           .open({
@@ -25,7 +24,7 @@ angular.module('bulbs.clickventure.edit.link.addPageModal.factory', [
                   newNode.title = $scope.pageTitle;
 
                   $scope.link.to_node = newNode.id;
-                  ClickventureEditLink.updateInboundLinks($scope.link);
+                  ClickventureEdit.updateInboundLinks($scope.link);
                 };
               }
             ],

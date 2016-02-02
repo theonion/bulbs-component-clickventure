@@ -1,11 +1,10 @@
 angular.module('bulbs.clickventure.edit.services.node', [
-  'bulbs.clickventure.edit.services.link',
   'bulbs.clickventure.edit.services.node.factory',
   'lodash'
 ])
   .service('ClickventureEdit', [
-    '_', '$filter', 'ClickventureEditNode', 'ClickventureEditLink',
-    function (_, $filter, ClickventureEditLink) {
+    '_', '$filter', 'ClickventureEditNode',
+    function (_, $filter, ClickventureEditNode) {
 
       var data = {
         nodeActive: null,
@@ -85,6 +84,16 @@ angular.module('bulbs.clickventure.edit.services.node', [
         return node;
       };
 
+      var updateInboundLinks = function (link) {
+        if (typeof link.to_node === 'number') {
+          var links = data.view[link.to_node].inboundLinks;
+
+          if (links.indexOf(link.from_node) < 0) {
+            links.push(link.from_node);
+          }
+        }
+      };
+
       var setNodes = function (nodes) {
         if (!_.isArray(nodes)) {
           nodes = [];
@@ -114,7 +123,7 @@ angular.module('bulbs.clickventure.edit.services.node', [
           // setup inboundLinks
           data.nodes.forEach(function (node) {
             node.links.forEach(function (link) {
-              ClickventureEditLink.updateInboundLinks(link);
+              updateInboundLinks(link);
             });
           });
 
@@ -199,7 +208,7 @@ angular.module('bulbs.clickventure.edit.services.node', [
           var newLink = _.clone(link);
 
           newLink.from_node = clonedNode.id;
-          ClickventureEditLink.updateInboundLinks(newLink);
+          updateInboundLinks(newLink);
 
           return newLink;
         });
@@ -272,7 +281,58 @@ angular.module('bulbs.clickventure.edit.services.node', [
         registerSelectNodeHandler: registerSelectNodeHandler,
         selectNode: selectNode,
         cloneNode: cloneNode,
-        deleteNode: deleteNode
+        deleteNode: deleteNode,
+        getValidLinkStyles: function () {
+          return [
+            '',
+            'Action',
+            'Dialogue',
+            'Music',
+            'Quiz'
+          ];
+        },
+        getValidNodeTransitions: function () {
+          return [
+            'default',
+            'slideLeft',
+            'slideRight',
+            'slideUp',
+            'slideDown',
+            'flipLeft'
+          ];
+        },
+        addLink: function (node) {
+          var link = {
+            body: '',
+            from_node: node.id,
+            to_node: null,
+            transition: '',
+            link_style: node.link_style,
+            float: false
+          };
+
+          node.links.push(link);
+
+          return link;
+        },
+        updateInboundLinks: updateInboundLinks,
+        reorderLink: function (node, indexFrom, indexTo) {
+          if (indexFrom >= 0 && indexTo >= 0 && indexTo < node.links.length) {
+            var link = node.links[indexFrom];
+            node.links.splice(indexFrom, 1);
+            node.links.splice(indexTo, 0, link);
+          }
+        },
+        deleteLink: function (node, rmLink) {
+          var indexLinks = node.links.indexOf(rmLink);
+          node.links.splice(indexLinks, 1);
+
+          if (typeof rmLink.to_node !== 'number') {
+            var linksInbound = data.view[rmLink.to_node].inboundLinks;
+            var indexInbound = linksInbound.indexOf(rmLink.from_node);
+            linksInbound.splice(indexInbound, 1);
+          }
+        }
       };
     }
   ]);

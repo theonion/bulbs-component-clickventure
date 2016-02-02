@@ -133,10 +133,44 @@ describe('ClickventureEditConfigPages', function () {
       });
     });
 
-    it('should have a method to determine if a node is "complete"', function () {
+    describe('should have a method to determine if a node is "complete" that', function () {
+      var node;
 
-      // TODO : add test code here
-      throw new Error('Not implemented yet.');
+      beforeEach(function () {
+        node = new ClickventureEditNode();
+      });
+
+      it('should be true if a node has all of the last statuses of all config pages', function () {
+        var completeStatuses = ClickventureEditConfigPages
+          .getConfigPageKeys()
+          .forEach(function (key) {
+            var statuses = ClickventureEditConfigPages.getConfigPage(key).statuses;
+            node.statuses[key] = statuses[statuses.length - 1];
+          });
+
+        var isComplete = ClickventureEditConfigPages.nodeIsComplete(node);
+
+        expect(isComplete).to.be.true;
+      });
+
+      it('should be false if a node only has some of the last statuses of all config pages', function () {
+        var configPageKey = 'copy';
+        var statuses = ClickventureEditConfigPages.getConfigPage(configPageKey).statuses;
+        var status = statuses[statuses.length - 1];
+
+        node.statuses[configPageKey] = status;
+        var isComplete = ClickventureEditConfigPages.nodeIsComplete(node);
+
+        expect(isComplete).to.be.false;
+      });
+
+      it('should be false if a node has none of the last statuses of all config pages', function () {
+
+        node.statuses = {};
+        var isComplete = ClickventureEditConfigPages.nodeIsComplete(node);
+
+        expect(isComplete).to.be.false;
+      });
     });
 
     it('should have a method to get the currently active config page', function () {

@@ -37,10 +37,14 @@ angular.module('bulbs.clickventure.edit.services.configPage', [
       };
 
       var _getVerifiedConfigPageKey = function (status) {
-        return Object.keys(data.configPages)
+        return getConfigPageKeys()
           .find(function (key) {
             return data.configPages[key].statuses.indexOf(status) >= 0;
           });
+      };
+
+      var getConfigPageKeys = function () {
+        return Object.keys(data.configPages);
       };
 
       var getConfigPage = function (configPage) {
@@ -48,7 +52,7 @@ angular.module('bulbs.clickventure.edit.services.configPage', [
 
         var key;
         if (type === 'object') {
-          key = Object.keys(data.configPages)
+          key = getConfigPageKeys()
             .find(function (key) {
               return data.configPages[key] === configPage;
             });
@@ -71,8 +75,9 @@ angular.module('bulbs.clickventure.edit.services.configPage', [
       changeConfigPage(data.configPages.settings);
 
       return {
+        getConfigPageKeys: getConfigPageKeys,
         getOrderedConfigPages: function () {
-          return Object.keys(data.configPages)
+          return getConfigPageKeys()
             .sort(function (a, b) {
               return data.configPages[a].order - data.configPages[b].order;
             })

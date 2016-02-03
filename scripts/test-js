@@ -2,6 +2,7 @@
 # Run javascript tests.
 
 if [ "$1" == "--single-run" ] || [ "$1" == '-s' ]; then
+  ./node_modules/.bin/grunt bulbs_cms_pre_dist
   ./node_modules/.bin/karma start resources/js/testing/karma.conf.js --single-run
 else
   ./node_modules/.bin/grunt karma:unit:start watch:test

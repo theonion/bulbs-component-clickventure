@@ -199,18 +199,17 @@ angular.module('bulbs.clickventure.edit.icon.error', [
 angular.module('bulbs.clickventure.edit.link.addPageModal.factory', [
   'bulbs.clickventure.edit.services.node',
   'ui.bootstrap.modal',
-  'uuid4'
+  'ui.bootstrap.tpls'
 ])
   .factory('ClickventureEditLinkAddPageModal', [
-    '$modal', 'uuid4', 'ClickventureEdit',
-    function ($modal, uuid4, ClickventureEdit) {
+    '$modal', 'ClickventureEdit',
+    function ($modal, ClickventureEdit) {
       var AddPageModal = function (scope) {
-        var modal = $modal
+        return $modal
           .open({
             controller: [
               '$scope', 'ClickventureEdit',
               function ($scope, ClickventureEdit) {
-                $scope.uuid = uuid4.generate();
                 $scope.pageTitle = '';
 
                 $scope.confirm = function () {
@@ -714,8 +713,31 @@ angular.module('bulbs.clickventure.edit.services.node.factory', [
     }
   ]);
 
+angular.module('bulbs.clickventure.edit.services.node.link.factory', [
+  'lodash'
+])
+  .factory('ClickventureEditNodeLink', [
+    '_',
+    function (_) {
+
+      function ClickventureEditNodeLink (props) {
+        _.assign(this, {
+          body: '',
+          from_node: null,
+          to_node: null,
+          transition: '',
+          link_style: null,
+          float: false
+        }, props);
+      };
+
+      return ClickventureEditNodeLink;
+    }
+  ]);
+
 angular.module('bulbs.clickventure.edit.services.node', [
   'bulbs.clickventure.edit.services.node.factory',
+  'bulbs.clickventure.edit.services.node.link.factory',
   'lodash'
 ])
   .service('ClickventureEdit', [
@@ -1018,14 +1040,10 @@ angular.module('bulbs.clickventure.edit.services.node', [
           ];
         },
         addLink: function (node) {
-          var link = {
-            body: '',
+          var link = new ClickventureEditNodeLink({
             from_node: node.id,
-            to_node: null,
-            transition: '',
-            link_style: node.link_style,
-            float: false
-          };
+            link_style: node.link_style
+          });
 
           node.links.push(link);
 
@@ -1268,7 +1286,7 @@ angular.module('bulbs.clickventure.templates', []).run(['$templateCache', functi
   'use strict';
 
   $templateCache.put('clickventure-edit-link/clickventure-edit-link-add-page-modal/clickventure-edit-link-add-page-modal.html',
-    "<div class=modal-header><button type=button class=close ng-click=$dismiss()><span class=\"fa fa-times\"></span></button><h4 class=modal-title>Add and Link Page</h4></div><div class=modal-body><label for=\"newPageTitle{{ uuid }}\">Page Title</label><input id=\"newPageTitle{{ uuid }}\" class=form-control ng-model=pageTitle ng-keyup=\"$event.keyCode === 13 && confirm()\"></div><div class=modal-footer><button class=\"btn btn-success\" ng-click=confirm()><i class=\"fa fa-plus\"></i> <span>Add and Link Page</span></button> <button class=\"btn btn-danger\" ng-click=$dismiss()><i class=\"fa fa-times\"></i> <span>Cancel</span></button></div>"
+    "<div class=modal-header><button type=button class=close ng-click=$dismiss()><span class=\"fa fa-times\"></span></button><h4 class=modal-title>Add and Link Page</h4></div><div class=modal-body><label for=newPageTitle>Page Title</label><input id=newPageTitle class=form-control ng-model=pageTitle ng-keyup=\"$event.keyCode === 13 && confirm()\"></div><div class=modal-footer><button class=\"btn btn-success\" ng-click=confirm()><i class=\"fa fa-plus\"></i> <span>Add and Link Page</span></button> <button class=\"btn btn-danger\" ng-click=$dismiss()><i class=\"fa fa-times\"></i> <span>Cancel</span></button></div>"
   );
 
 

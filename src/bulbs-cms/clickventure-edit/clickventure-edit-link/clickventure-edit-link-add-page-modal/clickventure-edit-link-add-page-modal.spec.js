@@ -2,18 +2,21 @@ describe('ClickventureEditLinkAddPageModal', function () {
 
   var $modalScope;
   var $parse;
+  var ClickventureEdit;
   var ClickventureEditNodeLink;
   var ClickventureEditLinkAddPageModal;
   var link;
 
   beforeEach(function () {
     module('bulbs.clickventure.edit.link.addPageModal.factory');
+    module('bulbs.clickventure.edit.services.node');
     module('bulbs.clickventure.edit.services.node.link.factory');
     module('bulbs.clickventure.templates');
 
-    inject(function (_$parse_, _ClickventureEditNodeLink_,
+    inject(function (_$parse_, _ClickventureEdit_, _ClickventureEditNodeLink_,
         _ClickventureEditLinkAddPageModal_, $rootScope) {
       $parse = _$parse_;
+      ClickventureEdit = _ClickventureEdit_;
       ClickventureEditNodeLink = _ClickventureEditNodeLink_;
       ClickventureEditLinkAddPageModal = _ClickventureEditLinkAddPageModal_;
 
@@ -57,26 +60,26 @@ describe('ClickventureEditLinkAddPageModal', function () {
 
   describe('on confirm', function () {
 
-    it('should add a new node', function () {
+    it('should add a new node and update link data', function () {
       var addPageModal = new ClickventureEditLinkAddPageModal($modalScope);
+      var pageTitle = 'something something';
+      var updateInboundLinks = sinon.stub(ClickventureEdit, 'updateInboundLinks');
+      var fakeNodeId = 10101;
+      var fakeNode = {id: fakeNodeId, title: ''};
+      var addNode = sinon.stub(ClickventureEdit, 'addNode').returns(fakeNode);
 
-      // TODO : add test code here
-      throw new Error('Not implemented yet.');
-    });
+      $modalScope.$digest();
+      var $childScope = $modalScope.$$childHead;
+      var $close = sinon.spy($childScope, '$close');
+      $childScope.pageTitle = pageTitle;
+      $childScope.confirm();
 
-    it('should link new node and update inbound links on given node', function () {
-
-      // TODO : add test code here
-      throw new Error('Not implemented yet.');
-    });
-  });
-
-  describe('on dismiss', function () {
-
-    it('should do nothing', function () {
-
-      // TODO : add test code here
-      throw new Error('Not implemented yet.');
+      expect($close.calledOnce).to.be.true;
+      expect(addNode.calledOnce).to.be.true;
+      expect(fakeNode.title).to.equal(pageTitle);
+      expect(link.to_node).to.equal(fakeNodeId);
+      expect(updateInboundLinks.calledOnce).to.be.true;
+      expect(updateInboundLinks.args[0][0]).to.equal(link);
     });
   });
 });

@@ -1,5 +1,6 @@
 angular.module('bulbs.clickventure.edit.services.node', [
   'bulbs.clickventure.edit.services.node.factory',
+  'bulbs.clickventure.edit.services.node.link.factory',
   'lodash'
 ])
   .service('ClickventureEdit', [
@@ -302,14 +303,10 @@ angular.module('bulbs.clickventure.edit.services.node', [
           ];
         },
         addLink: function (node) {
-          var link = {
-            body: '',
+          var link = new ClickventureEditNodeLink({
             from_node: node.id,
-            to_node: null,
-            transition: '',
-            link_style: node.link_style,
-            float: false
-          };
+            link_style: node.link_style
+          });
 
           node.links.push(link);
 

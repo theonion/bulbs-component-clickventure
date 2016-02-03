@@ -1,18 +1,17 @@
 angular.module('bulbs.clickventure.edit.link.addPageModal.factory', [
   'bulbs.clickventure.edit.services.node',
   'ui.bootstrap.modal',
-  'uuid4'
+  'ui.bootstrap.tpls'
 ])
   .factory('ClickventureEditLinkAddPageModal', [
-    '$modal', 'uuid4', 'ClickventureEdit',
-    function ($modal, uuid4, ClickventureEdit) {
+    '$modal', 'ClickventureEdit',
+    function ($modal, ClickventureEdit) {
       var AddPageModal = function (scope) {
-        var modal = $modal
+        return $modal
           .open({
             controller: [
               '$scope', 'ClickventureEdit',
               function ($scope, ClickventureEdit) {
-                $scope.uuid = uuid4.generate();
                 $scope.pageTitle = '';
 
                 $scope.confirm = function () {

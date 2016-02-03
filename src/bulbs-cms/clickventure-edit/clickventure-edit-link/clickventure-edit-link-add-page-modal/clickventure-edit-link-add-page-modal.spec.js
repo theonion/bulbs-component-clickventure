@@ -79,7 +79,7 @@ describe('ClickventureEditLinkAddPageModal', function () {
       expect(fakeNode.title).to.equal(pageTitle);
       expect(link.to_node).to.equal(fakeNodeId);
       expect(updateInboundLinks.calledOnce).to.be.true;
-      expect(updateInboundLinks.args[0][0]).to.equal(link);
+      expect(updateInboundLinks.calledWith(link)).to.be.true;
     });
   });
 });

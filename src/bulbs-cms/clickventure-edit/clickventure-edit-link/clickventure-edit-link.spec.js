@@ -7,11 +7,12 @@ describe('clickventureEditLink', function () {
 
   beforeEach(function () {
     module('bulbs.clickventure.edit.link');
+    module('bulbs.clickventure.edit.services.node');
     module('bulbs.clickventure.edit.services.node.factory');
     module('bulbs.clickventure.edit.services.node.link.factory');
     module('bulbs.clickventure.templates');
 
-    inject(function ($compile, $rootScope, ClickventureEditNode,
+    inject(function ($compile, $rootScope, ClickventureEdit, ClickventureEditNode,
         ClickventureEditNodeLink) {
       link = new ClickventureEditNodeLink();
       node = new ClickventureEditNode();
@@ -32,6 +33,9 @@ describe('clickventureEditLink', function () {
   describe('should have a method to delete a node\'s links that', function () {
 
     it('should delete the link on modal confirm', function () {
+      var deleteLink = sinon.spy(ClickventureEdit, 'deleteLink');
+
+      $directiveScope.deleteLink(node, link);
 
       // TODO : add test code here
       throw new Error('Not implemented yet.');

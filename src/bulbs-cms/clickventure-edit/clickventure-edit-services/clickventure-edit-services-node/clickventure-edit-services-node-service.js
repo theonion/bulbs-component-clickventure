@@ -4,8 +4,8 @@ angular.module('bulbs.clickventure.edit.services.node', [
   'lodash'
 ])
   .service('ClickventureEdit', [
-    '_', '$filter', 'ClickventureEditNode',
-    function (_, $filter, ClickventureEditNode) {
+    '_', '$filter', 'ClickventureEditNode', 'ClickventureEditNodeLink',
+    function (_, $filter, ClickventureEditNode, ClickventureEditNodeLink) {
 
       var data = {
         nodeActive: null,

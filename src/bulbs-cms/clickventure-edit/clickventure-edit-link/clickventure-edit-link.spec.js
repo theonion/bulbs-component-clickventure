@@ -4,7 +4,6 @@ describe('clickventureEditLink', function () {
   var ClickventureEdit;
   var ClickventureEditLinkAddPageModal_stub;
   var clickventureNodeNameFilter;
-  var element;
   var link;
   var node;
 
@@ -43,7 +42,7 @@ describe('clickventureEditLink', function () {
       $parentScope.link = link;
       $parentScope.node = node;
 
-      element = $compile(
+      var element = $compile(
         '<clickventure-edit-link node="node" link="link"></clickventure-edit-link>'
       )($parentScope);
 

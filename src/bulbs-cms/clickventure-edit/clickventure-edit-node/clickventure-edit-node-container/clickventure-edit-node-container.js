@@ -27,6 +27,7 @@ angular.module('bulbs.clickventure.edit.node.container', [
               $scope.onConfigPageRender();
             };
 
+            // using $timeout to ensure all data/view is updated before calling callback
             ClickventureEditConfigPages.registerConfigPageChangeHandler(
               $timeout.bind(null, function () {
                 if (ClickventureEditConfigPages.getActiveConfigPage() === $scope.configPage) {
@@ -35,6 +36,7 @@ angular.module('bulbs.clickventure.edit.node.container', [
               })
             );
 
+            // using $timeout to ensure all data/view is updated before calling callback
             ClickventureEdit.registerSelectNodeHandler(
               $timeout.bind(null, configPageRender)
             );

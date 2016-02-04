@@ -1,12 +1,13 @@
 angular.module('bulbs.clickventure.edit.node.copy', [
   'bulbs.clickventure.edit.link',
+  'bulbs.clickventure.edit.services.node',
   'bulbs.clickventure.edit.node.container',
-  'bulbs.clickventure.edit.service',
+  'bulbs.clickventure.edit.node.title',
   'bulbs.clickventure.edit.icon.error'
 ])
   .directive('clickventureEditNodeCopy', [
-    '$window', 'ClickventureEdit',
-    function ($window, ClickventureEdit) {
+    '$window',
+    function ($window) {
       return {
         restrict: 'E',
         templateUrl: 'clickventure-edit-node/clickventure-edit-node-copy/clickventure-edit-node-copy.html',
@@ -15,12 +16,9 @@ angular.module('bulbs.clickventure.edit.node.copy', [
           node: '='
         },
         controller: [
-          '$scope',
-          function ($scope) {
-            $scope.configPageTitle = 'Copy';
-
+          '$scope', 'ClickventureEdit',
+          function ($scope, ClickventureEdit) {
             $scope.addLink = ClickventureEdit.addLink;
-            $scope.data = ClickventureEdit.getData();
             $scope.linkStyles = ClickventureEdit.getValidLinkStyles();
             $scope.reorderLink = ClickventureEdit.reorderLink;
           }

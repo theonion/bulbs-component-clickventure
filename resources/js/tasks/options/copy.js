@@ -6,7 +6,10 @@
 module.exports = {
   bulbs_cms_to_django_app_pre_1_scripts: {
     dest: '.tmp/django-bulbs-cms-pre-1/',
-    src: 'src/bulbs-cms/**/*.js',
+    src: [
+      'src/bulbs-cms/**/*.js',
+      '!src/bulbs-cms/**/*.spec.js'
+    ],
     expand: true,
     flatten: true
   },

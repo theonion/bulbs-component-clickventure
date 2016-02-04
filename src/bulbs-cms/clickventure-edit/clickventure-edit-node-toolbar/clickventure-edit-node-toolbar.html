@@ -1,23 +1,21 @@
-<div class="clickventure-edit-node-toolbar-title">
-  Edit
-</div>
+<div class="clickventure-edit-node-toolbar-title">Edit</div>
 <div class="clickventure-edit-node-toolbar-view btn-group">
   <button
-      ng-repeat="title in data.configPages"
-      ng-click="changeConfigPage(title)"
+      ng-repeat="configPage in configPages track by configPage.order"
+      ng-click="changeConfigPage(configPage)"
       ng-class="{
-        'btn-default': data.configPageActive !== title,
-        'btn-primary': data.configPageActive === title
+        'btn-default': getActiveConfigPage() !== configPage,
+        'btn-primary': getActiveConfigPage() === configPage
       }"
       class="btn">
-    {{ title }}
+    {{ configPage.title }}
   </button>
 </div>
 <div class="clickventure-edit-node-toolbar-preview">
   <a
       class="btn btn-link text-primary"
       target="_blank"
-      href="/r/{{ article.id }}#{{ data.nodeActive.id }}">
+      href="/r/{{ article.id }}#{{ nodeData.nodeActive.id }}">
     <i class="fa fa-share"></i>
     <span>Preview Page</span>
   </a>

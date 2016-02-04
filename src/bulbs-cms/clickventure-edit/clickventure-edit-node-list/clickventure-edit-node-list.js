@@ -1,7 +1,9 @@
 angular.module('bulbs.clickventure.edit.nodeList', [
   'bulbs.clickventure.edit.nodeList.node',
-  'bulbs.clickventure.edit.service',
-  'bulbs.clickventure.edit.validator.service'
+  'bulbs.clickventure.edit.services.node',
+  'bulbs.clickventure.edit.services.configPage',
+  'bulbs.clickventure.edit.services.validator',
+  'uuid4'
 ])
   .directive('clickventureEditNodeList', [
     function () {
@@ -11,8 +13,13 @@ angular.module('bulbs.clickventure.edit.nodeList', [
         scope: {},
         require: '^clickventureEdit',
         controller: [
-          '$scope', 'ClickventureEdit', 'ClickventureEditValidator',
-          function ($scope, ClickventureEdit, ClickventureEditValidator) {
+          '$rootScope', '$scope', 'ClickventureEdit', 'ClickventureEditConfigPages',
+            'ClickventureEditValidator', 'uuid4',
+          function ($rootScope, $scope, ClickventureEdit, ClickventureEditConfigPages,
+              ClickventureEditValidator, uuid4) {
+
+            $scope.uuid = uuid4.generate();
+
             $scope.addAndSelectNode = ClickventureEdit.addAndSelectNode;
             $scope.reorderNode = ClickventureEdit.reorderNode;
             $scope.selectNode = ClickventureEdit.selectNode;
@@ -20,27 +27,51 @@ angular.module('bulbs.clickventure.edit.nodeList', [
             $scope.nodeData = ClickventureEdit.getData();
             $scope.nodeList = $scope.nodeData.nodes;
 
+            $scope.configPages = ClickventureEditConfigPages.getOrderedConfigPages();
+
             $scope.searchTerm = '';
 
+            $scope.completeFilter = 'Complete';
+            $scope.incompleteFilter = 'Incomplete';
+            $scope.selectedFilter = '';
+
             $scope.validateGraph = function () {
-              ClickventureEditValidator.validateGraph(ClickventureEdit.getData().nodes);
+              ClickventureEditValidator.validateGraph($scope.nodeData.nodes);
             };
 
             $scope.searchNodes = function () {
-              if ($scope.searchTerm.length > 0) {
-                var searchTermRE = new RegExp($scope.searchTerm, 'i');
+              if ($scope.searchTerm || $scope.selectedFilter) {
+                var searchTermRE = new RegExp($scope.searchTerm || '.*', 'i');
 
                 $scope.nodeList = $scope.nodeData.nodes.filter(function (node) {
-                  return !!node.title.match(searchTermRE) ||
-                      !!node.body.match(searchTermRE) ||
-                      node.links.filter(function (link) {
-                        return link.body.match(searchTermRE);
-                      }).length > 0;
+                  var textMatch =
+                    $scope.searchTerm.length === 0 ||
+                    !!node.title.match(searchTermRE) ||
+                    !!node.body.match(searchTermRE) ||
+                    node.links.filter(function (link) {
+                      return link.body.match(searchTermRE);
+                    }).length > 0;
+
+                  var statusMatch = true;
+                  if ($scope.selectedFilter === $scope.completeFilter) {
+                    statusMatch = ClickventureEditConfigPages.nodeIsComplete(node);
+                  } else if ($scope.selectedFilter === $scope.incompleteFilter) {
+                    statusMatch = !ClickventureEditConfigPages.nodeIsComplete(node);
+                  } else if ($scope.selectedFilter) {
+                    statusMatch = ClickventureEditConfigPages.nodeHasStatus(
+                      node,
+                      $scope.selectedFilter
+                    );
+                  }
+
+                  return textMatch && statusMatch;
                 });
               } else {
                 $scope.nodeList = $scope.nodeData.nodes;
               }
             };
+
+            $rootScope.$on('bulbs.clickventure.edit.nodeList.searchNodes', $scope.searchNodes);
 
             $scope.searchKeypress = function  (e) {
               if (e.keyCode === 27) {

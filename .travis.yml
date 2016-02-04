@@ -1,0 +1,11 @@
+language: node_js
+node_js:
+  - "5"
+script: ./scripts/test-js -s
+cache:
+  directories:
+    - bower_components
+    - node_modules
+before_script:
+  - npm install
+  - ./node_modules/.bin/bower install

@@ -1,20 +1,18 @@
-angular.module('bulbs.clickventure.edit.service', [
+angular.module('bulbs.clickventure.edit.services.node', [
+  'bulbs.clickventure.edit.services.node.factory',
   'lodash'
 ])
   .service('ClickventureEdit', [
-    '_', '$filter',
-    function (_, $filter) {
+    '_', '$filter', 'ClickventureEditNode',
+    function (_, $filter, ClickventureEditNode) {
 
       var data = {
-        configPageActive: '',
-        configPages: [],
         nodeActive: null,
         nodes: [],
         view: {}
       };
 
       var handlers = {
-        configPageChange: [],
         select: []
       };
 
@@ -75,11 +73,25 @@ angular.module('bulbs.clickventure.edit.service', [
           node.links = [];
         }
 
+        if (!_.isObject(node.statuses)) {
+          node.statuses = {};
+        }
+
         if (!_.isArray(node.sister_pages)) {
           node.sister_pages = [];
         }
 
         return node;
+      };
+
+      var updateInboundLinks = function (link) {
+        if (typeof link.to_node === 'number') {
+          var links = data.view[link.to_node].inboundLinks;
+
+          if (links.indexOf(link.from_node) < 0) {
+            links.push(link.from_node);
+          }
+        }
       };
 
       var setNodes = function (nodes) {
@@ -122,23 +134,10 @@ angular.module('bulbs.clickventure.edit.service', [
       };
 
       var addNode = function () {
-        var node = {
+        var node = new ClickventureEditNode({
           id: _getNextNodeId(),
-          body: '',
-          finish: false,
-          link_style: 'action',
-          links: [],
-          photo_description: '',
-          photo_final: null,
-          photo_note: null,
-          photo_placeholder_page_url: '',
-          photo_placeholder_url: '',
-          share_text: '',
-          shareable: false,
-          sister_pages: [],
-          start: data.nodes.length === 0,
-          title: ''
-        };
+          start: data.nodes.length === 0
+        });
 
         var activeNodeIndex = data.nodes.indexOf(data.nodeActive);
         if (activeNodeIndex >= 0) {
@@ -196,6 +195,7 @@ angular.module('bulbs.clickventure.edit.service', [
           _.omit(node, [
             'id',
             'links',
+            'statuses',
             'sister_pages',
             'title'
           ])
@@ -213,9 +213,7 @@ angular.module('bulbs.clickventure.edit.service', [
           return newLink;
         });
 
-        if (!_.isArray(node.sister_pages)) {
-          node.sister_pages = [];
-        }
+        clonedNode.statuses = _.clone(node.statuses);
 
         // this node gets the current list of siblings (which doesn't include itself)
         clonedNode.sister_pages = _.clone(node.sister_pages);
@@ -272,74 +270,18 @@ angular.module('bulbs.clickventure.edit.service', [
         return _reindexNodes();
       };
 
-      var addLink = function (node) {
-        var link = {
-          body: '',
-          from_node: node.id,
-          to_node: null,
-          transition: '',
-          link_style: node.link_style,
-          float: false
-        };
-
-        node.links.push(link);
-
-        return link;
-      };
-
-      var updateInboundLinks = function (link) {
-        if (typeof link.to_node === 'number') {
-          var links = data.view[link.to_node].inboundLinks;
-
-          if (links.indexOf(link.from_node) < 0) {
-            links.push(link.from_node);
-          }
-        }
-      };
-
-      var reorderLink = function (node, indexFrom, indexTo) {
-        if (indexFrom >= 0 && indexTo >= 0 && indexTo < node.links.length) {
-          var link = node.links[indexFrom];
-          node.links.splice(indexFrom, 1);
-          node.links.splice(indexTo, 0, link);
-        }
-      };
-
-      var deleteLink = function (node, rmLink) {
-        var indexLinks = node.links.indexOf(rmLink);
-        node.links.splice(indexLinks, 1);
-
-        if (typeof rmLink.to_node !== 'number') {
-          var linksInbound = data.view[rmLink.to_node].inboundLinks;
-          var indexInbound = linksInbound.indexOf(rmLink.from_node);
-          linksInbound.splice(indexInbound, 1);
-        }
-      };
-
-      var registerConfigPage = function (title) {
-        data.configPages.push(title);
-
-        if (data.configPageActive.length === 0) {
-          data.configPageActive = title;
-        }
-      };
-
-      var registerConfigPageChangeHandler = function (func) {
-        handlers.configPageChange.push(func);
-      };
-
-      var changeConfigPage = function (title) {
-        data.configPageActive = title;
-
-        handlers.configPageChange.forEach(function (func) {
-          func(title);
-        });
-      };
-
       return {
         getData: function () {
           return data;
         },
+        setNodes: setNodes,
+        addNode: addNode,
+        addAndSelectNode: addAndSelectNode,
+        reorderNode: reorderNode,
+        registerSelectNodeHandler: registerSelectNodeHandler,
+        selectNode: selectNode,
+        cloneNode: cloneNode,
+        deleteNode: deleteNode,
         getValidLinkStyles: function () {
           return [
             '',
@@ -359,21 +301,38 @@ angular.module('bulbs.clickventure.edit.service', [
             'flipLeft'
           ];
         },
-        setNodes: setNodes,
-        addNode: addNode,
-        addAndSelectNode: addAndSelectNode,
-        reorderNode: reorderNode,
-        registerSelectNodeHandler: registerSelectNodeHandler,
-        selectNode: selectNode,
-        cloneNode: cloneNode,
-        deleteNode: deleteNode,
-        addLink: addLink,
+        addLink: function (node) {
+          var link = {
+            body: '',
+            from_node: node.id,
+            to_node: null,
+            transition: '',
+            link_style: node.link_style,
+            float: false
+          };
+
+          node.links.push(link);
+
+          return link;
+        },
         updateInboundLinks: updateInboundLinks,
-        reorderLink: reorderLink,
-        deleteLink: deleteLink,
-        registerConfigPage: registerConfigPage,
-        registerConfigPageChangeHandler: registerConfigPageChangeHandler,
-        changeConfigPage: changeConfigPage
+        reorderLink: function (node, indexFrom, indexTo) {
+          if (indexFrom >= 0 && indexTo >= 0 && indexTo < node.links.length) {
+            var link = node.links[indexFrom];
+            node.links.splice(indexFrom, 1);
+            node.links.splice(indexTo, 0, link);
+          }
+        },
+        deleteLink: function (node, rmLink) {
+          var indexLinks = node.links.indexOf(rmLink);
+          node.links.splice(indexLinks, 1);
+
+          if (typeof rmLink.to_node !== 'number') {
+            var linksInbound = data.view[rmLink.to_node].inboundLinks;
+            var indexInbound = linksInbound.indexOf(rmLink.from_node);
+            linksInbound.splice(indexInbound, 1);
+          }
+        }
       };
     }
   ]);

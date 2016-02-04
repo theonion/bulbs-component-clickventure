@@ -25,7 +25,6 @@ install which should match the ```<version>``` used in ```requirements.txt```:
   $ bower install --save https://0469c955e10241b40fffe0225e29a3c238aadf69:x-oauth-basic@github.com/theonion/bulbs-component-clickventure.git\#\<version>
   ```
 
-
 ### Implementation
 1. Create a clickventure package in the site's app directory.
 1. Add ```"bulbs_component_clickventure"``` to ```INSTALLED_APPS``` in Django's settings file.
@@ -70,3 +69,32 @@ to rebuild ```compat-builds/django-bulbs-cms``` with your changes.
 
 Commit your changes and the rebuilt package, then reinstall the app on whatever
 project(s) require the changes.
+
+## Development
+
+### Setting up your environment
+To prep your environment for development:
+```bash
+$ ./scripts/dev-setup
+```
+
+### Testing javascript
+To run a continuous test:
+```bash
+$ ./scripts/test-js
+```
+To do a single test run:
+```bash
+$ ./scripts/test-js --single-run
+```
+
+### Building
+For continuous builds while you develop:
+```bash
+./scripts/dev-start
+```
+or to run a single build, as in creating a build for release:
+```bash
+$ ./scripts/dev-start --single-run
+```
+See [django-bulbs-cms Package](#django-bulbs-cms-package) section for more info.

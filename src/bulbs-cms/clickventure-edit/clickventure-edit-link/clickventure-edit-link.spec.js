@@ -101,23 +101,113 @@ describe('clickventureEditLink', function () {
   });
 
   describe('should have a method to search nodes by search term that', function () {
+    beforeEach(function () {
+      var nodes = [{
+        id: 0,
+        title: 'my garbage title'
+      }, {
+        id: 1,
+        title: 'this is trash'
+      }, {
+        id: 2,
+        title: 'not garbage, not trash'
+      }, {
+        id: 4,
+        title: 'garbage trucks'
+      }];
+      $directiveScope.nodeData.nodes = nodes;
+      $directiveScope.nodeData.view = {};
+      $directiveScope.nodeData.view[nodes[0].id] = {
+        node: nodes[0],
+        order: 0
+      };
+      $directiveScope.nodeData.view[nodes[1].id] = {
+        node: nodes[1],
+        order: 1
+      };
+      $directiveScope.nodeData.view[nodes[2].id] = {
+        node: nodes[2],
+        order: 100
+      };
+      $directiveScope.nodeData.view[nodes[3].id] = {
+        node: nodes[3],
+        order: 11
+      };
+    });
 
-    it('should be able to search by node number', function () {
+    it('should be able to search by node order', function () {
+      var searchTerm = 10;
+      var testNode = {
+        id: 1010101,
+        order: searchTerm
+      };
+      $directiveScope.nodeData.view[testNode.id] = testNode;
 
-      // TODO : add test code here
-      throw new Error('Not implemented yet.');
+      var selections;
+      $directiveScope.searchNodes(searchTerm)
+        .then(function (value) {
+          selections = value;
+        });
+      $directiveScope.$digest();
+
+      expect(selections.length).to.equal(1);
+      expect(selections[0]).to.equal(testNode.id);
+    });
+
+    it('should return an empty list when no node with order exists', function () {
+      var selections;
+      $directiveScope.searchNodes(101010)
+        .then(function (value) {
+          selections = value;
+        });
+      $directiveScope.$digest();
+
+      expect(selections.length).to.equal(0);
     });
 
     it('should be able to search by node title', function () {
+      var searchTerm = 'my favorite node';
+      var testNode1 = {
+        id: 1010101,
+        title: searchTerm
+      };
+      var testNode2 = {
+        id: 2020202,
+        title: searchTerm + ' not garbage, these are flowers'
+      };
+      $directiveScope.nodeData.nodes.push(testNode1);
+      $directiveScope.nodeData.nodes.push(testNode2);
 
-      // TODO : add test code here
-      throw new Error('Not implemented yet.');
+      var selections;
+      $directiveScope.searchNodes(searchTerm)
+        .then(function (value) {
+          selections = value;
+        });
+      $directiveScope.$digest();
+
+      expect(selections.length).to.equal(2);
+      expect(selections[0]).to.equal(testNode1.id);
+      expect(selections[1]).to.equal(testNode2.id);
+    });
+
+    it('should return an empty list when no node matching title exists', function () {
+      var selections;
+      $directiveScope.searchNodes('no title should mtch this 3ver, probably...')
+        .then(function (value) {
+          selections = value;
+        });
+      $directiveScope.$digest();
+
+      expect(selections.length).to.equal(0);
     });
 
     it('should return a promise interface', function () {
 
-      // TODO : add test code here
-      throw new Error('Not implemented yet.');
+      var searchPromise = $directiveScope.searchNodes();
+
+      expect(searchPromise.then).to.be.defined;
+      expect(searchPromise.catch).to.be.defined;
+      expect(searchPromise.finally).to.be.defined;
     });
   });
 });

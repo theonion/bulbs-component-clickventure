@@ -3,11 +3,6 @@ const path = require('path');
 module.exports = function (config) {
   config.set({
     basePath: path.join('..', '..', '..'),
-    frameworks: [
-      'chai',
-      'mocha',
-      'sinon'
-    ],
     files: [
       path.join('bower_components', 'angular', 'angular.js'),
       path.join('bower_components', 'angular-bootstrap', 'ui-bootstrap.js'),
@@ -21,6 +16,11 @@ module.exports = function (config) {
 
       path.join('resources', 'js', 'testing', 'test-helper.js'),
       path.join('src', 'bulbs-cms', '**', '*.js')
+    ],
+    frameworks: [
+      'chai',
+      'mocha',
+      'sinon'
     ],
     browsers: ['PhantomJS']
   });

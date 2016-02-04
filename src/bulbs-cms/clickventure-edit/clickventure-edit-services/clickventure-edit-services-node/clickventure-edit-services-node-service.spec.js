@@ -91,5 +91,17 @@ describe('ClickventureEdit', function () {
         expect(data.view[newNode.id].order).to.equal(4);
       });
     });
+
+    describe('should have a method to add and select a node that', function () {
+
+      it('should create a node and set it to the active node', function () {
+        var data = ClickventureEdit.getData();
+
+        var newNode = ClickventureEdit.addAndSelectNode();
+
+        expect(data.nodes[0]).to.equal(newNode);
+        expect(data.nodeActive).to.equal(newNode);
+      });
+    });
   });
 });

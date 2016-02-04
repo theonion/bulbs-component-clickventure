@@ -24,11 +24,11 @@ angular.module('bulbs.clickventure.edit.services.node', [
         data.view[node.id] = {
           node: node,
           order: settings.order ||
-            Math.max.apply(null, data.nodes.map(function (node) {
+            (Math.max.apply(null, data.nodes.map(function (node) {
               if (node.id in data.view) {
                 return data.view[node.id].order;
               }
-            })) + 1,
+            })) + 1),
           inboundLinks: []
         };
 

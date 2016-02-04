@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Build once≥
+
+./node_modules/.bin/grunt build_bulbs_cms_for_django

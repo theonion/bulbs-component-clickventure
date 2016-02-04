@@ -158,8 +158,7 @@ angular.module('bulbs.clickventure.edit.services.configPage', [
             var nodeStatus = node.statuses[configPageKey];
 
             hasStatus =
-              (statusIndex === 0 && typeof nodeStatus === 'undefined') ||
-              nodeStatus === status;
+              (statusIndex === 0 && !nodeStatus) || nodeStatus === status;
           }
 
           return hasStatus;

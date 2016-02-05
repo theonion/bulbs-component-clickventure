@@ -565,5 +565,21 @@ describe('ClickventureEdit', function () {
         expect(linkStyles[4]).to.equal('Quiz');
       });
     });
+
+    describe('should have a method to add a new link that', function () {
+
+      it('should add a new link to given node with some preset properties', function () {
+        var node = ClickventureEdit.addNode();
+        var linkStyle = 'blah balh alhb';
+
+        node.link_style = linkStyle;
+        var link = ClickventureEdit.addLink(node);
+
+        expect(node.links.length).to.equal(1);
+        expect(node.links[0]).to.equal(link);
+        expect(link.from_node).to.equal(node.id);
+        expect(link.link_style).to.equal(linkStyle);
+      });
+    });
   });
 });

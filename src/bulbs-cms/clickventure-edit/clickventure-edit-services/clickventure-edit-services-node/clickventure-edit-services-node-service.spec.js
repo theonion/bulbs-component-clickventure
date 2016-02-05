@@ -134,5 +134,119 @@ describe('ClickventureEdit', function () {
         expect(nodeData.view[nodeTo.id].inboundLinks.length).to.equal(1);
       });
     });
+
+    describe('should have a method to set nodes from data that', function () {
+      var data;
+
+      beforeEach(function () {
+        data = ClickventureEdit.getData();
+      });
+
+      it('should work if empty data was received', function () {
+
+        ClickventureEdit.setNodes(null);
+
+        expect(data.nodes).to.be.instanceOf(Array);
+        expect(data.view).to.be.instanceOf(Object);
+      });
+
+      it('should add a new start node if there aren\'t any nodes given', function () {
+
+        ClickventureEdit.setNodes(null);
+
+        expect(data.nodeActive).to.equal(data.nodes[0]);
+        expect(data.nodes.length).to.equal(1);
+        expect(data.nodes[0].start).to.be.true;
+        expect(data.view[data.nodes[0].id]).to.be.defined;
+        expect(data.view[data.nodes[0].id].node).to.equal(data.nodes[0]);
+      });
+
+      describe('should update old node data that', function () {
+
+        it('should ensure any existing links have a from_node property', function () {
+          var node = {id: 10202};
+          var link1 = {from_node: node.id};
+          var link2 = {};
+          node.links = [link1, link2];
+
+          ClickventureEdit.setNodes([node]);
+
+          expect(data.nodes[0]).to.equal(node);
+          expect(data.nodes[0].links[0].from_node).to.equal(node.id);
+          expect(data.nodes[0].links[1].from_node).to.equal(node.id);
+        });
+
+        it('should ensure all nodes have a links property', function () {
+
+          ClickventureEdit.setNodes([{}, {}, {}]);
+
+          expect(data.nodes[0].links).to.be.instanceOf(Array);
+          expect(data.nodes[1].links).to.be.instanceOf(Array);
+          expect(data.nodes[2].links).to.be.instanceOf(Array);
+        });
+
+        it('should ensure all nodes have a statuses property', function () {
+
+          ClickventureEdit.setNodes([{}, {}, {}]);
+
+          expect(data.nodes[0].statuses).to.be.instanceOf(Object);
+          expect(data.nodes[1].statuses).to.be.instanceOf(Object);
+          expect(data.nodes[2].statuses).to.be.instanceOf(Object);
+        });
+
+        it('should ensure all nodes have a sister_pages property', function () {
+
+          ClickventureEdit.setNodes([{}, {}, {}]);
+
+          expect(data.nodes[0].sister_pages).to.be.instanceOf(Array);
+          expect(data.nodes[1].sister_pages).to.be.instanceOf(Array);
+          expect(data.nodes[2].sister_pages).to.be.instanceOf(Array);
+        });
+      });
+
+      it('should set node view data for nodes', function () {
+        var nodes = [{id: 1}, {id: 2}];
+
+        ClickventureEdit.setNodes(nodes);
+
+        expect(data.view[nodes[0].id].node).to.equal(nodes[0]);
+        expect(data.view[nodes[0].id].order).to.equal(1);
+        expect(data.view[nodes[0].id].inboundLinks).to.be.instanceOf(Array);
+        expect(data.view[nodes[0].id].inboundLinks.length).to.equal(0);
+        expect(data.view[nodes[1].id].node).to.equal(nodes[1]);
+        expect(data.view[nodes[1].id].order).to.equal(2);
+        expect(data.view[nodes[1].id].inboundLinks).to.be.instanceOf(Array);
+        expect(data.view[nodes[1].id].inboundLinks.length).to.equal(0);
+      });
+
+      it('should make the first node active if there is not active node', function () {
+        var node1 = {id: 1};
+
+        ClickventureEdit.setNodes([node1, {id: 2}, {id: 3}]);
+
+        expect(data.nodeActive).to.equal(node1);
+      });
+
+      it('should keep the same node active', function () {
+        var activeNode = {id: 1};
+        data.nodeActive = activeNode;
+
+        ClickventureEdit.setNodes([{id: 3}, activeNode, {id: 2}]);
+
+        expect(data.nodeActive).to.equal(activeNode);
+      });
+
+      it('should setup inbound links for all node view data', function () {
+        var updateInboundLinks = sinon.spy(ClickventureEdit, 'updateInboundLinks');
+
+        ClickventureEdit.setNodes([{
+          links: [{}, {}, {}]
+        }, {
+          links: [{}]
+        }]);
+
+        expect(updateInboundLinks.callCount).to.equal(4);
+      });
+    });
   });
 });

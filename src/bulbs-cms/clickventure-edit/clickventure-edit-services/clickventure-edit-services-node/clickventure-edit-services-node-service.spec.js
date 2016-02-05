@@ -632,5 +632,47 @@ describe('ClickventureEdit', function () {
         expect(node.links[2]).to.equal(link3);
       });
     });
+
+    describe('should have a method to delete a link that', function () {
+
+      it('should removes link from node\'s list of links', function () {
+        var node = ClickventureEdit.addNode();
+        var link1 = ClickventureEdit.addLink(node);
+        var link2 = ClickventureEdit.addLink(node);
+
+        ClickventureEdit.deleteLink(node, link1);
+
+        expect(node.links.length).to.equal(1);
+        expect(node.links[0]).to.equal(link2);
+      });
+
+      it('should remove itself from inbound links for linked node', function () {
+        var node1 = ClickventureEdit.addNode();
+        var node2 = ClickventureEdit.addNode();
+        var link = ClickventureEdit.addLink(node1);
+
+        link.to_node = node2.id;
+        ClickventureEdit.updateInboundLinks(link);
+        ClickventureEdit.deleteLink(node1, link);
+
+        expect(nodeData.view[node2.id].inboundLinks.length).to.equal(0);
+      });
+
+      it('should not remove from node id in to node inbound links if multiple links from source node reach to destination', function () {
+        var node1 = ClickventureEdit.addNode();
+        var node2 = ClickventureEdit.addNode();
+        var link1 = ClickventureEdit.addLink(node1);
+        var link2 = ClickventureEdit.addLink(node1);
+
+        link1.to_node = node2.id;
+        link2.to_node = node2.id;
+        ClickventureEdit.updateInboundLinks(link1);
+        ClickventureEdit.updateInboundLinks(link2);
+        ClickventureEdit.deleteLink(node1, link1);
+
+        expect(nodeData.view[node2.id].inboundLinks.length).to.equal(1);
+        expect(nodeData.view[node2.id].inboundLinks[0]).to.equal(node1.id);
+      });
+    });
   });
 });

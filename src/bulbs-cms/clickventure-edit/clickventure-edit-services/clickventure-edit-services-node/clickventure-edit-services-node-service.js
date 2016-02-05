@@ -169,7 +169,7 @@ angular.module('bulbs.clickventure.edit.services.node', [
         reorderNode: function (indexFrom, indexTo) {
           var node = data.nodes[indexFrom];
 
-          if (typeof(indexTo) !== 'number' ||
+          if (typeof indexTo !== 'number' ||
               indexTo < 0 ||
               indexTo >= data.nodes.length) {
             // don't move it if an invalid index was given

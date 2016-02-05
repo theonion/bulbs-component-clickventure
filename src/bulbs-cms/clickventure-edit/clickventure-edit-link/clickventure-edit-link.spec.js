@@ -3,11 +3,13 @@ describe('clickventureEditLink', function () {
   var $directiveScope;
   var ClickventureEdit;
   var ClickventureEditLinkAddPageModal_stub;
-  var clickventureNodeNameFilter;
   var link;
   var node;
+  var sandbox;
 
   beforeEach(function () {
+    sandbox = sinon.sandbox.create();
+
     // modules from bulbs-cms
     angular.module('autocompleteBasic', []);
     angular.module('confirmationModal.factory', [])
@@ -15,14 +17,8 @@ describe('clickventureEditLink', function () {
 
     angular.module('bulbs.clickventure.edit.link.addPageModal.factory')
       .factory('ClickventureEditLinkAddPageModal', function () {
-        ClickventureEditLinkAddPageModal_stub = sinon.stub();
+        ClickventureEditLinkAddPageModal_stub = sandbox.stub();
         return ClickventureEditLinkAddPageModal_stub;
-      });
-
-    clickventureNodeNameFilter = sinon.stub();
-    angular.module('bulbs.clickventure.edit.nodeNameFilter')
-      .filter('clickventure_node_name', function () {
-        return clickventureNodeNameFilter;
       });
 
     module('bulbs.clickventure.edit.link');
@@ -51,10 +47,14 @@ describe('clickventureEditLink', function () {
     });
   });
 
+  afterEach(function () {
+    sandbox.restore();
+  });
+
   describe('should have a method to delete a node\'s links that', function () {
 
     it('should delete the link on modal confirm', function () {
-      var deleteLink = sinon.stub(ClickventureEdit, 'deleteLink');
+      var deleteLink = sandbox.stub(ClickventureEdit, 'deleteLink');
 
       var $modalScope = $directiveScope.deleteLink(node, link);
       $modalScope.modalOnOk();
@@ -84,18 +84,17 @@ describe('clickventureEditLink', function () {
       var nodeId = 101001;
       var nodeOrder = 10;
       var nodeTitle = 'hello one two three';
+      node.id = nodeId;
+      node.title = nodeTitle;
       $directiveScope.nodeData.view = {};
       $directiveScope.nodeData.view[nodeId] = {
         order: nodeOrder,
         node: node
       };
 
-      clickventureNodeNameFilter.returns(nodeTitle);
       var displayText = $directiveScope.nodeDisplay(nodeId);
 
       expect(displayText).to.equal('(' + nodeOrder + ') ' + nodeTitle);
-      expect(clickventureNodeNameFilter.calledOnce).to.be.true;
-      expect(clickventureNodeNameFilter.calledWith(node)).to.be.true;
     });
   });
 

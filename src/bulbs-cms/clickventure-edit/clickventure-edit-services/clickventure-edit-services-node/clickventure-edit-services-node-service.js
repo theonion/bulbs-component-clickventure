@@ -1,4 +1,5 @@
 angular.module('bulbs.clickventure.edit.services.node', [
+  'bulbs.clickventure.edit.nodeNameFilter',
   'bulbs.clickventure.edit.services.node.factory',
   'bulbs.clickventure.edit.services.node.link.factory',
   'lodash'

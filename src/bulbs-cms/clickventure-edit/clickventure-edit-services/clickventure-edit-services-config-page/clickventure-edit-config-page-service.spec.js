@@ -3,8 +3,11 @@ describe('ClickventureEditConfigPages', function () {
   var ClickventureEditConfigPage;
   var ClickventureEditConfigPages;
   var ClickventureEditNode;
+  var sandbox;
 
   beforeEach(function () {
+    sandbox = sinon.sandbox.create();
+
     module('bulbs.clickventure.edit.services.configPage');
     module('bulbs.clickventure.edit.services.node.factory');
 
@@ -15,6 +18,10 @@ describe('ClickventureEditConfigPages', function () {
       ClickventureEditConfigPages = _ClickventureEditConfigPages_;
       ClickventureEditNode = _ClickventureEditNode_;
     });
+  });
+
+  afterEach(function () {
+    sandbox.restore();
   });
 
   describe('initialization', function () {

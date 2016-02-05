@@ -10,8 +10,11 @@ describe('clickventureEditNodeContainer', function () {
   var configPageKey;
   var element;
   var renderCallback;
+  var sandbox;
 
   beforeEach(function () {
+    sandbox = sinon.sandbox.create();
+
     module('bulbs.clickventure.edit.node.container');
     module('bulbs.clickventure.edit.services.configPage');
     module('bulbs.clickventure.edit.services.node.factory');
@@ -46,6 +49,10 @@ describe('clickventureEditNodeContainer', function () {
     });
   });
 
+  afterEach(function () {
+    sandbox.restore();
+  });
+
   describe('initialization', function () {
 
     it('should choose a config page for rendering based on key', function () {
@@ -70,12 +77,12 @@ describe('clickventureEditNodeContainer', function () {
 
     it('should set selected status and call render callback when config page changes to this config page', function () {
       var node = new ClickventureEditNode();
-      var registerConfigPageChangeHandler = sinon.stub(
+      var registerConfigPageChangeHandler = sandbox.stub(
         ClickventureEditConfigPages,
         'registerConfigPageChangeHandler'
       );
-      renderCallback = sinon.stub();
-      sinon.stub(ClickventureEditConfigPages, 'getActiveConfigPage').returns(configPage);
+      renderCallback = sandbox.stub();
+      sandbox.stub(ClickventureEditConfigPages, 'getActiveConfigPage').returns(configPage);
       node.statuses[configPageKey] = configPage.statuses[1];
       ClickventureEdit.getData().nodeActive = node;
 
@@ -91,12 +98,12 @@ describe('clickventureEditNodeContainer', function () {
     });
 
     it('should do nothing when config page changes to a different config page', function () {
-      var registerConfigPageChangeHandler = sinon.stub(
+      var registerConfigPageChangeHandler = sandbox.stub(
         ClickventureEditConfigPages,
         'registerConfigPageChangeHandler'
       );
-      renderCallback = sinon.stub();
-      sinon.stub(ClickventureEditConfigPages, 'getActiveConfigPage').returns(null);
+      renderCallback = sandbox.stub();
+      sandbox.stub(ClickventureEditConfigPages, 'getActiveConfigPage').returns(null);
 
       $parentScope.$digest();
       var callback = registerConfigPageChangeHandler.getCall(0).args[0];
@@ -109,11 +116,11 @@ describe('clickventureEditNodeContainer', function () {
 
     it('should set selected status and call render callback when node changes', function () {
       var node = new ClickventureEditNode();
-      var registerSelectNodeHandler = sinon.stub(
+      var registerSelectNodeHandler = sandbox.stub(
         ClickventureEdit,
         'registerSelectNodeHandler'
       );
-      renderCallback = sinon.stub();
+      renderCallback = sandbox.stub();
       node.statuses[configPageKey] = configPage.statuses[1];
       ClickventureEdit.getData().nodeActive = node;
 
@@ -130,8 +137,8 @@ describe('clickventureEditNodeContainer', function () {
 
     it('should have a way to change active node status that causes a search', function () {
       var node = new ClickventureEditNode();
-      var setNodeStatus = sinon.stub(ClickventureEditConfigPages, 'setNodeStatus');
-      var $emit = sinon.stub($rootScope, '$emit');
+      var setNodeStatus = sandbox.stub(ClickventureEditConfigPages, 'setNodeStatus');
+      var $emit = sandbox.stub($rootScope, '$emit');
       var selectedStatus = 'some status';
 
       $parentScope.$digest();

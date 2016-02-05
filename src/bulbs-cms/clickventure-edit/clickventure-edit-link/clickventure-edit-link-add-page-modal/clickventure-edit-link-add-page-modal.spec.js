@@ -6,6 +6,7 @@ describe('ClickventureEditLinkAddPageModal', function () {
   var ClickventureEditNodeLink;
   var ClickventureEditLinkAddPageModal;
   var link;
+  var sandbox;
 
   beforeEach(function () {
     module('bulbs.clickventure.edit.link.addPageModal.factory');
@@ -15,6 +16,8 @@ describe('ClickventureEditLinkAddPageModal', function () {
 
     inject(function (_$parse_, _ClickventureEdit_, _ClickventureEditNodeLink_,
         _ClickventureEditLinkAddPageModal_, $rootScope) {
+      sandbox = sinon.sandbox.create();
+
       $parse = _$parse_;
       ClickventureEdit = _ClickventureEdit_;
       ClickventureEditNodeLink = _ClickventureEditNodeLink_;
@@ -24,6 +27,10 @@ describe('ClickventureEditLinkAddPageModal', function () {
       $modalScope = $rootScope.$new();
       $modalScope.link = link;
     });
+  });
+
+  afterEach(function () {
+    sandbox.restore();
   });
 
   describe('on initialization', function () {
@@ -47,7 +54,7 @@ describe('ClickventureEditLinkAddPageModal', function () {
       // I too hate this, good luck finding an alternative, it seems impossible
       //  to trigger any kind of event that will fire the ng-keyup logic on this
       //  stupid input.
-      var confirm = sinon.stub();
+      var confirm = sandbox.stub();
       var keyupAttr = angular.element(document.getElementById('newPageTitle')).attr('ng-keyup');
       $parse(keyupAttr)({
         $event: {keyCode: 13},
@@ -63,14 +70,14 @@ describe('ClickventureEditLinkAddPageModal', function () {
     it('should add a new node and update link data', function () {
       var addPageModal = new ClickventureEditLinkAddPageModal($modalScope);
       var pageTitle = 'something something';
-      var updateInboundLinks = sinon.stub(ClickventureEdit, 'updateInboundLinks');
+      var updateInboundLinks = sandbox.stub(ClickventureEdit, 'updateInboundLinks');
       var fakeNodeId = 10101;
       var fakeNode = {id: fakeNodeId, title: ''};
-      var addNode = sinon.stub(ClickventureEdit, 'addNode').returns(fakeNode);
+      var addNode = sandbox.stub(ClickventureEdit, 'addNode').returns(fakeNode);
 
       $modalScope.$digest();
       var $childScope = $modalScope.$$childHead;
-      var $close = sinon.spy($childScope, '$close');
+      var $close = sandbox.spy($childScope, '$close');
       $childScope.pageTitle = pageTitle;
       $childScope.confirm();
 

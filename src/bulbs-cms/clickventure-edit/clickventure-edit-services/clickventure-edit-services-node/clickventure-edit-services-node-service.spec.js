@@ -451,5 +451,105 @@ describe('ClickventureEdit', function () {
         });
       });
     });
+
+    describe('should have a way to delete a node that', function () {
+
+      it('should remove the given node', function () {
+        var node1 = ClickventureEdit.addNode();
+        var node2 = ClickventureEdit.addNode();
+        var node3 = ClickventureEdit.addNode();
+
+        ClickventureEdit.deleteNode(node2);
+
+        expect(nodeData.nodes.length).to.equal(2);
+        expect(nodeData.nodes[0]).to.equal(node1);
+        expect(nodeData.nodes[1]).to.equal(node3);
+      });
+
+      it('should remove node\'s data from view data', function () {
+        var node = ClickventureEdit.addNode();
+
+        ClickventureEdit.deleteNode(node);
+
+        expect(nodeData.view[node.id].node).to.not.equal(node);
+      });
+
+      it('should remove deleted node from all links', function () {
+        var node1 = ClickventureEdit.addNode();
+        var node2 = ClickventureEdit.addNode();
+        var link1 = ClickventureEdit.addLink(node1);
+        var link2 = ClickventureEdit.addLink(node1);
+
+        link1.to_node = node2.id;
+        link2.to_node = node2.id;
+        ClickventureEdit.deleteNode(node2);
+
+        expect(link1.to_node).to.be.null;
+        expect(link2.to_node).to.be.null;
+      });
+
+      it('should remove deleted node from all sister pages', function () {
+        var node1 = ClickventureEdit.addNode();
+        var node2 = ClickventureEdit.cloneNode(node1);
+        var node3 = ClickventureEdit.cloneNode(node2);
+
+        ClickventureEdit.deleteNode(node3);
+
+        expect(node1.sister_pages.length).to.equal(1);
+        expect(node1.sister_pages[0]).to.equal(node2.id);
+        expect(node2.sister_pages.length).to.equal(1);
+        expect(node2.sister_pages[0]).to.equal(node1.id);
+      });
+
+      it('should remove deleted node from all inbound links', function () {
+        var node1 = ClickventureEdit.addNode();
+        var node2 = ClickventureEdit.addNode();
+        var node3 = ClickventureEdit.addNode();
+        var link1 = ClickventureEdit.addLink(node1);
+        var link2 = ClickventureEdit.addLink(node1);
+
+        link1.to_node = node2.id;
+        ClickventureEdit.updateInboundLinks(link1);
+        link1.to_node = node3.id;
+        ClickventureEdit.updateInboundLinks(link2);
+        ClickventureEdit.deleteNode(node1);
+
+        expect(nodeData.view[node2.id].inboundLinks).to.not.contain(node1.id);
+        expect(nodeData.view[node3.id].inboundLinks).to.not.contain(node1.id);
+      });
+
+      it('should add a new node if the deleted node was the only node', function () {
+        var node = ClickventureEdit.addNode();
+
+        ClickventureEdit.deleteNode(node);
+
+        expect(nodeData.nodes.length).to.equal(1);
+        expect(nodeData.nodes[0]).to.not.equal(node);
+      });
+
+      it('should select the previous node', function () {
+        var node1 = ClickventureEdit.addNode();
+        var node2 = ClickventureEdit.addNode();
+        var node3 = ClickventureEdit.addNode();
+
+        ClickventureEdit.selectNode(node2);
+        ClickventureEdit.deleteNode(node2);
+
+        expect(nodeData.nodeActive).to.equal(node1);
+      });
+
+      it('should fix node orders in view data', function () {
+        var node1 = ClickventureEdit.addNode();
+        var node2 = ClickventureEdit.addNode();
+        var node3 = ClickventureEdit.addNode();
+        var node4 = ClickventureEdit.addNode();
+
+        ClickventureEdit.deleteNode(node3);
+
+        expect(nodeData.view[node1.id].order).to.equal(1);
+        expect(nodeData.view[node2.id].order).to.equal(2);
+        expect(nodeData.view[node4.id].order).to.equal(3);
+      });
+    });
   });
 });

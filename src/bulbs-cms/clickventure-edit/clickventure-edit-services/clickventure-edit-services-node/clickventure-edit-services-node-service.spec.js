@@ -551,5 +551,19 @@ describe('ClickventureEdit', function () {
         expect(nodeData.view[node4.id].order).to.equal(3);
       });
     });
+
+    describe('should have a method to retrieve valid link styles that', function () {
+
+      it('should returns valid link styles', function () {
+
+        var linkStyles = ClickventureEdit.getValidLinkStyles();
+
+        expect(linkStyles[0]).to.equal('');
+        expect(linkStyles[1]).to.equal('Action');
+        expect(linkStyles[2]).to.equal('Dialogue');
+        expect(linkStyles[3]).to.equal('Music');
+        expect(linkStyles[4]).to.equal('Quiz');
+      });
+    });
   });
 });

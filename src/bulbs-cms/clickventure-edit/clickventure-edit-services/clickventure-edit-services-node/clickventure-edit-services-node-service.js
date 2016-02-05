@@ -278,16 +278,6 @@ angular.module('bulbs.clickventure.edit.services.node', [
             'Quiz'
           ];
         },
-        getValidNodeTransitions: function () {
-          return [
-            'default',
-            'slideLeft',
-            'slideRight',
-            'slideUp',
-            'slideDown',
-            'flipLeft'
-          ];
-        },
         addLink: function (node) {
           var link = new ClickventureEditNodeLink({
             from_node: node.id,

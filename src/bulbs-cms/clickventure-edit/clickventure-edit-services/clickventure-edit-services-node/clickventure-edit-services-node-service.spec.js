@@ -42,6 +42,7 @@ describe('ClickventureEdit', function () {
         expect(newNode.id).to.equal(1);
         expect(newNode.start).to.be.true;
         expect(ClickventureEdit.getData().nodes[0]).to.equal(newNode);
+        expect(newNode).to.be.instanceOf(ClickventureEditNode);
       });
 
       it('should create a node with an id 1 greater than the max id', function () {
@@ -166,14 +167,14 @@ describe('ClickventureEdit', function () {
 
           ClickventureEdit.setNodes([node]);
 
-          expect(nodeData.nodes[0]).to.equal(node);
+          expect(nodeData.nodes[0].id).to.equal(node.id);
           expect(nodeData.nodes[0].links[0].from_node).to.equal(node.id);
           expect(nodeData.nodes[0].links[1].from_node).to.equal(node.id);
         });
 
         it('should ensure all nodes have a links property', function () {
 
-          ClickventureEdit.setNodes([{}, {}, {}]);
+          ClickventureEdit.setNodes([{id: 1}, {id: 2}, {id: 3}]);
 
           expect(nodeData.nodes[0].links).to.be.instanceOf(Array);
           expect(nodeData.nodes[1].links).to.be.instanceOf(Array);
@@ -182,7 +183,7 @@ describe('ClickventureEdit', function () {
 
         it('should ensure all nodes have a statuses property', function () {
 
-          ClickventureEdit.setNodes([{}, {}, {}]);
+          ClickventureEdit.setNodes([{id: 1}, {id: 2}, {id: 3}]);
 
           expect(nodeData.nodes[0].statuses).to.be.instanceOf(Object);
           expect(nodeData.nodes[1].statuses).to.be.instanceOf(Object);
@@ -191,11 +192,18 @@ describe('ClickventureEdit', function () {
 
         it('should ensure all nodes have a sister_pages property', function () {
 
-          ClickventureEdit.setNodes([{}, {}, {}]);
+          ClickventureEdit.setNodes([{id: 1}, {id: 2}, {id: 3}]);
 
           expect(nodeData.nodes[0].sister_pages).to.be.instanceOf(Array);
           expect(nodeData.nodes[1].sister_pages).to.be.instanceOf(Array);
           expect(nodeData.nodes[2].sister_pages).to.be.instanceOf(Array);
+        });
+
+        it('should ensure new data is casted as a node object', function () {
+
+          ClickventureEdit.setNodes([{id: 1}]);
+
+          expect(nodeData.nodes[0]).to.be.instanceOf(ClickventureEditNode);
         });
       });
 
@@ -235,8 +243,10 @@ describe('ClickventureEdit', function () {
         var updateInboundLinks = sinon.spy(ClickventureEdit, 'updateInboundLinks');
 
         ClickventureEdit.setNodes([{
+          id: 1,
           links: [{}, {}, {}]
         }, {
+          id: 2,
           links: [{}]
         }]);
 
@@ -316,6 +326,129 @@ describe('ClickventureEdit', function () {
         expect(handler1.calledWith(node)).to.be.true;
         expect(handler2.calledOnce).to.be.true;
         expect(handler2.calledWith(node)).to.be.true;
+      });
+    });
+
+    describe('should have a method to clone a node that', function () {
+
+      it('should do a shallow copy of all non-unqiue properties', function () {
+        var originalNode = ClickventureEdit.addNode();
+        originalNode.body = 'some body';
+        originalNode.finish = true;
+        originalNode.link_style = 'some link style';
+        originalNode.photo_description = 'some photo description';
+        originalNode.photo_final = 'something something something';
+        originalNode.photo_note = 'photo note';
+        originalNode.photo_placeholder_page_url = 'alsdkjflaksjlfkja';
+        originalNode.photo_placeholder_url = 'alsijfojoaijf3';
+        originalNode.share_text = '309j8qflaskefm';
+        originalNode.shareable = true;
+        originalNode.start = false;
+        originalNode.title = 'afli3jpajf3jakvjlamvasf'
+
+        var clonedNode = ClickventureEdit.cloneNode(originalNode);
+
+        expect(originalNode.id).to.not.equal(clonedNode.id);
+        expect(originalNode.title).to.not.equal(clonedNode.title);
+        expect(originalNode.links).to.not.equal(clonedNode.links);
+        expect(originalNode.sister_pages).to.not.equal(clonedNode.sister_pages);
+        expect(originalNode.statuses).to.not.equal(clonedNode.statuses);
+
+        expect(originalNode.body).to.equal(clonedNode.body);
+        expect(originalNode.finish).to.equal(clonedNode.finish);
+        expect(originalNode.link_style).to.equal(clonedNode.link_style);
+        expect(originalNode.photo_description).to.equal(clonedNode.photo_description);
+        expect(originalNode.photo_final).to.equal(clonedNode.photo_final);
+        expect(originalNode.photo_note).to.equal(clonedNode.photo_note);
+        expect(originalNode.photo_placeholder_page_url).to.equal(clonedNode.photo_placeholder_page_url);
+        expect(originalNode.photo_placeholder_url).to.equal(clonedNode.photo_placeholder_url);
+        expect(originalNode.share_text).to.equal(clonedNode.share_text);
+        expect(originalNode.shareable).to.equal(clonedNode.shareable);
+        expect(originalNode.start).to.equal(clonedNode.start);
+      });
+
+      it('should prefix the cloned node title with an indication that it\'s been cloned', function () {
+        var title = 'some node title';
+        var originalNode = ClickventureEdit.addNode();
+        originalNode.title = title;
+
+        var clonedNode = ClickventureEdit.cloneNode(originalNode);
+
+        expect(clonedNode.title).to.equal('Clone - ' + title);
+      });
+
+      it('should create clones of all outbound links', function () {
+        var nodeTo = ClickventureEdit.addNode();
+        var nodeFrom = ClickventureEdit.addNode();
+        var link1 = ClickventureEdit.addLink(nodeFrom);
+        var link2 = ClickventureEdit.addLink(nodeFrom);
+
+        link1.to_node = nodeTo.id;
+        link2.to_node = nodeTo.id;
+        ClickventureEdit.updateInboundLinks(link1);
+        ClickventureEdit.updateInboundLinks(link2);
+        var clonedNode = ClickventureEdit.cloneNode(nodeFrom);
+
+        expect(clonedNode.links.length).to.equal(2);
+        expect(clonedNode.links[0].to_node).to.equal(link1.to_node);
+        expect(clonedNode.links[0]).to.not.equal(link1);
+        expect(clonedNode.links[1].to_node).to.equal(link2.to_node);
+        expect(clonedNode.links[1]).to.not.equal(link2);
+        expect(nodeData.view[nodeTo.id].inboundLinks.length).to.equal(2);
+        expect(nodeData.view[nodeTo.id].inboundLinks).to.include(nodeFrom.id);
+        expect(nodeData.view[nodeTo.id].inboundLinks).to.include(clonedNode.id);
+      });
+
+      it('should clone all statuses', function () {
+        var node = ClickventureEdit.addNode();
+        var statuses = ['my garbage status', 'trash status one', 'blah balh blah'];
+
+        node.statuses = statuses;
+        var clonedNode = ClickventureEdit.cloneNode(node);
+
+        expect(clonedNode.statuses[0]).to.equal(node.statuses[0]);
+        expect(clonedNode.statuses[1]).to.equal(node.statuses[1]);
+        expect(clonedNode.statuses[2]).to.equal(node.statuses[2]);
+      });
+
+      describe('should have a way to deal with sister pages that', function () {
+        var node1;
+        var node2;
+        var node3;
+        var node1SisterPages;
+
+        beforeEach(function () {
+          node1 = ClickventureEdit.addNode();
+          node2 = ClickventureEdit.addNode();
+          node3 = ClickventureEdit.addNode();
+          node1SisterPages = [node2.id, node3.id];
+
+          node1.sister_pages = node1SisterPages;
+        });
+
+        it('should clone all sister page ids', function () {
+
+          var clonedNode = ClickventureEdit.cloneNode(node1);
+
+          expect(clonedNode.sister_pages[0]).to.equal(node1.sister_pages[0]);
+          expect(clonedNode.sister_pages[1]).to.equal(node1.sister_pages[1]);
+        });
+
+        it('should tell sister pages they have a new sibling', function () {
+
+          var clonedNode = ClickventureEdit.cloneNode(node1);
+
+          expect(node2.sister_pages).to.include(clonedNode.id);
+          expect(node3.sister_pages).to.include(clonedNode.id);
+        });
+
+        it('should list the original node as a sister, and the original node should list the clone as a sister', function () {
+
+          var clonedNode = ClickventureEdit.cloneNode(node1);
+
+          expect(node1.sister_pages).to.include(clonedNode.id);
+          expect(clonedNode.sister_pages).to.include(node1.id);
+        });
       });
     });
   });

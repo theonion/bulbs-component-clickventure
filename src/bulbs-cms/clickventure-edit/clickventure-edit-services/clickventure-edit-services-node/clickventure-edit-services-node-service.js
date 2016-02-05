@@ -119,19 +119,21 @@ angular.module('bulbs.clickventure.edit.services.node', [
           return data;
         },
         setNodes: function (nodes) {
+          data.nodes = [];
+          data.view = {};
+
           if (!_.isArray(nodes)) {
             nodes = [];
           }
-
-          data.nodes = nodes;
-          data.view = {};
 
           var newActiveNode = null;
           if (nodes.length < 1) {
             // ensure there's at least one node
             this.addAndSelectNode();
           } else {
-            data.nodes.forEach(function (node, i) {
+            nodes.forEach(function (node, i) {
+              data.nodes.push(new ClickventureEditNode(node));
+
               // some cleanup to ensure old nodes are in a good state
               _updateNodeData(node);
 
@@ -204,7 +206,7 @@ angular.module('bulbs.clickventure.edit.services.node', [
           // so we don't modify the original page's links
           var _this = this;
           clonedNode.links = node.links.map(function (link) {
-            var newLink = _.clone(link);
+            var newLink = new ClickventureEditNodeLink(link);
 
             newLink.from_node = clonedNode.id;
             _this.updateInboundLinks(newLink);

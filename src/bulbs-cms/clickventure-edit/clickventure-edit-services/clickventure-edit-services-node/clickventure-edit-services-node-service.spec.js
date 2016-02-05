@@ -581,5 +581,56 @@ describe('ClickventureEdit', function () {
         expect(link.link_style).to.equal(linkStyle);
       });
     });
+
+    describe('should have a method to reorder a link that', function () {
+      var node;
+      var link1;
+      var link2;
+      var link3;
+
+      beforeEach(function () {
+        node = ClickventureEdit.addNode();
+        link1 = ClickventureEdit.addLink(node);
+        link2 = ClickventureEdit.addLink(node);
+        link3 = ClickventureEdit.addLink(node);
+      });
+
+      it('should move link', function () {
+        var oldIndex = node.links.indexOf(link1);
+
+        ClickventureEdit.reorderLink(node, oldIndex, 1);
+
+        expect(node.links[0]).to.equal(link2);
+        expect(node.links[1]).to.equal(link1);
+        expect(node.links[2]).to.equal(link3);
+      });
+
+      it('should not move link if given from index is less than 0', function () {
+
+        ClickventureEdit.reorderLink(node, -1, 1);
+
+        expect(node.links[0]).to.equal(link1);
+        expect(node.links[1]).to.equal(link2);
+        expect(node.links[2]).to.equal(link3);
+      });
+
+      it('should not move link if given to index is less than 0', function () {
+
+        ClickventureEdit.reorderLink(node, 0, -1);
+
+        expect(node.links[0]).to.equal(link1);
+        expect(node.links[1]).to.equal(link2);
+        expect(node.links[2]).to.equal(link3);
+      });
+
+      it('should not move link if given to index is out of top bound', function () {
+
+        ClickventureEdit.reorderLink(node, 0, node.links.length);
+
+        expect(node.links[0]).to.equal(link1);
+        expect(node.links[1]).to.equal(link2);
+        expect(node.links[2]).to.equal(link3);
+      });
+    });
   });
 });

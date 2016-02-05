@@ -83,16 +83,6 @@ angular.module('bulbs.clickventure.edit.services.node', [
         return node;
       };
 
-      var _selectNode = function (node) {
-        data.nodeActive = node;
-
-        handlers.select.forEach(function (func) {
-          func(node);
-        });
-
-        return node;
-      };
-
       return {
         addNode: function () {
           var node = new ClickventureEditNode({
@@ -113,7 +103,7 @@ angular.module('bulbs.clickventure.edit.services.node', [
           return node;
         },
         addAndSelectNode: function () {
-          return _selectNode(this.addNode());
+          return this.selectNode(this.addNode());
         },
         updateInboundLinks: function (link) {
           if (typeof link.to_node === 'number') {
@@ -161,7 +151,7 @@ angular.module('bulbs.clickventure.edit.services.node', [
               });
             });
 
-            _selectNode(newActiveNode);
+            this.selectNode(newActiveNode);
           }
 
           return _reindexNodes();
@@ -184,6 +174,15 @@ angular.module('bulbs.clickventure.edit.services.node', [
         },
         registerSelectNodeHandler: function (func) {
           handlers.select.push(func);
+        },
+        selectNode: function (node) {
+          data.nodeActive = node;
+
+          handlers.select.forEach(function (func) {
+            func(node);
+          });
+
+          return node;
         },
         cloneNode: function (node) {
           var clonedNode = this.addAndSelectNode();
@@ -263,7 +262,7 @@ angular.module('bulbs.clickventure.edit.services.node', [
             nextNodeId = 0;
           }
 
-          _selectNode(data.nodes[nextNodeId]);
+          this.selectNode(data.nodes[nextNodeId]);
 
           return _reindexNodes();
         },

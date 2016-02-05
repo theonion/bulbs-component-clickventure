@@ -291,5 +291,32 @@ describe('ClickventureEdit', function () {
         expect(nodeData.view[node3.id].order).to.equal(3);
       });
     });
+
+    describe('should have a method to select a node that', function () {
+
+      it('should set the active node', function () {
+        var node = {};
+
+        nodeData.nodeActive = null;
+        ClickventureEdit.selectNode(node);
+
+        expect(nodeData.nodeActive).to.equal(node);
+      });
+
+      it('should fire registered select node handlers', function () {
+        var node = {};
+        var handler1 = sinon.stub();
+        var handler2 = sinon.stub();
+
+        ClickventureEdit.registerSelectNodeHandler(handler1);
+        ClickventureEdit.registerSelectNodeHandler(handler2);
+        ClickventureEdit.selectNode(node);
+
+        expect(handler1.calledOnce).to.be.true;
+        expect(handler1.calledWith(node)).to.be.true;
+        expect(handler2.calledOnce).to.be.true;
+        expect(handler2.calledWith(node)).to.be.true;
+      });
+    });
   });
 });

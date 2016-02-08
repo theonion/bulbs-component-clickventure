@@ -12,7 +12,7 @@ module.exports = function (config) {
       path.join('bower_components', 'lodash', 'lodash.js'),
       path.join('bower_components', 'angular-uuid4', 'angular-uuid4.js'),
 
-      path.join('.tmp', 'django-bulbs-cms-pre-1', 'templates.js'),
+      path.join('.test', 'django-bulbs-cms-pre-1', 'templates.js'),
 
       path.join('resources', 'js', 'testing', 'test-helper.js'),
       path.join('src', 'bulbs-cms', '**', '*.js')

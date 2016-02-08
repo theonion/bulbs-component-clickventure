@@ -2,7 +2,7 @@ angular.module('bulbs.clickventure.edit', [
   'bulbs.clickventure.edit.node',
   'bulbs.clickventure.edit.nodeList',
   'bulbs.clickventure.edit.nodeToolbar',
-  'bulbs.clickventure.edit.services.node',
+  'bulbs.clickventure.edit.services.edit',
   'bulbs.clickventure.edit.toolFixture'
 ])
   .directive('clickventureEdit', [
@@ -19,6 +19,10 @@ angular.module('bulbs.clickventure.edit', [
           function ($scope, ClickventureEdit) {
 
             $scope.data = ClickventureEdit.getData();
+
+            if (!article.nodes) {
+              article.nodes = [];
+            }
 
             $scope.$watch('article.nodes', function (newVal, oldVal) {
               ClickventureEdit.setNodes(newVal);

@@ -95,6 +95,6 @@ For continuous builds while you develop:
 ```
 or to run a single build, as in creating a build for release:
 ```bash
-$ ./scripts/dev-start --single-run
+$ ./scripts/build
 ```
 See [django-bulbs-cms Package](#django-bulbs-cms-package) section for more info.

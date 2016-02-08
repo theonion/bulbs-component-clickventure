@@ -3,10 +3,13 @@ describe('ClickventureEditConfigPages', function () {
   var ClickventureEditConfigPage;
   var ClickventureEditConfigPages;
   var ClickventureEditNode;
+  var sandbox;
 
   beforeEach(function () {
+    sandbox = sinon.sandbox.create();
+
     module('bulbs.clickventure.edit.services.configPage');
-    module('bulbs.clickventure.edit.services.node.factory');
+    module('bulbs.clickventure.edit.services.node.service');
 
     inject(function (_ClickventureEditConfigPage_, _ClickventureEditConfigPages_,
         _ClickventureEditNode_) {
@@ -15,6 +18,10 @@ describe('ClickventureEditConfigPages', function () {
       ClickventureEditConfigPages = _ClickventureEditConfigPages_;
       ClickventureEditNode = _ClickventureEditNode_;
     });
+  });
+
+  afterEach(function () {
+    sandbox.restore();
   });
 
   describe('initialization', function () {
@@ -78,7 +85,7 @@ describe('ClickventureEditConfigPages', function () {
       var node;
 
       beforeEach(function () {
-        node = new ClickventureEditNode();
+        node = ClickventureEditNode.prepOrCreate();
       });
 
       it('should work for a valid status', function () {
@@ -112,7 +119,7 @@ describe('ClickventureEditConfigPages', function () {
       var node;
 
       beforeEach(function () {
-        node = new ClickventureEditNode();
+        node = ClickventureEditNode.prepOrCreate();
       });
 
       it('should be true if it doesn\'t have the status, but the status being tested for is the first in the list of statuses for a config page', function () {
@@ -166,7 +173,7 @@ describe('ClickventureEditConfigPages', function () {
       var node;
 
       beforeEach(function () {
-        node = new ClickventureEditNode();
+        node = ClickventureEditNode.prepOrCreate();
       });
 
       it('should be true if a node has all of the last statuses of all config pages', function () {

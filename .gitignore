@@ -12,7 +12,8 @@ src/django-bulbs-public/static/clickventure/styles/clickventure.css
 ########
 # node #
 ########
-.tmp
+.build
+.test
 dist
 node_modules
 npm-debug.log

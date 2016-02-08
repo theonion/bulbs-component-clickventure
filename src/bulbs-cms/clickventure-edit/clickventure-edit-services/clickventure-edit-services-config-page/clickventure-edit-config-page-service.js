@@ -110,15 +110,14 @@ angular.module('bulbs.clickventure.edit.services.configPage', [
           var nodeStatus = node.statuses[configPageKey];
 
           hasStatus =
-            (statusIndex === 0 && typeof nodeStatus === 'undefined') ||
-            nodeStatus === status;
+            (statusIndex === 0 && !nodeStatus) || nodeStatus === status;
         }
 
         return hasStatus;
       });
 
       method('nodeIsComplete', function (node) {
-        return Object.keys(data.configPages)
+        return this.getConfigPageKeys()
           .reduce(function (isComplete, configPageKey) {
             return isComplete &&
               node.statuses[configPageKey] === data.configPages[configPageKey].getCompleteStatus();

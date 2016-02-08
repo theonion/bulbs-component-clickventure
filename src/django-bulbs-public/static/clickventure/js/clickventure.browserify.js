@@ -1,3 +1,4 @@
+
 (function (global, $) {
 
   // default options to use when constructing Clickventure, can be passed in and overridden
@@ -99,7 +100,9 @@
   var Clickventure = function (element, options) {
 
     this.element = $(element);
-    this.options = $.extend({}, defaultOptions, options);
+
+    var settings = $.extend({}, defaultOptions, options);
+    this.options = settings;
     this.doAlign = !this.options.preventFirstAlignment;
 
     // set up all node links
@@ -110,6 +113,7 @@
         var targetNode = $dataContainer.data('targetNode');
         var transitionName = $dataContainer.data('transition');
         clickventure.gotoNodeId(targetNode, transitionName);
+        settings.analyticsManager.trackPageView(false, transitionName);
       });
     });
 

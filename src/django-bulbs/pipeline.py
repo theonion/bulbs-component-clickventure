@@ -48,4 +48,4 @@ public_js \
     .set_output_filename("js/clickventure.js") \
     .add_source_filename("velocity/jquery.velocity.min.js") \
     .add_source_filename("velocity/velocity.ui.min.js") \
-    .add_source_filename("clickventure/js/clickventure.js")
+    .add_source_filename("clickventure/js/clickventure.browserify.js")

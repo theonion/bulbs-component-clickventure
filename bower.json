@@ -1,7 +1,7 @@
 {
   "name": "bulbs-component-clickventure",
   "description": "Frontend dependencies for Clickventure component.",
-  "version": "0.1.5",
+  "version": "0.2.1",
   "private": true,
   "ignore": [
     "compat-builds",

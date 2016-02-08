@@ -1,9 +1,6 @@
 {
   "description": "Do not install via npm.",
   "private": true,
-  "scripts": {
-    "test": "karma start resources/js/testing/karma.conf.js"
-  },
   "devDependencies": {
     "bower": "^1.7.7",
     "chai": "^3.5.0",
@@ -15,6 +12,7 @@
     "grunt-contrib-copy": "^0.8.0",
     "grunt-contrib-less": "^1.1.0",
     "grunt-contrib-watch": "^0.6.1",
+    "grunt-karma": "^0.12.1",
     "karma": "^0.13.19",
     "karma-chai": "^0.1.0",
     "karma-mocha": "^0.2.1",

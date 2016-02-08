@@ -47,12 +47,19 @@ angular.module('bulbs.clickventure.edit.services.configPage', [
         return Object.keys(data.configPages);
       };
 
-      var getConfigPage = function (configPage) {
+      var methods = {};
+      var method = function (name, func) {
+        methods[name] = func.bind(methods);
+      };
+
+      method('getConfigPageKeys', getConfigPageKeys);
+
+      method('getConfigPage', function (configPage) {
         var type = typeof configPage;
 
         var key;
         if (type === 'object') {
-          key = getConfigPageKeys()
+          key = this.getConfigPageKeys()
             .find(function (key) {
               return data.configPages[key] === configPage;
             });
@@ -61,70 +68,73 @@ angular.module('bulbs.clickventure.edit.services.configPage', [
         }
 
         return data.configPages[key];
-      };
+      });
 
-      var changeConfigPage = function (configPage) {
-        var activeConfigPage = getConfigPage(configPage);
+      method('changeConfigPage', function (configPage) {
+        var activeConfigPage = this.getConfigPage(configPage);
         if (activeConfigPage) {
           data.configPageActive = activeConfigPage;
           handlers.configPageChange.forEach(function (func) {
             func(activeConfigPage);
           });
         };
-      };
+      });
 
-      changeConfigPage(data.configPages.settings);
+      method('getOrderedConfigPages', function () {
+        return this.getConfigPageKeys()
+          .sort(function (a, b) {
+            return data.configPages[a].order - data.configPages[b].order;
+          })
+          .map(function (key) {
+            return data.configPages[key];
+          });
+      });
 
-      return {
-        getConfigPageKeys: getConfigPageKeys,
-        getConfigPage: getConfigPage,
-        changeConfigPage: changeConfigPage,
-        getOrderedConfigPages: function () {
-          return getConfigPageKeys()
-            .sort(function (a, b) {
-              return data.configPages[a].order - data.configPages[b].order;
-            })
-            .map(function (key) {
-              return data.configPages[key];
-            });
-        },
-        setNodeStatus: function (node, status) {
-          var configPageKey = _getVerifiedConfigPageKey(status);
-          if (configPageKey) {
-            node.statuses[configPageKey] =
-              status === data.configPages[configPageKey].getUnsetStatus() ? '' : status;
-          }
-
-          return node;
-        },
-        nodeHasStatus: function (node, status) {
-          var hasStatus = false;
-          var configPageKey = _getVerifiedConfigPageKey(status);
-
-          if (configPageKey) {
-            var configPage = data.configPages[configPageKey];
-            var statusIndex = configPage.statuses.indexOf(status);
-            var nodeStatus = node.statuses[configPageKey];
-
-            hasStatus =
-              (statusIndex === 0 && !nodeStatus) || nodeStatus === status;
-          }
-
-          return hasStatus;
-        },
-        nodeIsComplete: function (node) {
-          return Object.keys(data.configPages)
-            .reduce(function (isComplete, configPageKey) {
-              return isComplete &&
-                node.statuses[configPageKey] === data.configPages[configPageKey].getCompleteStatus();
-            }, true);
-        },
-        getActiveConfigPage: function () {
-          return data.configPageActive;
-        },
-        registerConfigPageChangeHandler: function (func) {
-          handlers.configPageChange.push(func);
+      method('setNodeStatus', function (node, status) {
+        var configPageKey = _getVerifiedConfigPageKey(status);
+        if (configPageKey) {
+          node.statuses[configPageKey] =
+            status === data.configPages[configPageKey].getUnsetStatus() ? '' : status;
         }
-      };
+
+        return node;
+      });
+
+      method('nodeHasStatus', function (node, status) {
+        var hasStatus = false;
+        var configPageKey = _getVerifiedConfigPageKey(status);
+
+        if (configPageKey) {
+          var configPage = data.configPages[configPageKey];
+          var statusIndex = configPage.statuses.indexOf(status);
+          var nodeStatus = node.statuses[configPageKey];
+
+          hasStatus =
+            (statusIndex === 0 && !nodeStatus) || nodeStatus === status;
+        }
+
+        return hasStatus;
+      });
+
+      method('nodeIsComplete', function (node) {
+        return this.getConfigPageKeys()
+          .reduce(function (isComplete, configPageKey) {
+            return isComplete &&
+              node.statuses[configPageKey] === data.configPages[configPageKey].getCompleteStatus();
+          }, true);
+      });
+
+      method('getActiveConfigPage', function () {
+        return data.configPageActive;
+      });
+
+      method('registerConfigPageChangeHandler', function (func) {
+        handlers.configPageChange.push(func);
+      });
+
+      // set intial config page
+      methods.changeConfigPage(data.configPages.settings);
+
+      return methods;
     }
   ]);

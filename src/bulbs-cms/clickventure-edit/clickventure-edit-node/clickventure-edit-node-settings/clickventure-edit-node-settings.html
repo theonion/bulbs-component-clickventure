@@ -106,7 +106,7 @@
     <div class="col-xs-6">
       <label>Outbound Links</label>
       <ul ng-show="node.links.length > 0">
-        <li ng-repeat="link in node.links">
+        <li ng-repeat="link in node.links track by $index">
           <a
               ng-if="link.to_node"
               ng-bind-html="nodeData.view[link.to_node].node | clickventure_node_name"

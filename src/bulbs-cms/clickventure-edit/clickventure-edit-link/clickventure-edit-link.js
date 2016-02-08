@@ -4,7 +4,7 @@ angular.module('bulbs.clickventure.edit.link', [
   'bulbs.clickventure.edit.icon.error',
   'bulbs.clickventure.edit.link.addPageModal.factory',
   'bulbs.clickventure.edit.nodeNameFilter',
-  'bulbs.clickventure.edit.services.node',
+  'bulbs.clickventure.edit.services.edit',
   'uuid4'
 ])
   .directive('clickventureEditLink', [
@@ -31,16 +31,20 @@ angular.module('bulbs.clickventure.edit.link', [
             $scope.nodeData = ClickventureEdit.getData();
 
             $scope.deleteLink = function (node, link) {
-              var modalScope = $scope.$new();
+              var $modalScope = $scope.$new();
 
-              modalScope.modalOnOk = ClickventureEdit.deleteLink.bind(ClickventureEdit, node, link);
-              modalScope.modalOnCancel = function () {};
-              modalScope.modalTitle = 'Confirm Link Delete';
-              modalScope.modalBody = 'Are you sure you wish to delete this link? This action cannot be undone!';
-              modalScope.modalOkText = 'Delete';
-              modalScope.modalCancelText = 'Cancel';
+              $modalScope.modalOnOk = function () {
+                ClickventureEdit.deleteLink(node, link);
+              };
+              $modalScope.modalOnCancel = function () {};
+              $modalScope.modalTitle = 'Confirm Link Delete';
+              $modalScope.modalBody = 'Are you sure you wish to delete this link? This action cannot be undone!';
+              $modalScope.modalOkText = 'Delete';
+              $modalScope.modalCancelText = 'Cancel';
 
-              new ConfirmationModal(modalScope);
+              new ConfirmationModal($modalScope);
+
+              return $modalScope
             };
 
             $scope.openAddPageModal = function (link) {

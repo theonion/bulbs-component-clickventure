@@ -212,31 +212,32 @@ describe('ClickventureEdit', function () {
 
         ClickventureEdit.setNodes(nodes);
 
-        expect(nodeData.view[nodes[0].id].node).to.equal(nodes[0]);
+        expect(nodeData.view[nodes[0].id].node).to.equal(nodeData.nodes[0]);
         expect(nodeData.view[nodes[0].id].order).to.equal(1);
         expect(nodeData.view[nodes[0].id].inboundLinks).to.be.instanceOf(Array);
         expect(nodeData.view[nodes[0].id].inboundLinks.length).to.equal(0);
-        expect(nodeData.view[nodes[1].id].node).to.equal(nodes[1]);
+        expect(nodeData.view[nodes[1].id].node).to.equal(nodeData.nodes[1]);
         expect(nodeData.view[nodes[1].id].order).to.equal(2);
         expect(nodeData.view[nodes[1].id].inboundLinks).to.be.instanceOf(Array);
         expect(nodeData.view[nodes[1].id].inboundLinks.length).to.equal(0);
       });
 
-      it('should make the first node active if there is not active node', function () {
+      it('should make the first is node active if there is not an active node', function () {
         var node1 = {id: 1};
 
         ClickventureEdit.setNodes([node1, {id: 2}, {id: 3}]);
 
-        expect(nodeData.nodeActive).to.equal(node1);
+        expect(nodeData.nodeActive).to.equal(nodeData.nodes[0]);
       });
 
       it('should keep the same node active', function () {
-        var activeNode = {id: 1};
-        nodeData.nodeActive = activeNode;
+        var activeNodeId = 1;
 
-        ClickventureEdit.setNodes([{id: 3}, activeNode, {id: 2}]);
+        ClickventureEdit.setNodes([{id: 3}, {id: activeNodeId}, {id: 2}]);
+        nodeData.nodeActive = nodeData.nodes[1];
+        ClickventureEdit.setNodes([{id: 5}, {id: 2}, {id: activeNodeId}]);
 
-        expect(nodeData.nodeActive).to.equal(activeNode);
+        expect(nodeData.nodeActive).to.equal(nodeData.view[activeNodeId].node);
       });
 
       it('should setup inbound links for all node view data', function () {

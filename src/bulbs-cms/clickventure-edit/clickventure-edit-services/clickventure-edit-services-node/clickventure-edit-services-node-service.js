@@ -132,17 +132,19 @@ angular.module('bulbs.clickventure.edit.services.node', [
             this.addAndSelectNode();
           } else {
             nodes.forEach(function (node, i) {
-              data.nodes.push(new ClickventureEditNode(node));
+              var wrappedNode = new ClickventureEditNode(node);
+
+              data.nodes.push(wrappedNode);
 
               // some cleanup to ensure old nodes are in a good state
-              _updateNodeData(node);
+              _updateNodeData(wrappedNode);
 
               // 1-based index for readability
-              _setNodeViewData(node);
+              _setNodeViewData(wrappedNode);
 
               if (i === 0 && data.nodeActive === null ||
-                  newActiveNode === null && data.nodeActive.id === node.id) {
-                newActiveNode = node;
+                  newActiveNode === null && data.nodeActive.id === wrappedNode.id) {
+                newActiveNode = wrappedNode;
               }
             });
 

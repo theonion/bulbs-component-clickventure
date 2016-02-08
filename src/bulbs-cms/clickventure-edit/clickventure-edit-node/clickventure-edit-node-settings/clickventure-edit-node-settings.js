@@ -3,7 +3,7 @@ angular.module('bulbs.clickventure.edit.node.settings', [
   'bulbs.clickventure.edit.node.container',
   'bulbs.clickventure.edit.node.title',
   'bulbs.clickventure.edit.nodeNameFilter',
-  'bulbs.clickventure.edit.services.node'
+  'bulbs.clickventure.edit.services.edit'
 ])
   .directive('clickventureEditNodeSettings', function () {
     return {

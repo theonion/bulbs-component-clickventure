@@ -22,17 +22,17 @@ describe('clickventureEditLink', function () {
       });
 
     module('bulbs.clickventure.edit.link');
-    module('bulbs.clickventure.edit.services.node');
-    module('bulbs.clickventure.edit.services.node.factory');
-    module('bulbs.clickventure.edit.services.node.link.factory');
+    module('bulbs.clickventure.edit.services.edit');
+    module('bulbs.clickventure.edit.services.node.service');
+    module('bulbs.clickventure.edit.services.node.link.service');
     module('bulbs.clickventure.templates');
 
     inject(function (_ClickventureEdit_, $compile, $rootScope, ClickventureEditNode,
         ClickventureEditNodeLink) {
       ClickventureEdit = _ClickventureEdit_;
 
-      link = new ClickventureEditNodeLink();
-      node = new ClickventureEditNode();
+      link = ClickventureEditNodeLink.prepOrCreate();
+      node = ClickventureEditNode.prepOrCreate();
 
       var $parentScope = $rootScope.$new();
       $parentScope.link = link;

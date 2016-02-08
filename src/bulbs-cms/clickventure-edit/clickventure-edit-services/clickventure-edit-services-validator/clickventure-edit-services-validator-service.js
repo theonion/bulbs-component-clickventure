@@ -1,5 +1,5 @@
 angular.module('bulbs.clickventure.edit.services.validator', [
-  'bulbs.clickventure.edit.services.node',
+  'bulbs.clickventure.edit.services.edit',
 ])
   .service('ClickventureEditValidator', [
     '$filter', 'ClickventureEdit',

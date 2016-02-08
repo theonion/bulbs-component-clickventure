@@ -17,7 +17,7 @@ describe('clickventureEditNodeContainer', function () {
 
     module('bulbs.clickventure.edit.node.container');
     module('bulbs.clickventure.edit.services.configPage');
-    module('bulbs.clickventure.edit.services.node.factory');
+    module('bulbs.clickventure.edit.services.node.service');
     module('bulbs.clickventure.templates');
 
     inject(function ($compile, _$rootScope_, _$timeout_, _ClickventureEdit_,
@@ -63,7 +63,7 @@ describe('clickventureEditNodeContainer', function () {
     });
 
     it('should set the selected status to the active node\'s status for active config page', function () {
-      var node = new ClickventureEditNode();
+      var node = ClickventureEditNode.prepOrCreate();
       ClickventureEdit.getData().nodeActive = node;
       node.statuses[configPageKey] = configPage.statuses[1];
 
@@ -76,7 +76,7 @@ describe('clickventureEditNodeContainer', function () {
   describe('functionality', function () {
 
     it('should set selected status and call render callback when config page changes to this config page', function () {
-      var node = new ClickventureEditNode();
+      var node = ClickventureEditNode.prepOrCreate();
       var registerConfigPageChangeHandler = sandbox.stub(
         ClickventureEditConfigPages,
         'registerConfigPageChangeHandler'
@@ -115,7 +115,7 @@ describe('clickventureEditNodeContainer', function () {
     });
 
     it('should set selected status and call render callback when node changes', function () {
-      var node = new ClickventureEditNode();
+      var node = ClickventureEditNode.prepOrCreate();
       var registerSelectNodeHandler = sandbox.stub(
         ClickventureEdit,
         'registerSelectNodeHandler'
@@ -136,7 +136,7 @@ describe('clickventureEditNodeContainer', function () {
     });
 
     it('should have a way to change active node status that causes a search', function () {
-      var node = new ClickventureEditNode();
+      var node = ClickventureEditNode.prepOrCreate();
       var setNodeStatus = sandbox.stub(ClickventureEditConfigPages, 'setNodeStatus');
       var $emit = sandbox.stub($rootScope, '$emit');
       var selectedStatus = 'some status';

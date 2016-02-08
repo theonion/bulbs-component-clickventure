@@ -6,8 +6,8 @@ describe('ClickventureEdit', function () {
   var nodeData;
 
   beforeEach(function () {
-    module('bulbs.clickventure.edit.services.node');
-    module('bulbs.clickventure.edit.services.node.link.factory');
+    module('bulbs.clickventure.edit.services.edit');
+    module('bulbs.clickventure.edit.services.node.link.service');
 
     inject(function (_ClickventureEdit_, _ClickventureEditNode_, _ClickventureEditNodeLink_) {
 
@@ -42,7 +42,6 @@ describe('ClickventureEdit', function () {
         expect(newNode.id).to.equal(1);
         expect(newNode.start).to.be.true;
         expect(ClickventureEdit.getData().nodes[0]).to.equal(newNode);
-        expect(newNode).to.be.instanceOf(ClickventureEditNode);
       });
 
       it('should create a node with an id 1 greater than the max id', function () {
@@ -197,13 +196,6 @@ describe('ClickventureEdit', function () {
           expect(nodeData.nodes[0].sister_pages).to.be.instanceOf(Array);
           expect(nodeData.nodes[1].sister_pages).to.be.instanceOf(Array);
           expect(nodeData.nodes[2].sister_pages).to.be.instanceOf(Array);
-        });
-
-        it('should ensure new data is casted as a node object', function () {
-
-          ClickventureEdit.setNodes([{id: 1}]);
-
-          expect(nodeData.nodes[0]).to.be.instanceOf(ClickventureEditNode);
         });
       });
 

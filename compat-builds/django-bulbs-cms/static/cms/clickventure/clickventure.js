@@ -197,7 +197,7 @@ angular.module('bulbs.clickventure.edit.icon.error', [
   ]);
 
 angular.module('bulbs.clickventure.edit.link.addPageModal.factory', [
-  'bulbs.clickventure.edit.services.node',
+  'bulbs.clickventure.edit.services.edit',
   'ui.bootstrap.modal',
   'ui.bootstrap.tpls'
 ])
@@ -238,7 +238,7 @@ angular.module('bulbs.clickventure.edit.link', [
   'bulbs.clickventure.edit.icon.error',
   'bulbs.clickventure.edit.link.addPageModal.factory',
   'bulbs.clickventure.edit.nodeNameFilter',
-  'bulbs.clickventure.edit.services.node',
+  'bulbs.clickventure.edit.services.edit',
   'uuid4'
 ])
   .directive('clickventureEditLink', [
@@ -327,7 +327,7 @@ angular.module('bulbs.clickventure.edit.link', [
   );
 
 angular.module('bulbs.clickventure.edit.node.container', [
-  'bulbs.clickventure.edit.services.node',
+  'bulbs.clickventure.edit.services.edit',
   'bulbs.clickventure.edit.services.configPage'
 ])
   .directive('clickventureEditNodeContainer', [
@@ -386,7 +386,7 @@ angular.module('bulbs.clickventure.edit.node.container', [
 
 angular.module('bulbs.clickventure.edit.node.copy', [
   'bulbs.clickventure.edit.link',
-  'bulbs.clickventure.edit.services.node',
+  'bulbs.clickventure.edit.services.edit',
   'bulbs.clickventure.edit.node.container',
   'bulbs.clickventure.edit.node.title',
   'bulbs.clickventure.edit.icon.error'
@@ -437,7 +437,7 @@ angular.module('bulbs.clickventure.edit.nodeList.node', [
 
 angular.module('bulbs.clickventure.edit.nodeList', [
   'bulbs.clickventure.edit.nodeList.node',
-  'bulbs.clickventure.edit.services.node',
+  'bulbs.clickventure.edit.services.edit',
   'bulbs.clickventure.edit.services.configPage',
   'bulbs.clickventure.edit.services.validator',
   'uuid4'
@@ -585,7 +585,7 @@ angular.module('bulbs.clickventure.edit.node.settings', [
   'bulbs.clickventure.edit.node.container',
   'bulbs.clickventure.edit.node.title',
   'bulbs.clickventure.edit.nodeNameFilter',
-  'bulbs.clickventure.edit.services.node'
+  'bulbs.clickventure.edit.services.edit'
 ])
   .directive('clickventureEditNodeSettings', function () {
     return {
@@ -642,7 +642,7 @@ angular.module('bulbs.clickventure.edit.node.title', [])
   ]);
 
 angular.module('bulbs.clickventure.edit.nodeToolbar', [
-  'bulbs.clickventure.edit.services.node',
+  'bulbs.clickventure.edit.services.edit',
   'bulbs.clickventure.edit.services.configPage'
 ])
   .directive('clickventureEditNodeToolbar', [
@@ -687,64 +687,10 @@ angular.module('bulbs.clickventure.edit.node', [
     }
   ]);
 
-angular.module('bulbs.clickventure.edit.services.node.factory', [
-  'lodash'
-])
-  .factory('ClickventureEditNode', [
-    '_',
-    function (_) {
-
-      function ClickventureEditNode (props) {
-        _.assign(this, {
-          id: null,
-          body: '',
-          finish: false,
-          link_style: 'action',
-          links: [],
-          photo_description: '',
-          photo_final: null,
-          photo_note: '',
-          photo_placeholder_page_url: '',
-          photo_placeholder_url: '',
-          share_text: '',
-          shareable: false,
-          sister_pages: [],
-          start: false,
-          statuses: {},
-          title: ''
-        }, props);
-      };
-
-      return ClickventureEditNode;
-    }
-  ]);
-
-angular.module('bulbs.clickventure.edit.services.node.link.factory', [
-  'lodash'
-])
-  .factory('ClickventureEditNodeLink', [
-    '_',
-    function (_) {
-
-      function ClickventureEditNodeLink (props) {
-        _.assign(this, {
-          body: '',
-          from_node: null,
-          to_node: null,
-          transition: '',
-          link_style: null,
-          float: false
-        }, props);
-      };
-
-      return ClickventureEditNodeLink;
-    }
-  ]);
-
-angular.module('bulbs.clickventure.edit.services.node', [
+angular.module('bulbs.clickventure.edit.services.edit', [
   'bulbs.clickventure.edit.nodeNameFilter',
-  'bulbs.clickventure.edit.services.node.factory',
-  'bulbs.clickventure.edit.services.node.link.factory',
+  'bulbs.clickventure.edit.services.node.service',
+  'bulbs.clickventure.edit.services.node.link.service',
   'lodash'
 ])
   .service('ClickventureEdit', [
@@ -809,8 +755,14 @@ angular.module('bulbs.clickventure.edit.services.node', [
        */
       var _updateNodeData = function (node) {
         if (_.isArray(node.links)) {
-          node.links.forEach(function (link) {
+          // wrap each link properly
+          node.links = node.links.map(function (link, i) {
             link.from_node = node.id;
+
+            return ClickventureEditNodeLink.prepOrCreate(link);
+          });
+          node.links.forEach(function (link) {
+
           });
         } else {
           node.links = [];
@@ -829,7 +781,7 @@ angular.module('bulbs.clickventure.edit.services.node', [
 
       return {
         addNode: function () {
-          var node = new ClickventureEditNode({
+          var node = ClickventureEditNode.prepOrCreate({
             id: _getNextNodeId(),
             start: data.nodes.length === 0
           });
@@ -875,7 +827,7 @@ angular.module('bulbs.clickventure.edit.services.node', [
             this.addAndSelectNode();
           } else {
             nodes.forEach(function (node, i) {
-              var wrappedNode = new ClickventureEditNode(node);
+              var wrappedNode = ClickventureEditNode.prepOrCreate(node);
 
               data.nodes.push(wrappedNode);
 
@@ -951,7 +903,7 @@ angular.module('bulbs.clickventure.edit.services.node', [
           // so we don't modify the original page's links
           var _this = this;
           clonedNode.links = node.links.map(function (link) {
-            var newLink = new ClickventureEditNodeLink(link);
+            var newLink = ClickventureEditNodeLink.prepOrCreate(_.clone(link));
 
             newLink.from_node = clonedNode.id;
             _this.updateInboundLinks(newLink);
@@ -1024,7 +976,7 @@ angular.module('bulbs.clickventure.edit.services.node', [
           ];
         },
         addLink: function (node) {
-          var link = new ClickventureEditNodeLink({
+          var link = ClickventureEditNodeLink.prepOrCreate({
             from_node: node.id,
             link_style: node.link_style
           });
@@ -1060,8 +1012,73 @@ angular.module('bulbs.clickventure.edit.services.node', [
     }
   ]);
 
+angular.module('bulbs.clickventure.edit.services.node.link.service', [
+  'lodash'
+])
+  .service('ClickventureEditNodeLink', [
+    '_',
+    function (_) {
+
+      return {
+        prepOrCreate: function (data) {
+          return _.defaults(data, {
+            order: null,
+            body: '',
+            from_node: null,
+            to_node: null,
+            transition: '',
+            link_style: null,
+            float: false
+          });
+        }
+      };
+    }
+  ]);
+
+angular.module('bulbs.clickventure.edit.services.node.service', [
+  'bulbs.clickventure.edit.services.node.link.service',
+  'lodash'
+])
+  .service('ClickventureEditNode', [
+    '_', 'ClickventureEditNodeLink',
+    function (_, ClickventureEditNodeLink) {
+
+      return {
+        prepOrCreate: function (data) {
+          var reference = _.defaults(data, {
+            id: null,
+            body: '',
+            finish: false,
+            link_style: 'action',
+            links: [],
+            photo_description: '',
+            photo_final: null,
+            photo_note: '',
+            photo_placeholder_page_url: '',
+            photo_placeholder_url: '',
+            share_text: '',
+            shareable: false,
+            sister_pages: [],
+            start: false,
+            statuses: {},
+            title: ''
+          });
+
+          // wrap each link properly
+          reference.links = reference.links.map(function (link, i) {
+            link.from_node = reference.id;
+
+            return ClickventureEditNodeLink.prepOrCreate(link);
+          });
+
+          return reference;
+        }
+      };
+    }
+  ]);
+
 angular.module('bulbs.clickventure.edit.services.validator', [
-  'bulbs.clickventure.edit.services.node',
+  'bulbs.clickventure.edit.services.edit',
 ])
   .service('ClickventureEditValidator', [
     '$filter', 'ClickventureEdit',
@@ -1239,7 +1256,7 @@ angular.module('bulbs.clickventure.edit', [
   'bulbs.clickventure.edit.node',
   'bulbs.clickventure.edit.nodeList',
   'bulbs.clickventure.edit.nodeToolbar',
-  'bulbs.clickventure.edit.services.node',
+  'bulbs.clickventure.edit.services.edit',
   'bulbs.clickventure.edit.toolFixture'
 ])
   .directive('clickventureEdit', [
@@ -1355,7 +1372,7 @@ angular.module('bulbs.clickventure.templates', []).run(['$templateCache', functi
     "            }\" ng-click=\"node.shareable = !node.shareable\"><span class=fa ng-class=\"{\n" +
     "                'fa-check-square-o': node.shareable,\n" +
     "                'fa-square-o': !node.shareable\n" +
-    "              }\"></span> <span>Shareable</span></button></div></div><div ng-show=\"node.finish && node.shareable\" class=\"col-xs-12 form-group\"><label for=nodeShareText>Share Message</label><input id=nodeShareText class=form-control placeholder=\"Page Name (Internal Use)\" ng-model=node.share_text></div></div><div class=\"row form-group\"><div class=col-xs-6><label>Inbound Links</label><ul ng-show=\"nodeData.view[node.id].inboundLinks.length > 0\"><li ng-repeat=\"nodeId in nodeData.view[node.id].inboundLinks track by nodeId\"><a ng-bind-html=\"nodeData.view[nodeId].node | clickventure_node_name\" ng-click=selectNode(nodeData.view[nodeId].node)></a></li></ul><div ng-show=\"nodeData.view[node.id].inboundLinks.length === 0\">No inbound links yet, link a page to this one to make the first one.</div></div><div class=col-xs-6><label>Outbound Links</label><ul ng-show=\"node.links.length > 0\"><li ng-repeat=\"link in node.links\"><a ng-if=link.to_node ng-bind-html=\"nodeData.view[link.to_node].node | clickventure_node_name\" ng-click=selectNode(nodeData.view[link.to_node].node)></a> <span ng-if=!link.to_node class=text-danger><span>An unset link</span><clickventure-edit-icon-error error-text=\"This link doesn't link to another page!\"></clickventure-edit-icon-error></span></li></ul><div ng-show=\"node.links.length === 0\">No outbound links yet, add a link in copy settings to make the first one.</div></div></div><div class=\"row form-group\"><div class=col-xs-6><label>Sister Pages</label><ul ng-show=\"node.sister_pages.length > 0\"><li ng-repeat=\"nodeId in node.sister_pages track by nodeId\"><a ng-bind-html=\"nodeData.view[nodeId].node | clickventure_node_name\" ng-click=selectNode(nodeData.view[nodeId].node)></a></li></ul><div ng-show=\"node.sister_pages.length === 0\">No sister pages yet, clone this page to make the first one.</div></div></div><div class=\"row col-xs-12 form-group\"><button class=\"btn btn-danger\" ng-click=deleteNode(node)><i class=\"fa fa-trash-o\"></i> <span>Delete Page</span></button></div></clickventure-edit-node-container>"
+    "              }\"></span> <span>Shareable</span></button></div></div><div ng-show=\"node.finish && node.shareable\" class=\"col-xs-12 form-group\"><label for=nodeShareText>Share Message</label><input id=nodeShareText class=form-control placeholder=\"Page Name (Internal Use)\" ng-model=node.share_text></div></div><div class=\"row form-group\"><div class=col-xs-6><label>Inbound Links</label><ul ng-show=\"nodeData.view[node.id].inboundLinks.length > 0\"><li ng-repeat=\"nodeId in nodeData.view[node.id].inboundLinks track by nodeId\"><a ng-bind-html=\"nodeData.view[nodeId].node | clickventure_node_name\" ng-click=selectNode(nodeData.view[nodeId].node)></a></li></ul><div ng-show=\"nodeData.view[node.id].inboundLinks.length === 0\">No inbound links yet, link a page to this one to make the first one.</div></div><div class=col-xs-6><label>Outbound Links</label><ul ng-show=\"node.links.length > 0\"><li ng-repeat=\"link in node.links track by $index\"><a ng-if=link.to_node ng-bind-html=\"nodeData.view[link.to_node].node | clickventure_node_name\" ng-click=selectNode(nodeData.view[link.to_node].node)></a> <span ng-if=!link.to_node class=text-danger><span>An unset link</span><clickventure-edit-icon-error error-text=\"This link doesn't link to another page!\"></clickventure-edit-icon-error></span></li></ul><div ng-show=\"node.links.length === 0\">No outbound links yet, add a link in copy settings to make the first one.</div></div></div><div class=\"row form-group\"><div class=col-xs-6><label>Sister Pages</label><ul ng-show=\"node.sister_pages.length > 0\"><li ng-repeat=\"nodeId in node.sister_pages track by nodeId\"><a ng-bind-html=\"nodeData.view[nodeId].node | clickventure_node_name\" ng-click=selectNode(nodeData.view[nodeId].node)></a></li></ul><div ng-show=\"node.sister_pages.length === 0\">No sister pages yet, clone this page to make the first one.</div></div></div><div class=\"row col-xs-12 form-group\"><button class=\"btn btn-danger\" ng-click=deleteNode(node)><i class=\"fa fa-trash-o\"></i> <span>Delete Page</span></button></div></clickventure-edit-node-container>"
   );
 
 

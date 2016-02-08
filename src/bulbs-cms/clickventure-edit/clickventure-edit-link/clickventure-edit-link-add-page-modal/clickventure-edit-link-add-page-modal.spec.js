@@ -10,8 +10,8 @@ describe('ClickventureEditLinkAddPageModal', function () {
 
   beforeEach(function () {
     module('bulbs.clickventure.edit.link.addPageModal.factory');
-    module('bulbs.clickventure.edit.services.node');
-    module('bulbs.clickventure.edit.services.node.link.factory');
+    module('bulbs.clickventure.edit.services.edit');
+    module('bulbs.clickventure.edit.services.node.link.service');
     module('bulbs.clickventure.templates');
 
     inject(function (_$parse_, _ClickventureEdit_, _ClickventureEditNodeLink_,
@@ -23,7 +23,7 @@ describe('ClickventureEditLinkAddPageModal', function () {
       ClickventureEditNodeLink = _ClickventureEditNodeLink_;
       ClickventureEditLinkAddPageModal = _ClickventureEditLinkAddPageModal_;
 
-      link = new ClickventureEditNodeLink();
+      link = ClickventureEditNodeLink.prepOrCreate();
       $modalScope = $rootScope.$new();
       $modalScope.link = link;
     });

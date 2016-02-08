@@ -1,5 +1,5 @@
 angular.module('bulbs.clickventure.edit.link.addPageModal.factory', [
-  'bulbs.clickventure.edit.services.node',
+  'bulbs.clickventure.edit.services.edit',
   'ui.bootstrap.modal',
   'ui.bootstrap.tpls'
 ])

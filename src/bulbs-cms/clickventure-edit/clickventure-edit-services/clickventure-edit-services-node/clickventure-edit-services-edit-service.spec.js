@@ -137,17 +137,9 @@ describe('ClickventureEdit', function () {
 
     describe('should have a method to set nodes from data that', function () {
 
-      it('should work if empty data was received', function () {
-
-        ClickventureEdit.setNodes(null);
-
-        expect(nodeData.nodes).to.be.instanceOf(Array);
-        expect(nodeData.view).to.be.instanceOf(Object);
-      });
-
       it('should add a new start node if there aren\'t any nodes given', function () {
 
-        ClickventureEdit.setNodes(null);
+        ClickventureEdit.setNodes([]);
 
         expect(nodeData.nodeActive).to.equal(nodeData.nodes[0]);
         expect(nodeData.nodes.length).to.equal(1);
@@ -237,13 +229,27 @@ describe('ClickventureEdit', function () {
 
         ClickventureEdit.setNodes([{
           id: 1,
-          links: [{}, {}, {}]
+          links: [{to_node: 1}, {to_node: 2}, {to_node: 2}]
         }, {
           id: 2,
-          links: [{}]
+          links: [{to_node: 1}]
         }]);
 
         expect(updateInboundLinks.callCount).to.equal(4);
+      });
+
+      it('should not setup inbound links for nodes with invalid to_node', function () {
+        var updateInboundLinks = sinon.spy(ClickventureEdit, 'updateInboundLinks');
+
+        ClickventureEdit.setNodes([{
+          id: 1,
+          links: [{to_node: 2}, {to_node: 4}, {to_node: 1}]
+        }, {
+          id: 2,
+          links: [{to_node: null}, {to_node: 1}]
+        }]);
+
+        expect(updateInboundLinks.callCount).to.equal(3);
       });
     });
 

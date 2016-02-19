@@ -11,7 +11,7 @@ From the site using this component:
 1. Add a dependency for this project in ```requirements.txt```, where ```<version>```
 is the version to install:
   ```
-  git+https://0469c955e10241b40fffe0225e29a3c238aadf69:x-oauth-basic@github.com/theonion/bulbs-component-clickventure.git@<version>#egg=bulbs-component-clickventure
+  git+https://github.com/theonion/bulbs-component-clickventure.git@<version>#egg=bulbs-component-clickventure
   ```
 
 1. Run ```pip install -r requirements.txt``` on requirements file in the correct
@@ -20,7 +20,7 @@ context to install this project's Django apps.
 1. Install bower dependencies, where ```<version>``` is the version to
 install which should match the ```<version>``` used in ```requirements.txt```:
   ```bash
-  $ bower install --save https://0469c955e10241b40fffe0225e29a3c238aadf69:x-oauth-basic@github.com/theonion/bulbs-component-clickventure.git\#\<version>
+  $ bower install --save https://github.com/theonion/bulbs-component-clickventure.git\#\<version>
   ```
 
 ### Implementation

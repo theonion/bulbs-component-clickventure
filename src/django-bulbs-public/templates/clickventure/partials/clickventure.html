@@ -13,7 +13,7 @@ This should be included with an include tag, with the following variables:
   </marquee>
 </noscript>
 <div
-    class="clickventure-container"
+    class="clickventure-container {{ content.slug }}"
     data-track-category="Article: Clickventure">
   {% for node in content.nodes %}
     <div

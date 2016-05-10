@@ -96,6 +96,33 @@ describe('clickventureEditLink', function () {
 
       expect(displayText).to.equal('(' + nodeOrder + ') ' + nodeTitle);
     });
+
+    it('should fail gracefully when not given an id', function () {
+      var nodeDisplay = sandbox.spy($directiveScope, 'nodeDisplay');
+
+      try {
+        nodeDisplay();
+      } catch (e) {}
+
+      expect(nodeDisplay.exceptions[0]).to.be.undefined;
+    });
+
+    it('should fail gracefully when given a non-existent id', function () {
+      var nodeDisplay = sandbox.spy($directiveScope, 'nodeDisplay');
+
+      try {
+        nodeDisplay(10);
+      } catch (e) {}
+
+      expect(nodeDisplay.exceptions[0]).to.be.undefined;
+    });
+
+    it('should return an empty string when not given an id', function () {
+
+      var displayText = $directiveScope.nodeDisplay();
+
+      expect(displayText).to.equal('');
+    });
   });
 
   describe('should have a method to search nodes by search term that', function () {

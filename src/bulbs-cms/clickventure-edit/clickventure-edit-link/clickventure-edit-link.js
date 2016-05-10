@@ -56,7 +56,12 @@ angular.module('bulbs.clickventure.edit.link', [
 
             $scope.nodeDisplay = function (id) {
               var view = $scope.nodeData.view[id];
-              return '(' + view.order + ') ' + $filter('clickventure_node_name')(view.node);
+
+              if (typeof view === 'object') {
+                return '(' + view.order + ') ' + $filter('clickventure_node_name')(view.node);
+              }
+
+              return '';
             };
 
             $scope.searchTerm = '';

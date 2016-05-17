@@ -86,6 +86,7 @@ clickventure-edit-node-toolbar {
   margin-left: 250px;
   position: absolute;
   width: 550px;
+  z-index: 100;
 }
 clickventure-edit-node-toolbar .clickventure-edit-node-toolbar-title {
   min-height: 34px;

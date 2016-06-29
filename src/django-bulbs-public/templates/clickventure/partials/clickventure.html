@@ -12,9 +12,11 @@ This should be included with an include tag, with the following variables:
     <blink>This feature requires JavaScript to function.</blink>
   </marquee>
 </noscript>
-<div
+<bulbs-clickventure
+    content-id="{{content.id}}"
     class="clickventure-container {{ content.slug }}"
     data-track-category="Article: Clickventure">
+    <h1>Hello World!</h1>
   {% for node in content.nodes %}
     <div
         id="clickventure-node-{{ node.id }}"
@@ -103,4 +105,4 @@ This should be included with an include tag, with the following variables:
       {% endif %}
     </div>
   {% endfor %}
-</div>
+</bulbs-clickventure>

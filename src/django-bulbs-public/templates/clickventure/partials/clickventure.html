@@ -12,9 +12,8 @@ This should be included with an include tag, with the following variables:
     <blink>This feature requires JavaScript to function.</blink>
   </marquee>
 </noscript>
-<bulbs-clickventure
-    content-id="{{content.id}}"
-    class="clickventure-container {{ content.slug }}"
+<div
+    class="clickventure-container"
     data-track-category="Article: Clickventure">
   {% for node in content.nodes %}
     <div
@@ -34,7 +33,7 @@ This should be included with an include tag, with the following variables:
               <img src="{% cropped_url node.photo_final.id ratio="original" %}">
             </noscript>
           </div>
-        {% elif node.photo_placeholder_url and CMS_TOOLS_ENABLED %}
+        {% elif node.photo_placeholder_url and PREVIEW_TOOLS_ALLOWED %}
           <img src="{{ node.photo_placeholder_url }}" alt="{{ node.photo_placeholder_page_url }}">
           <div class="clickventure-node-image-stock">
             <div>
@@ -104,4 +103,4 @@ This should be included with an include tag, with the following variables:
       {% endif %}
     </div>
   {% endfor %}
-</bulbs-clickventure>
+</div>

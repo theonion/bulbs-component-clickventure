@@ -1,4 +1,4 @@
-{% load betty %}
+{% load betty google_analytics %}
 
 {% comment %}
 This should be included with an include tag, with the following variables:
@@ -15,7 +15,8 @@ This should be included with an include tag, with the following variables:
 <bulbs-clickventure
     content-id="{{content.id}}"
     class="clickventure-container {{ content.slug }}"
-    data-track-category="Article: Clickventure">
+    data-track-category="Article: Clickventure"
+    data-content-analytics-dimensions="{% ga_dimensions_as_json navigation_method='clickventure' %}">
   {% for node in content.nodes %}
     <div
         id="clickventure-node-{{ node.id }}"

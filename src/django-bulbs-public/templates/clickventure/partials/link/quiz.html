@@ -1,7 +1,7 @@
 <div
     class="clickventure-node-link-button clickventure-node-link-quiz"
     data-track-action="Next Page"
-    data-track-label="{{ link.id }}">
+    data-track-label="{{ link.to_node.id }}">
   <input
       id="input-{{ node.id }}-{{ link.to_node }}-{{ action_index }}"
       name="clickventure_quiz[{{ node.id }}][{{ link.to_node }}]"
